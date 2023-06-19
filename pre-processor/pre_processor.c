@@ -1,13 +1,17 @@
+#include "pre_processor.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXLEN 80
+bool is_macro(char *);
+Macro get_macro();
 
 int main(int argc, char *argv[]) {
+  Macro macros[12];
+  int i = 0;
   int arg_index;
-
+  char *token;
   FILE *curr_file;
   char line[MAXLEN];
 
@@ -15,7 +19,10 @@ int main(int argc, char *argv[]) {
     curr_file = fopen(argv[arg_index], "r");
 
     while (fgets(line, 80, curr_file)) {
-       
+      if (is_macro(line)) {
+        
+        i++;
+      }
     }
 
     fclose(curr_file);
