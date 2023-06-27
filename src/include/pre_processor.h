@@ -2,8 +2,8 @@
 
 #define __PRE_PROCESSOR_H
 
-#include "../tables/tables.h"
+#include "tables.h"
+#include "line.h"
 
-#define MAXLEN 80
 
 #endif

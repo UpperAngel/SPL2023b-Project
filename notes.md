@@ -1,7 +1,7 @@
 # notes
 * ### making an assembler for a dummy assembly language
     * each word is 12 bits 
-    * 6 registers. r0 - r5
+    * 7 registers. r0 - r7
 
 ## types of lines:
 * comment: start with a `;`. the assembler ignores this line. <br> 
