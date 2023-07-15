@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 /* Struct to represent a line of content */
 struct content {
@@ -66,3 +67,22 @@ void addToMacroTable(mcro* macroToAdd, struct macroList** macroTablePtr);
  * @return Pointer to the matching macro if found, or NULL if not found.
  */
 mcro* findMacroByName(struct macroList* macroTable, const char* name);
+
+
+int isValidMacroName(const char* name);
+/**
+ * Checks if a given macro name adheres to the specified rules.
+ *
+ * The name must meet the following requirements:
+ * - The first character must be a letter.
+ * - The name can only contain letters (uppercase or lowercase) and numbers.
+ * - The name cannot be one of the reserved keywords: mov, cmp, add, sub, not, clr, lea, inc,
+ *   de, jmp, bne, red, prn, jsr, rts, stop.
+ *
+ * @param name The name to be checked.
+ * @return 1 if the name is valid, 0 otherwise.
+ */
+
+
+
+
