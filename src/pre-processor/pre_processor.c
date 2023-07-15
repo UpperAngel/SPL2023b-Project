@@ -1,35 +1,45 @@
 #include "../include/pre_processor.h"
 
+int is_empty();
 
-bool is_empty();
 void add_line(char *);
 
-void process_file(FILE *file) {
+void process_file(FILE *file, FILE *target_file)
+{
   int is_macro = 0;
   int i = 0;
   int arg_index;
   char line[MAXLEN];
 
-  while (fgets(line, 80, file) != NULL) {
-    if (strstr(line, "mcro")) {
+  while (fgets(line, 80, file) != NULL)
+  {
+
+    if (strstr(line, "mcro"))
+    {
       is_macro = 1;
       delete_line(line);
-    } else if (strstr(line, "endmcro")) {
+    }
+    else if (strstr(line, "endmcro"))
+    {
       is_macro = 0;
       delete_line(line);
-    } else {
+    }
+    else
+    {
       /* inside macro */
-      add_line(line);
+      add_line(line); 
       delete_line(line);
     }
 
-    if (is_comment(line)) {
+    if (is_comment(line))
+    {
       delete_line(line);
-    } else if (is_empty()) {
+    }
+    else if (is_empty())
+    {
       delete_line(line);
     }
 
-    fprintf_s(file, "%s", line);
-    
-  } 
+    fprintf_s(target_file, "%s", line);
+  }
 }

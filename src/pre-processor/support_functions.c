@@ -1,3 +1,4 @@
+#include "../include/support_functions.h"
 /* API style documentation of every function is in the "supportFunction.h" file */
 
 void addLineToMcro(mcro* macro, char* contentSource)
@@ -32,7 +33,7 @@ void addToMacroTable(mcro* macroToAdd, struct macroList** macroTablePtr)
 {
     /* Create a new node */
     struct macroList* newNode = malloc(sizeof(struct macroList));
-********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
+/********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
     newNode->macro = macroToAdd;
     newNode->nextMacro = NULL;
@@ -61,7 +62,7 @@ void addToMacroTable(mcro* macroToAdd, struct macroList** macroTablePtr)
 
 mcro* createMcro(const char* name) {
     mcro* newMcro = malloc(sizeof(mcro));
-********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
+/********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
     if (newMcro != NULL) {
         newMcro->name = strdup(name);  /* Allocate memory and copy the name */
@@ -73,7 +74,7 @@ mcro* createMcro(const char* name) {
 
 struct macroList* createMacroList() {
     struct macroList* newList = malloc(sizeof(struct macroList));
-********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
+/********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
     if (newList != NULL) {
         newList->macro = NULL;       /* Initialize macro member to NULL */
