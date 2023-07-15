@@ -92,13 +92,44 @@ mcro* findMacroByName(struct macroList* macroTable, const char* name) {
     while (current != NULL) {
         mcro* currentMacro = current->macro;
 
-        // Compare the current macro's name with the specified name
+        /* Compare the current macro's name with the specified name */
         if (strcmp(currentMacro->name, name) == 0) {
-            return currentMacro; // Found matching macro, return pointer to it
+            return currentMacro; /* Found matching macro, return pointer to it */
         }
 
-        current = current->nextMacro; // Move to the next node in the macroList
+        current = current->nextMacro; /* Move to the next node in the macroList */
     }
 
-    return NULL; // Macro not found, return NULL
+    return NULL; /* Macro not found, return NULL */
+}
+
+
+int isValidName(const char* name) {
+    /* Check if name is a reserved keyword */
+    const char* reservedKeywords[] = {
+        "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
+        "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"
+    };
+    int numReservedKeywords = sizeof(reservedKeywords) / sizeof(reservedKeywords[0]);
+
+    for (int i = 0; i < numReservedKeywords; i++) {
+        if (strcmp(name, reservedKeywords[i]) == 0) {
+            return 0;  /* Name is a reserved keyword */
+        }
+    }
+
+    /* Check if the first character is a letter */
+    if (!isalpha(name[0])) {
+        return 0;  /* First character is not a letter */
+    }
+
+    /* Check if the name contains only valid characters (letters and digits) */
+    for (int i = 0; i < strlen(name); i++) {
+        if (!isalnum(name[i])) {
+            return 0;  /* Name contains an invalid character */
+        }
+    }
+
+    /* Name passes all checks */
+    return 1;
 }
