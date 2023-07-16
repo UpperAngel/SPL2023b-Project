@@ -21,8 +21,7 @@ typedef struct {
 } mcro;
 
 /* Struct to represent a node in the macro table */
-struct macroList
-{
+struct macroList {
     mcro *macro;
     struct macroList *nextMacro;
 };
@@ -33,7 +32,7 @@ struct macroList
  * @param macro The macro to which the line of content is added.
  * @param contentSource The source of the content to be added.
  */
-void addLineToMcro(mcro *macro, char *contentSource);
+void add_line_to_mcro(mcro *macro, char *contentSource);
 
 /**
  * Creates a new macro list.
@@ -48,7 +47,7 @@ struct macroList* createMacroList();
  * @param name The name of the macro.
  * @return The newly created macro.
  */
-mcro* createMcro(const char* name);
+mcro* create_mcro(const char* name);
 
 /**
  * Adds a macro to the macro table.
@@ -56,7 +55,7 @@ mcro* createMcro(const char* name);
  * @param macroToAdd The macro to be added to the macro table.
  * @param macroTablePtr Pointer to the macro table.
  */
-void addToMacroTable(mcro* macroToAdd, struct macroList** macroTablePtr);
+void add_to_macro_table(mcro* macroToAdd, struct macroList** macroTablePtr);
 
 
 /**
@@ -85,4 +84,9 @@ int isValidMacroName(const char* name);
 
 
 
-
+int is_valid_macro_def(const char * line);
+/**
+ * checks if the line is a valid definition of a macro
+ * @param line the line that is checked.
+ * @return 1 if the definition is valid, otherwise 0 
+*/

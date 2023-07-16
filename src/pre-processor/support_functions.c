@@ -1,7 +1,7 @@
 #include "../include/support_functions.h"
 /* API style documentation of every function is in the "supportFunction.h" file */
 
-void addLineToMcro(mcro* macro, char* contentSource)
+void add_line_to_mcro(mcro* macro, char* contentSource)
 {
     /* Pointer to the pointer to the data member */
     struct content** ptr = &(macro->data);
@@ -29,7 +29,7 @@ void addLineToMcro(mcro* macro, char* contentSource)
 }
 
 
-void addToMacroTable(mcro* macroToAdd, struct macroList** macroTablePtr)
+void add_to_macro_table(mcro* macroToAdd, struct macroList** macroTablePtr)
 {
     /* Create a new node */
     struct macroList* newNode = malloc(sizeof(struct macroList));
@@ -60,7 +60,7 @@ void addToMacroTable(mcro* macroToAdd, struct macroList** macroTablePtr)
 
 
 
-mcro* createMcro(const char* name) {
+mcro* create_mcro(const char* name) {
     mcro* newMcro = malloc(sizeof(mcro));
 /********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
@@ -86,7 +86,7 @@ struct macroList* createMacroList() {
 
 
 
-mcro* findMacroByName(struct macroList* macroTable, const char* name) {
+mcro* find_macro_by_name(struct macroList* macroTable, const char* name) {
     struct macroList* current = macroTable;
 
     while (current != NULL) {
@@ -104,32 +104,73 @@ mcro* findMacroByName(struct macroList* macroTable, const char* name) {
 }
 
 
-int isValidName(const char* name) {
+int is_valid_macro_name(const char *name)
+{
     /* Check if name is a reserved keyword */
-    const char* reservedKeywords[] = {
+    const char *reservedKeywords[] = {
         "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
-        "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"
-    };
+        "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"};
     int numReservedKeywords = sizeof(reservedKeywords) / sizeof(reservedKeywords[0]);
 
-    for (int i = 0; i < numReservedKeywords; i++) {
-        if (strcmp(name, reservedKeywords[i]) == 0) {
-            return 0;  /* Name is a reserved keyword */
+    for (int i = 0; i < numReservedKeywords; i++)
+    {
+        if (strcmp(name, reservedKeywords[i]) == 0)
+        {
+            return 0; /* Name is a reserved keyword */
         }
     }
 
     /* Check if the first character is a letter */
-    if (!isalpha(name[0])) {
-        return 0;  /* First character is not a letter */
+    if (!isalpha(name[0]))
+    {
+        return 0; /* First character is not a letter */
     }
 
     /* Check if the name contains only valid characters (letters and digits) */
-    for (int i = 0; i < strlen(name); i++) {
-        if (!isalnum(name[i])) {
-            return 0;  /* Name contains an invalid character */
+    for (int j = 0; j < strlen(name); j++)
+    {
+        if (!isalnum(name[j]))
+        {
+            return 0; /* Name contains an invalid character */
         }
     }
 
     /* Name passes all checks */
     return 1;
 }
+
+int is_valid_macro_def(const char *line)
+{
+    char *token = NULL;
+    
+    char *mod_line = malloc(strlen(line) + 1);
+    char *first_word = strtok(mod_line, " ");
+    strcpy(mod_line, line);
+
+
+    if (strcmp(first_word, "mcro") != 0)
+    {
+        free(mod_line);
+        return 0;
+    }
+
+    token = strtok(NULL, " ");
+    if (!isValidMacroName(token))
+    {
+        free(mod_line);
+        return 0;
+    }
+
+    token = strtok(NULL, " ");
+    if (token != NULL)
+    {
+        free(mod_line);
+        return 0;
+    }
+
+    free(mod_line);
+    return 1;
+}
+
+
+

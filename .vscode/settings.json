@@ -1,6 +1,9 @@
 {
     "files.associations": {
-        "cstdlib": "c",
-        "pre_processor.h": "c"
+        "pre_processor.h": "c",
+        "string.h": "c",
+        "line.h": "c",
+        "helper_fucntions.h": "c",
+        "support_functions.h": "c"
     }
 }

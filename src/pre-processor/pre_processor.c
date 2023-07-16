@@ -1,44 +1,51 @@
 #include "../include/pre_processor.h"
 
-int is_empty();
-
-void add_line(char *);
-
 void process_file(FILE *file, FILE *target_file)
 {
+
+  int i;
   int is_macro = 0;
-  int i = 0;
-  int arg_index;
   char line[MAXLEN];
+  char *curr_mcro_name;
+  mcro *created_macro;
+  mcro *curr_macro;
+  struct macroList *macro_list = createMacroList();
 
   while (fgets(line, 80, file) != NULL)
   {
-
-    if (strstr(line, "mcro"))
+    if (is_valid_macro_def(line))
     {
       is_macro = 1;
-      delete_line(line);
+      curr_mcro_name = strtok(NULL, " ");
+      created_macro = create_mcro(curr_mcro_name);
+      add_to_macro_table(created_macro, macro_list);
     }
-    else if (strstr(line, "endmcro"))
+
+    if (is_endmcro)
     {
       is_macro = 0;
       delete_line(line);
     }
-    else
+
+    if (is_comment)
     {
-      /* inside macro */
-      add_line(line); 
       delete_line(line);
     }
 
-    if (is_comment(line))
+    if (is_empty(line))
     {
       delete_line(line);
     }
-    else if (is_empty())
+    if (is_macro == 1)
     {
-      delete_line(line);
+      add_line_to_mcro(created_macro, line);
     }
+
+    if ((curr_macro = findMacroByName(macro_list, line)))
+    {
+      deploy_macro(curr_macro, target_file);
+    }
+    
 
     fprintf_s(target_file, "%s", line);
   }
