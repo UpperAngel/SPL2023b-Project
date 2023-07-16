@@ -7,21 +7,24 @@
 #include <ctype.h>
 
 /* Struct to represent a line of content */
-struct content {
+struct content
+{
     char line[MAXLEN];
-    struct content* next;
+    struct content *next;
 };
 
 typedef struct content node;
 
 /* Struct to represent a macro */
-typedef struct {
-    char* name;
-    node* data;
+typedef struct
+{
+    char *name;
+    node *data;
 } mcro;
 
 /* Struct to represent a node in the macro table */
-struct macroList {
+struct macroList
+{
     mcro *macro;
     struct macroList *nextMacro;
 };
@@ -39,7 +42,7 @@ void add_line_to_mcro(mcro *macro, char *contentSource);
  *
  * @return The newly created macro list.
  */
-struct macroList* createMacroList();
+struct macroList *createMacroList();
 
 /**
  * Creates a new macro with the given name.
@@ -47,7 +50,7 @@ struct macroList* createMacroList();
  * @param name The name of the macro.
  * @return The newly created macro.
  */
-mcro* create_mcro(const char* name);
+mcro *create_mcro(const char *name);
 
 /**
  * Adds a macro to the macro table.
@@ -55,8 +58,7 @@ mcro* create_mcro(const char* name);
  * @param macroToAdd The macro to be added to the macro table.
  * @param macroTablePtr Pointer to the macro table.
  */
-void add_to_macro_table(mcro* macroToAdd, struct macroList** macroTablePtr);
-
+void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr);
 
 /**
  * Traverses the macroList and checks whether there is a macro with a specified name.
@@ -65,10 +67,9 @@ void add_to_macro_table(mcro* macroToAdd, struct macroList** macroTablePtr);
  * @param name The name of the macro to find.
  * @return Pointer to the matching macro if found, or NULL if not found.
  */
-mcro* findMacroByName(struct macroList* macroTable, const char* name);
+mcro *find_macro_by_name(struct macroList *macroTable, const char *name);
 
-
-int isValidMacroName(const char* name);
+int is_Valid_macro_name(const char *name);
 /**
  * Checks if a given macro name adheres to the specified rules.
  *
@@ -82,11 +83,15 @@ int isValidMacroName(const char* name);
  * @return 1 if the name is valid, 0 otherwise.
  */
 
-
-
-int is_valid_macro_def(const char * line);
+int is_valid_macro_def(const char *line);
 /**
  * checks if the line is a valid definition of a macro
  * @param line the line that is checked.
- * @return 1 if the definition is valid, otherwise 0 
+ * @return 1 if the definition is valid, otherwise 0
+ */
+
+
+void deploy_macro(const mcro *macro, FILE *target_file);
+/**
+ * expands the macro
 */

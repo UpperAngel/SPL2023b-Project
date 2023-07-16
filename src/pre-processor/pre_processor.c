@@ -41,7 +41,7 @@ void process_file(FILE *file, FILE *target_file)
       add_line_to_mcro(created_macro, line);
     }
 
-    if ((curr_macro = findMacroByName(macro_list, line)))
+    if ((curr_macro = find_macro_by_name(macro_list, line)))
     {
       deploy_macro(curr_macro, target_file);
     }

@@ -1,13 +1,13 @@
 #include "../include/support_functions.h"
 /* API style documentation of every function is in the "supportFunction.h" file */
 
-void add_line_to_mcro(mcro* macro, char* contentSource)
+void add_line_to_mcro(mcro *macro, char *contentSource)
 {
     /* Pointer to the pointer to the data member */
-    struct content** ptr = &(macro->data);
+    struct content **ptr = &(macro->data);
 
     /* Create a new node */
-    struct content* macroNode = (struct content*)malloc(sizeof(struct content));
+    struct content *macroNode = (struct content *)malloc(sizeof(struct content));
 
     /* ********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
@@ -16,24 +16,26 @@ void add_line_to_mcro(mcro* macro, char* contentSource)
     macroNode->next = NULL;
 
     /* If the data member is NULL, update it with the new node */
-    if (*ptr == NULL) {
+    if (*ptr == NULL)
+    {
         *ptr = macroNode;
     }
     /* If the data member is not NULL, find the last node and append the new node */
-    else {
-        while ((*ptr)->next != NULL) {
+    else
+    {
+        while ((*ptr)->next != NULL)
+        {
             ptr = &((*ptr)->next);
         }
         (*ptr)->next = macroNode;
     }
 }
 
-
-void add_to_macro_table(mcro* macroToAdd, struct macroList** macroTablePtr)
+void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr)
 {
     /* Create a new node */
-    struct macroList* newNode = malloc(sizeof(struct macroList));
-/********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
+    struct macroList *newNode = malloc(sizeof(struct macroList));
+    /********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
     newNode->macro = macroToAdd;
     newNode->nextMacro = NULL;
@@ -45,7 +47,7 @@ void add_to_macro_table(mcro* macroToAdd, struct macroList** macroTablePtr)
     }
     else
     {
-        struct macroList* ptr = *macroTablePtr;
+        struct macroList *ptr = *macroTablePtr;
 
         /* Traverse to the end of the macro table */
         while (ptr->nextMacro != NULL)
@@ -58,42 +60,45 @@ void add_to_macro_table(mcro* macroToAdd, struct macroList** macroTablePtr)
     }
 }
 
+mcro *create_mcro(const char *name)
+{
+    mcro *newMcro = malloc(sizeof(mcro));
+    /********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
-
-mcro* create_mcro(const char* name) {
-    mcro* newMcro = malloc(sizeof(mcro));
-/********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
-
-    if (newMcro != NULL) {
-        newMcro->name = strdup(name);  /* Allocate memory and copy the name */
-        newMcro->data = NULL;           /* Initialize data member to NULL */
+    if (newMcro != NULL)
+    {
+        newMcro->name = strdup(name); /* Allocate memory and copy the name */
+        newMcro->data = NULL;         /* Initialize data member to NULL */
     }
 
     return newMcro;
 }
 
-struct macroList* createMacroList() {
-    struct macroList* newList = malloc(sizeof(struct macroList));
-/********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
+struct macroList *createMacroList()
+{
+    struct macroList *newList = malloc(sizeof(struct macroList));
+    /********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
-    if (newList != NULL) {
-        newList->macro = NULL;       /* Initialize macro member to NULL */
-        newList->nextMacro = NULL;   /* Initialize nextMacro member to NULL */
+    if (newList != NULL)
+    {
+        newList->macro = NULL;     /* Initialize macro member to NULL */
+        newList->nextMacro = NULL; /* Initialize nextMacro member to NULL */
     }
 
     return newList;
 }
 
+mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
+{
+    struct macroList *current = macroTable;
 
-
-mcro* find_macro_by_name(struct macroList* macroTable, const char* name) {
-    struct macroList* current = macroTable;
-
-    while (current != NULL) {
-        mcro* currentMacro = current->macro;
+    while (current != NULL)
+    {
+        mcro *currentMacro = current->macro;
 
         /* Compare the current macro's name with the specified name */
-        if (strcmp(currentMacro->name, name) == 0) {
+        if (strcmp(currentMacro->name, name) == 0)
+        {
             return currentMacro; /* Found matching macro, return pointer to it */
         }
 
@@ -103,8 +108,7 @@ mcro* find_macro_by_name(struct macroList* macroTable, const char* name) {
     return NULL; /* Macro not found, return NULL */
 }
 
-
-int is_valid_macro_name(const char *name)
+int is_Valid_macro_name(const char *name)
 {
     /* Check if name is a reserved keyword */
     const char *reservedKeywords[] = {
@@ -142,11 +146,10 @@ int is_valid_macro_name(const char *name)
 int is_valid_macro_def(const char *line)
 {
     char *token = NULL;
-    
+
     char *mod_line = malloc(strlen(line) + 1);
     char *first_word = strtok(mod_line, " ");
     strcpy(mod_line, line);
-
 
     if (strcmp(first_word, "mcro") != 0)
     {
@@ -155,7 +158,7 @@ int is_valid_macro_def(const char *line)
     }
 
     token = strtok(NULL, " ");
-    if (!isValidMacroName(token))
+    if (!is_Valid_macro_name(token))
     {
         free(mod_line);
         return 0;
@@ -172,5 +175,13 @@ int is_valid_macro_def(const char *line)
     return 1;
 }
 
-
-
+void deploy_macro(const mcro *macro, FILE *target_file)
+{
+    /* Deploy its content line by line to the target_file */
+    node *currentNode = macro->data;
+    while (currentNode != NULL)
+    {
+        fprintf(target_file, "%s\n", currentNode->line);
+        currentNode = currentNode->next;
+    }
+}
