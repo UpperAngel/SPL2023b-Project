@@ -11,6 +11,6 @@
 int is_comment(const char *);
 void delete_line(char *);
 int is_endmcro(const char *);
-is_empty(const char *);
+int is_empty(const char *);
 
 #endif

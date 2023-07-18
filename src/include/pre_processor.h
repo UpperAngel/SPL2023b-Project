@@ -5,6 +5,6 @@
 #include "line.h"
 #include "support_functions.h"
 
-void process_file(FILE *, FILE *);
+void process_file(FILE *,FILE*);
 
 #endif
