@@ -14,21 +14,30 @@ int is_comment(const char *line)
   return 0;
 }
 
-int is_endmcro(const char *line)
-{
-  char *word;
-  char *mod_line = malloc(strlen(line) + 1);
-  strcpy(mod_line, line);
+int is_endmcro(const char *line) {
+    // Allocate memory for mod_line and check if malloc was successful
+    char *mod_line = malloc(strlen(line) + 1);
+    if (mod_line == NULL) {
+        // Memory allocation failed; handle the error appropriately
+        return 0;
+    }
 
-  word = strtok(mod_line, " ");
-  if (!strcmp(word, "endmcro"))
-  {
-    return 1;
-  }
-  return 0;
+    // Copy the line into mod_line before calling strtok
+    strcpy(mod_line, line);
+
+    // Use strtok to tokenize the line
+    char *word = strtok(mod_line, " ");
+
+    int result = (word != NULL && strcmp(word, "endmcro") == 0);
+
+    free(mod_line); // Free the dynamically allocated memory
+    return result;
 }
 
-is_empty(const char *line)
+
+
+
+int is_empty(const char *line)
 {
   while (*line != '\0')
   {
@@ -39,7 +48,9 @@ is_empty(const char *line)
     line++;
   }
   return 1;
-
 }
 
-void delete_line(char *line) { puts(""); }
+void delete_line(char *line) {
+    strcpy(line, ""); // Clear the content of the line by copying an empty string
+}
+

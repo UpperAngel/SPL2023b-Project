@@ -1,6 +1,5 @@
 /* Maximum length for a line of content */
 #define MAXLEN 80
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -95,3 +94,8 @@ void deploy_macro(const mcro *macro, FILE *target_file);
 /**
  * expands the macro
 */
+
+
+void free_macro_list(struct macroList *list);
+
+void free_content_list(struct content *list);
