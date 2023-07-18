@@ -90,23 +90,36 @@ struct macroList *createMacroList()
 
 mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
 {
+    if (macroTable == NULL || name == NULL)
+    {
+        /* Handle the case of null pointers gracefully */
+        return NULL;
+    }
+
     struct macroList *current = macroTable;
 
     while (current != NULL)
     {
         mcro *currentMacro = current->macro;
 
-        /* Compare the current macro's name with the specified name */
-        if (strcmp(currentMacro->name, name) == 0)
+        if (currentMacro == NULL || currentMacro->name == NULL)
         {
-            return currentMacro; /* Found matching macro, return pointer to it */
+            /* Skip this node as it contains invalid data */
+            current = current->nextMacro;
+            continue;
         }
 
-        current = current->nextMacro; /* Move to the next node in the macroList */
+        if (strcmp(currentMacro->name, name) == 0)
+        {
+            return currentMacro; // Found matching macro, return pointer to it
+        }
+
+        current = current->nextMacro; // Move to the next node in the macroList
     }
 
-    return NULL; /* Macro not found, return NULL */
+    return NULL; // Macro not found, return NULL
 }
+
 
 int is_Valid_macro_name(const char *name)
 {
@@ -146,7 +159,7 @@ int is_Valid_macro_name(const char *name)
 int is_valid_macro_def(const char *line) {
     char *token = NULL;
 
-    // Allocate memory for mod_line and check if malloc was successful
+    /* Allocate memory for mod_line and check if malloc was successful */
     char *mod_line = malloc(strlen(line) + 1);
     if (mod_line == NULL) {
         // Memory allocation failed; handle the error appropriately
@@ -198,17 +211,21 @@ void free_macro_list(struct macroList *list) {
         struct macroList *temp = list; /* Store the current node in a temporary variable */
         list = list->nextMacro; /* Move to the next node before deallocating the current one */
 
-        /* Free the memory for the macro name and the linked list of content nodes */
-        free(temp->macro->name);
-        free_content_list(temp->macro->data);
+        /* Make sure the macro is not NULL before freeing its memory */
+        if (temp->macro != NULL) {
+            /* Free the memory for the macro name and the linked list of content nodes */
+            free(temp->macro->name);
+            free_content_list(temp->macro->data);
 
-        /* Free the memory for the macro itself */
-        free(temp->macro);
+            /* Free the memory for the macro itself */
+            free(temp->macro);
+        }
 
         /* Free the memory for the current node in the macro list */
         free(temp);
     }
 }
+
 
 void free_content_list(struct content *list) {
     while (list != NULL) {
@@ -219,3 +236,4 @@ void free_content_list(struct content *list) {
         free(temp);
     }
 }
+
