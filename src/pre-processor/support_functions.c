@@ -162,36 +162,43 @@ int is_valid_macro_def(const char *line) {
     /* Allocate memory for mod_line and check if malloc was successful */
     char *mod_line = malloc(strlen(line) + 1);
     if (mod_line == NULL) {
-        // Memory allocation failed; handle the error appropriately
+        /* Memory allocation failed; handle the error appropriately */
         return 0;
     }
 
-    // Copy the line into mod_line before calling strtok
+    /* Copy the line into mod_line before calling strtok */
     strcpy(mod_line, line);
 
-    // Use strtok to tokenize the line
+    /* Use strtok to tokenize the line */
     char *first_word = strtok(mod_line, " ");
 
     if (first_word != NULL && strcmp(first_word, "mcro") != 0) {
+        /* The first word is not "mcro", which is required for a valid macro definition */
         free(mod_line);
         return 0;
     }
 
+    /* Get the next token (macro name) */
     token = strtok(NULL, " ");
     if (token == NULL || !is_Valid_macro_name(token)) {
+        /* Either the token is NULL or the macro name is invalid */
         free(mod_line);
         return 0;
     }
 
+    /* Check if there are any more tokens (should be no more tokens for a valid macro definition) */
     token = strtok(NULL, " ");
     if (token != NULL) {
+        /* There are more tokens, which is not allowed in a valid macro definition */
         free(mod_line);
         return 0;
     }
 
+    /* If all conditions are satisfied, the macro definition is valid */
     free(mod_line);
     return 1;
 }
+
 
 
 
@@ -237,3 +244,7 @@ void free_content_list(struct content *list) {
     }
 }
 
+
+void write_line_to_file(const char *line, FILE *target_file) {
+    fprintf(target_file, "%s\n", line);
+}

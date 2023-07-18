@@ -50,7 +50,5 @@ int is_empty(const char *line)
   return 1;
 }
 
-void delete_line(char *line) {
-    strcpy(line, ""); // Clear the content of the line by copying an empty string
-}
+
 

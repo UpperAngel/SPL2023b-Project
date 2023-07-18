@@ -99,3 +99,11 @@ void deploy_macro(const mcro *macro, FILE *target_file);
 void free_macro_list(struct macroList *list);
 
 void free_content_list(struct content *list);
+
+/**
+ * Write a line to the target file, followed by a newline character.
+ *
+ * @param line The line to be written to the target file.
+ * @param target_file The file pointer of the target file to write to.
+ */
+void write_line_to_file(const char *line, FILE *target_file);
