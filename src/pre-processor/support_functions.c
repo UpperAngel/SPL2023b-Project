@@ -373,3 +373,89 @@ void remove_newline(char *str) {
     if (len > 0 && str[len - 1] == '\n')
         str[len - 1] = '\0';
 }
+
+
+
+
+/* Function to check if the line contains "endmcro" with or without other words */
+int valid_end_macro(const char *line) {
+    char *first_word;
+    char *second_word;
+    char *target = "endmcro";
+
+    /* Allocate memory for mod_line and check if malloc was successful */
+    char *mod_line = malloc(strlen(line) + 1);
+    if (mod_line == NULL) {
+        /* Memory allocation failed; handle the error appropriately */
+        return 0;
+    }
+
+    /* Copy the line into mod_line before calling strtok */
+    strcpy(mod_line, line);
+
+    /* Use strtok to tokenize the line */
+    first_word = strtok(mod_line, " ");
+    second_word = strtok(NULL, " ");
+
+    if (strstr(line, target) == NULL)
+        return 2; /* "endmcro" not found in the line. */
+    else if (strcmp(target, first_word) == 0 && second_word == NULL)
+        return 1; /* "endmcro" is the only word in the line. */
+
+    free(mod_line); /* Free the dynamically allocated memory. */
+    return 0; /* "endmcro" found with other words in the line. */
+}
+
+
+
+
+
+
+
+/* Function to check if a given line contains a comment */
+int is_comment(const char *line) {
+    char in[MAXLEN];
+    strcpy(in, line); // Copy the input line to a local buffer 'in'.
+
+    char *c_pos = strchr(in, ';'); // Find the position of the first semicolon in 'in'.
+    if (c_pos != NULL && !isspace(*(c_pos + 1))) {
+        /*
+         * Check if a semicolon is found and if the character immediately after it
+         * is not a whitespace character (newline, tab, or space).
+         * This condition ensures that it's not an empty comment or a comment with only spaces after the semicolon.
+         */
+        return 1; // Return 1 to indicate that the line contains a comment.
+    }
+
+    return 0; // Return 0 if no comment is found in the line.
+}
+
+
+/* Function to check if a given line is empty (contains only whitespace characters) */
+int is_empty(const char *line) {
+    while (*line != '\0') {
+        /* Loop through each character in the line until the end of the string is reached. */
+
+        if (!isspace((unsigned char)*line)) {
+            /*
+             * Check if the current character is not a whitespace character.
+             * The `(unsigned char)` cast is used to handle potential negative char values correctly.
+             */
+
+            return 0; // Return 0 immediately if a non-whitespace character is found.
+        }
+
+        line++; // Move to the next character in the line.
+    }
+
+    return 1; // Return 1 if the loop reaches the end of the line without finding a non-whitespace character.
+}
+
+
+
+
+
+
+
+
+

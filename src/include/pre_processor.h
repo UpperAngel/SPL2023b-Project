@@ -24,6 +24,7 @@
  * @note Before calling this function, ensure that the macroList structure and the necessary helper functions (e.g., add_line_to_mcro, create_mcro, add_to_macro_table, etc.) have been correctly defined and implemented.
  * @note The function frees the dynamically allocated memory for the macro list before exiting.
  */
+
 int process_file(FILE *,FILE*);
 
 #endif

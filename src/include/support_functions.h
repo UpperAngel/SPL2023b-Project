@@ -5,33 +5,38 @@
 #include <string.h>
 #include <ctype.h>
 
+/* Enum to represent the return values of valid_end_macro */
+enum ValidEndMacroResult {
+    END_MACRO_WITH_OTHER_CHARACTERS, /* Indicates that the end of a macro is found with other characters after it. */
+    END_MACRO_FOUND /* Indicates that the end of a macro is found without any other characters after it. */
+};
+
+/* Enum to represent different states of parsing a file */
 enum State {
-    OUTSIDE_MACRO_DEF,
-    INSIDE_MACRO_DEF
+    OUTSIDE_MACRO_DEF, /* Indicates that the parser is currently outside a macro definition. */
+    INSIDE_MACRO_DEF /* Indicates that the parser is currently inside a macro definition. */
 };
 
 /* Struct to represent a line of content */
-struct content
-{
-    char line[MAXLEN];
-    struct content *next;
+struct content {
+    char line[MAXLEN]; /* The content of the line. */
+    struct content *next; /* Pointer to the next line in the linked list of content. */
 };
 
-typedef struct content node;
+typedef struct content node; /* Typedef for the struct content as node. */
 
 /* Struct to represent a macro */
-typedef struct
-{
-    char *name;
-    node *data;
+typedef struct {
+    char *name; /* The name of the macro. */
+    node *data; /* Pointer to the data (lines of content) of the macro. */
 } mcro;
 
 /* Struct to represent a node in the macro table */
-struct macroList
-{
-    mcro *macro;
-    struct macroList *nextMacro;
+struct macroList {
+    mcro *macro; /* Pointer to the macro stored in this node. */
+    struct macroList *nextMacro; /* Pointer to the next node in the linked list of macros. */
 };
+
 
 /**
  * @brief Adds a new line of content to a given macro.
@@ -414,3 +419,35 @@ int check_line_for_macro(const char line[80], struct macroList* macroTable);
  * @warning The function does not perform any validation on the parameter, and it is the responsibility of the caller to ensure its validity.
  */
 void remove_newline(char *str);
+
+
+
+/**
+ * Checks if a line contains the string "endmcro" with specific conditions.
+ *
+ * @param line The input line to check for "endmcro".
+ * @return 2 if "endmcro" is not found in the line,
+ *         1 if "endmcro" is the only content in the line (with or without whitespace characters),
+ *         0 if "endmcro" is found in the line with other characters before or after it.
+ */
+int valid_end_macro(const char* line);
+
+
+
+/**
+ * Checks if a given line contains a comment.
+ *
+ * @param line The input line to check for a comment.
+ * @return 1 if the line contains a comment (semicolon followed by non-whitespace character after it),
+ *         0 otherwise.
+ */
+int is_comment(const char *);
+
+
+/**
+ * Checks if a given line is empty (contains only whitespace characters).
+ *
+ * @param line The input line to check for emptiness.
+ * @return 1 if the line is empty (contains only whitespace characters), 0 otherwise.
+ */
+int is_empty(const char *);

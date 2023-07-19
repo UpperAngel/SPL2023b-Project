@@ -18,14 +18,13 @@ int process_file(FILE *source_file, FILE *target_file) {
             continue;
 
         /* Check if the line marks the end of a macro definition */
-        if ( is_endmcro(line) ) {
+        if (valid_end_macro(line) == END_MACRO_FOUND) {
             state = OUTSIDE_MACRO_DEF;
             continue;
         }
+        else if (valid_end_macro(line) == END_MACRO_WITH_OTHER_CHARACTERS)
+            return 0; /* Invalid end of macro definition means error so don't make target file (return 0) */
 
-        /* Check if the line is a valid macro definition */
-        if ( is_valid_macro_def(line) == 0)
-            return 0; /* indicate that the target file was not built */
 
         /* Check if the line is the start of a valid macro definition */
         if (state == OUTSIDE_MACRO_DEF && is_valid_macro_def(line) == 1 ) {
