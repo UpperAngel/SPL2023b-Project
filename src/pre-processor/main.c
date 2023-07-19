@@ -1,5 +1,4 @@
 #include "../include/pre_processor.h"
-
 int main() {
     FILE *input_file = fopen("input.txt", "r+");
     FILE *output_file = fopen("output.txt", "w");
