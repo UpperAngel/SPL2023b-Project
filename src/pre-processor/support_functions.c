@@ -1,4 +1,5 @@
 #include "../include/support_functions.h"
+#include "line.h"
 /* API style documentation of every function is in the "supportFunction.h" file */
 
 /* Function to add a line to the content of a macro */
