@@ -1,8 +1,7 @@
 #include "../include/support_functions.h"
 /* API style documentation of every function is in the "supportFunction.h" file */
 
-void add_line_to_mcro(mcro *macro, char *contentSource)
-{
+void add_line_to_mcro(mcro *macro, char *contentSource) {
     /* Pointer to the pointer to the data member */
     struct content **ptr = &(macro->data);
 
@@ -16,23 +15,19 @@ void add_line_to_mcro(mcro *macro, char *contentSource)
     macroNode->next = NULL;
 
     /* If the data member is NULL, update it with the new node */
-    if (*ptr == NULL)
-    {
+    if (*ptr == NULL) {
         *ptr = macroNode;
     }
-        /* If the data member is not NULL, find the last node and append the new node */
-    else
-    {
-        while ((*ptr)->next != NULL)
-        {
+    /* If the data member is not NULL, find the last node and append the new node */
+    else {
+        while ((*ptr)->next != NULL) {
             ptr = &((*ptr)->next);
         }
         (*ptr)->next = macroNode;
     }
 }
 
-void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr)
-{
+void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr) {
     /* Create a new node */
     struct macroList *newNode = malloc(sizeof(struct macroList));
     /********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
@@ -41,17 +36,13 @@ void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr)
     newNode->nextMacro = NULL;
 
     /* If the macro table is empty */
-    if ((*macroTablePtr)->macro == NULL)
-    {
+    if ((*macroTablePtr)->macro == NULL) {
         *macroTablePtr = newNode;
-    }
-    else
-    {
+    } else {
         struct macroList *ptr = *macroTablePtr;
 
         /* Traverse to the end of the macro table */
-        while (ptr->nextMacro != NULL)
-        {
+        while (ptr->nextMacro != NULL) {
             ptr = ptr->nextMacro;
         }
 
@@ -60,13 +51,11 @@ void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr)
     }
 }
 
-mcro *create_mcro(const char *name)
-{
+mcro *create_mcro(const char *name) {
     mcro *newMcro = malloc(sizeof(mcro));
     /********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
-    if (newMcro != NULL)
-    {
+    if (newMcro != NULL) {
         newMcro->name = strdup(name); /* Allocate memory and copy the name */
         newMcro->data = NULL;         /* Initialize data member to NULL */
     }
@@ -74,13 +63,11 @@ mcro *create_mcro(const char *name)
     return newMcro;
 }
 
-struct macroList *createMacroList()
-{
+struct macroList *createMacroList() {
     struct macroList *newList = malloc(sizeof(struct macroList));
     /********************HERE SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY *********/
 
-    if (newList != NULL)
-    {
+    if (newList != NULL) {
         newList->macro = NULL;     /* Initialize macro member to NULL */
         newList->nextMacro = NULL; /* Initialize nextMacro member to NULL */
     }
@@ -88,66 +75,54 @@ struct macroList *createMacroList()
     return newList;
 }
 
-mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
-{
-    if (macroTable == NULL || name == NULL)
-    {
+mcro *find_macro_by_name(struct macroList *macroTable, const char *name) {
+    if (macroTable == NULL || name == NULL) {
         /* Handle the case of null pointers gracefully */
         return NULL;
     }
 
     struct macroList *current = macroTable;
 
-    while (current != NULL)
-    {
+    while (current != NULL) {
         mcro *currentMacro = current->macro;
 
-        if (currentMacro == NULL || currentMacro->name == NULL)
-        {
+        if (currentMacro == NULL || currentMacro->name == NULL) {
             /* Skip this node as it contains invalid data */
             current = current->nextMacro;
             continue;
         }
 
-        if (strcmp(currentMacro->name, name) == 0)
-        {
-            return currentMacro; // Found matching macro, return pointer to it
+        if (strcmp(currentMacro->name, name) == 0) {
+            return currentMacro;  // Found matching macro, return pointer to it
         }
 
-        current = current->nextMacro; // Move to the next node in the macroList
+        current = current->nextMacro;  // Move to the next node in the macroList
     }
 
-    return NULL; // Macro not found, return NULL
+    return NULL;  // Macro not found, return NULL
 }
 
-
-int is_Valid_macro_name(const char *name)
-{
+int is_Valid_macro_name(const char *name) {
     /* Check if name is a reserved keyword */
     const char *reservedKeywords[] = {
-            "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
-            "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"};
+        "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
+        "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"};
     int numReservedKeywords = sizeof(reservedKeywords) / sizeof(reservedKeywords[0]);
 
-    for (int i = 0; i < numReservedKeywords; i++)
-    {
-        if (strcmp(name, reservedKeywords[i]) == 0)
-        {
+    for (int i = 0; i < numReservedKeywords; i++) {
+        if (strcmp(name, reservedKeywords[i]) == 0) {
             return 0; /* Name is a reserved keyword */
         }
     }
 
     /* Check if the first character is a letter */
-    if (!isalpha(name[0]))
-    {
+    if (!isalpha(name[0])) {
         return 0; /* First character is not a letter */
     }
 
     /* Check if the name contains only valid characters (letters and digits) */
-    for (int j = 0; j < strlen(name); j++)
-    {
-        if (!isalnum(name[j]))
-        {
+    for (int j = 0; j < strlen(name); j++) {
+        if (!isalnum(name[j])) {
             return 0; /* Name contains an invalid character */
         }
     }
@@ -199,15 +174,10 @@ int is_valid_macro_def(const char *line) {
     return 1;
 }
 
-
-
-
-void deploy_macro(const mcro *macro, FILE *target_file)
-{
+void deploy_macro(const mcro *macro, FILE *target_file) {
     /* Deploy its content line by line to the target_file */
     node *currentNode = macro->data;
-    while (currentNode != NULL)
-    {
+    while (currentNode != NULL) {
         fprintf(target_file, "%s\n", currentNode->line);
         currentNode = currentNode->next;
     }
@@ -216,7 +186,7 @@ void deploy_macro(const mcro *macro, FILE *target_file)
 void free_macro_list(struct macroList *list) {
     while (list != NULL) {
         struct macroList *temp = list; /* Store the current node in a temporary variable */
-        list = list->nextMacro; /* Move to the next node before deallocating the current one */
+        list = list->nextMacro;        /* Move to the next node before deallocating the current one */
 
         /* Make sure the macro is not NULL before freeing its memory */
         if (temp->macro != NULL) {
@@ -233,17 +203,15 @@ void free_macro_list(struct macroList *list) {
     }
 }
 
-
 void free_content_list(struct content *list) {
     while (list != NULL) {
         struct content *temp = list; /* Store the current node in a temporary variable */
-        list = list->next; /* Move to the next node before deallocating the current one */
+        list = list->next;           /* Move to the next node before deallocating the current one */
 
         /* Free the memory for the current content node */
         free(temp);
     }
 }
-
 
 void write_line_to_file(const char *line, FILE *target_file) {
     fprintf(target_file, "%s\n", line);
