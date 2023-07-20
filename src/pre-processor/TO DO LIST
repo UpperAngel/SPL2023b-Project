@@ -1,0 +1,4 @@
+-need to go over all of the function with dynamic memmory allocating and add error handling in the case where the allocating failed.
+-need to do more thorough testing of the pre-processor func before shipping.
+-need to run the pre-processor on the virtual machine to verify that it works correctly.
+-need to check what to do if a given line is more than 80 characters 
