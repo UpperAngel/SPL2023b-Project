@@ -1,4 +1,4 @@
-#include "include/helper_fucntions.h"
+#include "pre-processor/pre-processor header files/pre_processor.h"
 
 FILE *create_file(const char *file_name, const char *extension) {
   FILE *created_file = NULL;
@@ -6,11 +6,11 @@ FILE *create_file(const char *file_name, const char *extension) {
   char *new_file_name;
   char *dot = NULL;
 
-  /* dynamiclly allocate memory for the file name and the extension */
+  /* dynamically allocate memory for the file name and the extension */
   new_file_name = (char *)malloc(strlen(file_name) + 1);
   if (new_file_name == NULL)
   {
-    printf("faild allocation for the file name \n");
+    printf("failed allocation for the file name \n");
     return NULL;
   }
   
@@ -27,7 +27,7 @@ FILE *create_file(const char *file_name, const char *extension) {
   new_file_name = strcat(new_file_name, extension);
   created_file = fopen(new_file_name, "w+");
 
-  /* checks if file was created succesfully */
+  /* checks if file was created successfully */
   if (created_file == NULL)
   {
     printf("failed to create file %s \n", new_file_name);
