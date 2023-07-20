@@ -34,6 +34,9 @@ int process_file(FILE *source_file, FILE *target_file) {
             add_to_macro_table(created_macro, &(macro_list));
             continue;
         }
+        if (is_valid_macro_def(line) == 0) {
+            return 0; /* Invalid macro definition means error, so don't make target file (return 0) */
+        }
 
         /* If inside a macro definition, add the line to the current macro */
         if (state == INSIDE_MACRO_DEF) {
