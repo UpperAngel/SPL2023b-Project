@@ -1,8 +1,6 @@
 #include "../include/first_pass.h"
-#include "../include/utils.h"
 
-enum opcodes
-{
+enum opcodes {
     /* group 1 */
     mov_op = 0,
     cmp_op = 1,
@@ -32,14 +30,12 @@ enum opcodes
     null_op = 16,
 };
 
-struct cm_entry
-{
+struct cm_entry {
     const char *command;
     opcodes opcode;
 };
 
-struct instruction
-{
+struct instruction {
     const char *command;
     const char *source_oparend;
     const char *target_oparend;
@@ -71,48 +67,64 @@ commandmap command_map[] = {
 
 };
 
-opcodes get_command_opcode(char *command)
-{
+opcodes get_command_opcode(char *command) {
     int i;
 
-    if (command == NULL) /* if the command is null we return the null op*/
+    if (command == NULL) /* if the command is null we return the null op (16) */
     {
         return null_op;
     }
-    for (i = 0; i < command_map[i].command != NULL; i++)
+    for (i = 0; i < command_map[i].command != NULL; i++) /* if the command is the same as a saved command we return it's
+                 opcode.*/
     {
-        if (strcmp(command, command_map[i].command) == 0)
-        {
+        if (strcmp(command, command_map[i].command) == 0) {
             return command_map[i].opcode;
         }
     }
-    return null_op;
+    return null_op; /* if we don't find the command we return null op */
 }
 
-BOOL is_valid_label( const char label[31])
-{
+char *get_label(const char *line) {
+    char *label = NULL;
     
-    int i;
-    if (!isalpha(label[0]))
-    {
-        return FALSE;
+    char *mod_line = strdup(line); 
+    
+    label = strtok(mod_line, ":");
+    if (label != NULL) {
+        
+        return label;
     }
     
-    /* checks command names */
-    for (i = 0; i < command_map[i].command != NULL; j++)
-    {
-        if (!isalnum(label[i]))
-        {
-            return FALSE;
+    // Clean up and return NULL if no label found
+    free(mod_line);
+    return NULL;
+}
+
+int is_valid_label(const char label[32]) {
+    int label_len = 32 int i;
+    int j;
+
+    if (label == NULL) {
+        return 0;
+    }
+
+    if (!isalpha(label[0])) {
+        return 0;
+    }
+
+    for (i = 0; i < label_len; i++) {
+        if (!isalnum(label[i])) {
+            return 0;
         }
-        
-        else if (strcmp(label, command_map[i].command) == 0)
-        {
-            return FALSE;
+    }
+
+    /* checks command names */
+    for (j = 0; j < command_map[j].command != NULL; j++) {
+        else if (strcmp(label, command_map[i].command) != 0) {
+            return 0;
         }
 
-        /* add check against label database */       
+        /* ADD CHECK AGAINST LABEL DATABASE */
     }
-    return TRUE;
-        
+    return 1;
 }
