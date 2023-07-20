@@ -30,10 +30,6 @@ int process_file(FILE *source_file, FILE *target_file) {
         if (state == OUTSIDE_MACRO_DEF && is_valid_macro_def(line) == 1 ) {
             /* If the line is a valid macro definition, process it and continue to the next line. */
             state = INSIDE_MACRO_DEF;
-            if (sscanf(line, "mcro %s", curr_mcro_name) != 1) {
-                printf("Invalid macro definition: %s\n", line);
-                continue;
-            }
             created_macro = create_mcro(curr_mcro_name);
             add_to_macro_table(created_macro, &(macro_list));
             continue;
