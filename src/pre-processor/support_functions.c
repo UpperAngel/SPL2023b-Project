@@ -141,34 +141,44 @@ mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
 
 
 
-/* Function to check if the given macro name is valid */
-int is_valid_macro_name(const char *name)
-{
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int is_valid_macro_name(const char *name) {
+    /* Maximum allowed length for macro name */
+    const int maxNameLength = 31;
+
+    /* Check the length of the name */
+    size_t nameLength = strnlen(name, maxNameLength + 1);
+
+    /* Check if the length exceeds the maximum allowed length */
+    if (nameLength > maxNameLength) {
+        return 0; /* Name exceeds the maximum allowed length */
+    }
+
     /* Check if name is a reserved keyword */
     const char *reservedKeywords[] = {
             "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
-            "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"};
+            "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"
+    };
+
     int numReservedKeywords = sizeof(reservedKeywords) / sizeof(reservedKeywords[0]);
 
-    for (int i = 0; i < numReservedKeywords; i++)
-    {
-        if (strcmp(name, reservedKeywords[i]) == 0)
-        {
+    for (int i = 0; i < numReservedKeywords; i++) {
+        if (strcmp(name, reservedKeywords[i]) == 0) {
             return 0; /* Name is a reserved keyword */
         }
     }
 
     /* Check if the first character is a letter */
-    if (!isalpha(name[0]))
-    {
+    if (!isalpha(name[0])) {
         return 0; /* First character is not a letter */
     }
 
     /* Check if the name contains only valid characters (letters and digits) */
-    for (int j = 0; j < strlen(name); j++)
-    {
-        if (!isalnum(name[j]))
-        {
+    for (size_t j = 0; j < nameLength; j++) {
+        if (!isalnum(name[j])) {
             return 0; /* Name contains an invalid character */
         }
     }
@@ -176,6 +186,7 @@ int is_valid_macro_name(const char *name)
     /* Name passes all checks */
     return 1;
 }
+
 
 
 
@@ -204,9 +215,6 @@ int is_valid_macro_def(const char *line) {
         return 2;
     }
 
-
-
-
     /* Get the next token (macro name) */
     token = strtok(NULL, " ");
     if (token == NULL || !is_valid_macro_name(token)) {
@@ -214,10 +222,6 @@ int is_valid_macro_def(const char *line) {
         free(mod_line);
         return 0;
     }
-
-
-
-
 
     /* Check if there are any more tokens (should be no more tokens for a valid macro definition) */
     token = strtok(NULL, " ");
