@@ -1,5 +1,4 @@
-#include "../include/support_functions.h"
-#include "line.h"
+#include "pre-processor header files/support_functions.h"
 /* API style documentation of every function is in the "supportFunction.h" file */
 
 /* Function to add a line to the content of a macro */
@@ -147,6 +146,9 @@ mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
 #include <ctype.h>
 
 int is_valid_macro_name(const char *name) {
+    int i;
+    int j;
+    
     /* Maximum allowed length for macro name */
     const int maxNameLength = 31;
 
@@ -166,7 +168,7 @@ int is_valid_macro_name(const char *name) {
 
     int numReservedKeywords = sizeof(reservedKeywords) / sizeof(reservedKeywords[0]);
 
-    for (int i = 0; i < numReservedKeywords; i++) {
+    for (i = 0; i < numReservedKeywords; i++) {
         if (strcmp(name, reservedKeywords[i]) == 0) {
             return 0; /* Name is a reserved keyword */
         }
@@ -178,7 +180,7 @@ int is_valid_macro_name(const char *name) {
     }
 
     /* Check if the name contains only valid characters (letters and digits) */
-    for (size_t j = 0; j < nameLength; j++) {
+    for (j = 0; j < nameLength; j++) {
         if (!isalnum(name[j])) {
             return 0; /* Name contains an invalid character */
         }
@@ -312,6 +314,7 @@ int skip_line(char *line)
 
 /* Function to deploy macros in a line to the target file */
 void deploy_macros_in_line(const char line[MAXLEN], FILE *target_file, struct macroList *macroTable) {
+    int i;
     char copyLine[MAXLEN];
     char *tokens[80]; /* Array to store the tokens */
     int numTokens = 0;
@@ -326,7 +329,7 @@ void deploy_macros_in_line(const char line[MAXLEN], FILE *target_file, struct ma
     }
 
     /* Iterate through the tokens and check if they match any macro name */
-    for (int i = 0; i < numTokens; i++) {
+    for (i = 0; i < numTokens; i++) {
         mcro *foundMacro = find_macro_by_name(macroTable, tokens[i]);
         if (foundMacro != NULL) {
             /* Deploy the macro's lines to the target file */
