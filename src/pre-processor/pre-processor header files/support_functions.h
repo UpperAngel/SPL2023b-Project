@@ -83,8 +83,7 @@ void add_line_to_mcro(mcro *macro, char *contentSource);
  * @warning The function assumes that the given `name` is a valid null-terminated C string.
  *          It is the caller's responsibility to ensure the validity of the input.
  */
-
-struct macroList *createMacroList();
+struct macroList *createMacroList(void);
 
 
 

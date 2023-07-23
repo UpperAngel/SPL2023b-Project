@@ -88,7 +88,7 @@ mcro *create_mcro(const char *name)
 
 
 /* Function to create a new macro list */
-struct macroList *createMacroList()
+struct macroList *createMacroList(void)
 {
     struct macroList *newList = malloc(sizeof(struct macroList));
     /* Here SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY */
@@ -110,7 +110,7 @@ mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
 {
     if (macroTable == NULL || name == NULL)
     {
-        /* Handle the case of null pointers gracefully */
+        /* Handle the case of null pointer */
         return NULL;
     }
 
