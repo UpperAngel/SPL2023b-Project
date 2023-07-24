@@ -1,0 +1,150 @@
+Index: src/Second - Pass/SecondPass.c
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include <stdio.h>\n#include <string.h>\n\n#define MAXLEN 80\n\n/* Function to complete the coding of operands based on addressing method */\nvoid complete_operand_coding(char *operand, int addressing_method, FILE *output_file, SymbolTable *symbol_table) {\n    /* Implement the logic to complete the coding of operands\n     * based on the addressing method and update the machine code\n     * accordingly in the output file.\n     */\n}\n\n/* Function to perform the second pass */\nvoid second_pass(FILE *source_file, FILE *output_file, SymbolTable *symbol_table) {\n    int IC = 0; /* Instruction counter */\n    char line[MAXLEN];\n    int line_num = 0;\n\n    while (fgets(line, sizeof(line), source_file)) {\n        line_num++; // Increment the line number for error reporting\n\n        /* Create a copy of the line for tokenization */\n        char line_copy[MAXLEN];\n        strcpy(line_copy, line);\n\n        /* Remove trailing newline character from the line */\n        line_copy[strcspn(line_copy, \"\\n\")] = '\\0';\n\n        /* Tokenize the line_copy to separate fields */\n        char *token = strtok(line_copy, \" \\t\");\n\n        /* If the line_copy is empty or a comment, skip it */\n        if (token == NULL || token[0] == ';') {\n            continue;\n        }\n\n        /* Check if the first field is a symbol, skip it */\n        if (is_symbol(token)) {\n            /* Get the next token */\n            token = strtok(NULL, \" \\t\");\n        }\n\n        /* Check if it's a directive (.extern, .string, .data) */\n        if (is_directive(token)) {\n            continue;\n        }\n\n        /* Check if it's an .entry prompt */\n        if (strcmp(token, \".entry\") == 0) {\n            /* Get the next token which is the symbol to mark as .entry */\n            token = strtok(NULL, \" \\t\");\n            mark_as_entry(symbol_table, token); /* Implement this function */\n            continue;\n        }\n\n        /* If it's not a symbol or a directive, then it's an instruction */\n        /* Get the addressing method and the operands */\n        int addressing_method = get_addressing_method(token); /* Implement this function */\n        char *operand1 = strtok(NULL, \" \\t\");\n        char *operand2 = strtok(NULL, \" \\t\");\n\n        /* Check for errors in the syntax of the source program */\n        if (!is_valid_instruction(token, operand1, operand2)) { /* Implement this function */\n            printf(\"Error in line %d: Invalid instruction or operands.\\n\", line_num);\n            // You can decide whether to continue or exit after an error is found.\n            // In this example, we continue to find additional errors.\n            continue;\n        }\n\n        /* Complete the coding of operands based on the addressing method */\n        complete_operand_coding(operand1, addressing_method, output_file, symbol_table);\n        complete_operand_coding(operand2, addressing_method, output_file, symbol_table);\n\n        /* Update the instruction counter (IC) */\n        IC += get_instruction_length(token, operand1, operand2); /* Implement this function */\n    }\n}\n
+===================================================================
+diff --git a/src/Second - Pass/SecondPass.c b/src/Second - Pass/SecondPass.c
+--- a/src/Second - Pass/SecondPass.c	
++++ b/src/Second - Pass/SecondPass.c	
+@@ -1,78 +1,83 @@
+ #include <stdio.h>
+ #include <string.h>
++#include <stdlib.h>
+ 
+-#define MAXLEN 80
++#define MAXLEN 81
+ 
+-/* Function to complete the coding of operands based on addressing method */
+-void complete_operand_coding(char *operand, int addressing_method, FILE *output_file, SymbolTable *symbol_table) {
+-    /* Implement the logic to complete the coding of operands
+-     * based on the addressing method and update the machine code
+-     * accordingly in the output file.
+-     */
+-}
++typedef struct {
++    char label[32];
++    int address;
++} SymbolTable;
+ 
+-/* Function to perform the second pass */
+ void second_pass(FILE *source_file, FILE *output_file, SymbolTable *symbol_table) {
+-    int IC = 0; /* Instruction counter */
++    int IC = 0; // Instruction Counter
++    int line_number = 1; // Line number in the source file
+     char line[MAXLEN];
+-    int line_num = 0;
+ 
+     while (fgets(line, sizeof(line), source_file)) {
+-        line_num++; // Increment the line number for error reporting
+-
+-        /* Create a copy of the line for tokenization */
+-        char line_copy[MAXLEN];
+-        strcpy(line_copy, line);
+-
+-        /* Remove trailing newline character from the line */
+-        line_copy[strcspn(line_copy, "\n")] = '\0';
+-
+-        /* Tokenize the line_copy to separate fields */
+-        char *token = strtok(line_copy, " \t");
+-
+-        /* If the line_copy is empty or a comment, skip it */
+-        if (token == NULL || token[0] == ';') {
+-            continue;
++        // Step 2: Read the next line from the source file. If the source file ends, exit the loop.
++        if (feof(source_file)) {
++            break;
+         }
+ 
+-        /* Check if the first field is a symbol, skip it */
+-        if (is_symbol(token)) {
+-            /* Get the next token */
+-            token = strtok(NULL, " \t");
++        // Step 3: If the first field is a symbol, skip it.
++        char *token = strtok(line, " \t");
++        if (is_label(token)) {
++            token = strtok(NULL, " \t"); // Move to the next field
+         }
+ 
+-        /* Check if it's a directive (.extern, .string, .data) */
++        // Step 4: Check if the current line is a directive statement
+         if (is_directive(token)) {
+-            continue;
+-        }
++            // Step 5: Handle the directive statement accordingly
++            if (strcmp(token, ".extern") == 0) {
++                // Handle '.extern' directive
++                char *label = strtok(NULL, " \t\n");
++                handle_extern_directive(label, symbol_table);
++            } else if (strcmp(token, ".data") == 0) {
++                // Handle '.data' directive
++                char *label = strtok(NULL, " \t");
++                char *parameters = strtok(NULL, "\n");
++                if (!handle_data_directive(label, parameters, output_file, symbol_table, &IC, line_number)) {
++                    // Error occurred while processing the .data directive
++                    // Handle the error and exit if necessary
++                }
++            } else if (strcmp(token, ".string") == 0) {
++                // Handle '.string' directive
++                char *label = strtok(NULL, " \t");
++                char *string = strtok(NULL, "\n");
++                if (!handle_string_directive(label, string, output_file, symbol_table, &IC, line_number)) {
++                    // Error occurred while processing the .string directive
++                    // Handle the error and exit if necessary
++                }
++            }
++        } else {
++            // Step 6: Handle instruction sentences
++            char *instruction = token;
++            char *operand1 = strtok(NULL, ", \t");
++            char *operand2 = strtok(NULL, ", \t");
+ 
+-        /* Check if it's an .entry prompt */
+-        if (strcmp(token, ".entry") == 0) {
+-            /* Get the next token which is the symbol to mark as .entry */
+-            token = strtok(NULL, " \t");
+-            mark_as_entry(symbol_table, token); /* Implement this function */
+-            continue;
++            if (operand1 && !operand2) {
++                // Instruction with one operand
++                if (!handle_instruction_with_one_operand(instruction, operand1, output_file, symbol_table, &IC, line_number)) {
++                    // Error occurred while processing the instruction with one operand
++                    // Handle the error and exit if necessary
++                }
++            } else if (!operand1 && !operand2) {
++                // Instruction without operands
++                if (!handle_instruction_without_operands(instruction, output_file, symbol_table, &IC, line_number)) {
++                    // Error occurred while processing the instruction without operands
++                    // Handle the error and exit if necessary
++                }
++            }
+         }
+ 
+-        /* If it's not a symbol or a directive, then it's an instruction */
+-        /* Get the addressing method and the operands */
+-        int addressing_method = get_addressing_method(token); /* Implement this function */
+-        char *operand1 = strtok(NULL, " \t");
+-        char *operand2 = strtok(NULL, " \t");
++        // Step 8: Error Handling
++        // You can add error handling for syntax errors, undefined symbols, etc.
+ 
+-        /* Check for errors in the syntax of the source program */
+-        if (!is_valid_instruction(token, operand1, operand2)) { /* Implement this function */
+-            printf("Error in line %d: Invalid instruction or operands.\n", line_num);
+-            // You can decide whether to continue or exit after an error is found.
+-            // In this example, we continue to find additional errors.
+-            continue;
+-        }
++        // Step 9: Repeat the loop for the next line in the source file
++        line_number++;
++    }
+ 
+-        /* Complete the coding of operands based on the addressing method */
+-        complete_operand_coding(operand1, addressing_method, output_file, symbol_table);
+-        complete_operand_coding(operand2, addressing_method, output_file, symbol_table);
+-
+-        /* Update the instruction counter (IC) */
+-        IC += get_instruction_length(token, operand1, operand2); /* Implement this function */
+-    }
++    // Step 9: Completion of the assembly process
++    // You can add code here for generating output files, finalizing the machine code, etc.
+ }
