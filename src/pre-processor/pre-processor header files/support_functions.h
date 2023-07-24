@@ -1,5 +1,5 @@
 /* Maximum length for a line of content */
-#define MAXLEN 80
+#define MAXLEN 81
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
