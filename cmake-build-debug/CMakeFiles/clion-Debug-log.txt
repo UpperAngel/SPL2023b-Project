@@ -12,5 +12,14 @@ CMake Warning:
 
 
 -- Configuring done
--- Generating done
--- Build files have been written to: /home/david/CLionProjects/SPL2023b-Project-copy/cmake-build-debug
+CMake Error at CMakeLists.txt:10 (add_executable):
+  Cannot find source file:
+
+    src/pre-processor/line.c
+
+
+CMake Error at CMakeLists.txt:10 (add_executable):
+  No SOURCES given to target: SPL2023b_Project_copy
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.

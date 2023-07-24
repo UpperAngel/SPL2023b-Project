@@ -1,29 +1,5 @@
-We have seen that in the first pass, the assembler cannot build the machine code of the user operands
-in symbols that have not yet been defined. Only after the assembler has gone through the entire program, so that all symbols have entered
-Already to the symbol table, the assembler can complete the machine code of all the operands.
-For this purpose, the assembler performs an additional pass (second pass) on the entire source file, and updates the machine code of
-The operands that use symbols, using the symbol values from the symbol table.
-At the end of the second pass, the program will be completely translated into machine code.
-
-To refine the understanding of the work process of the assembler, we will present below a skeletal algorithm for the first pass and the second pass.
-We divide the machine code into two parts: the instruction image and the data image.
-Each part has its own counter, and they are called IC the instruction counter - Instruction-Counter and the data counter Data-Counter.
-Also, we will denote by L the number of words occupied by the machine code of a given instruction.
-At each pass, the source file is read from the beginning.
-
-second pass:
-1. Initialize IC to 0.
-2. Read the next line from the source file. If the source file ends, go to 10.
-3. If the first field is a symbol, skip it.
-4. Is this the guide: .extern .string, .data, ? If so, go back to 2.
-5. Is this an .entry prompt? If not, go to 7.
-6. In the symbol table, mark the appropriate symbols as .entry Return to 2.
-7. Complete the coding of the operands starting with the second word of the instruction's binary code, according
-For the addressing method. If the operand is a symbol, find the addressee in the symbol table.
-8. Update IC to IC + L.
-9. Go back to 2.
-10. If errors are found in the second pass, stop.
-11. Create and save the output files: a code file known as an external symbols file, and a symbol file of
-Entry points (more details below).
-
-Turn this psuedo code to code in c assuming that you already have all the function implemintations.
+mcro            m1 
+m1
+       endmcro
+     no spaces shoudl          be seen 
+    m1

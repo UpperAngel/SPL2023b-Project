@@ -3,13 +3,14 @@ project(SPL2023b_Project_copy C)
 
 set(CMAKE_C_STANDARD 90)
 
+add_compile_options(-ansi -Wall -pedantic)
+
 include_directories("src/pre-processor/pre-processor header files")
 
 add_executable(SPL2023b_Project_copy
         "src/pre-processor/pre-processor header files/helper_fucntions.h"
         "src/pre-processor/pre-processor header files/pre_processor.h"
         "src/pre-processor/pre-processor header files/support_functions.h"
-        src/pre-processor/line.c
         src/pre-processor/main.c
         src/pre-processor/pre_processor.c
         src/pre-processor/support_functions.c

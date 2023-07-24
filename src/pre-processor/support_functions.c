@@ -1,5 +1,5 @@
-#include "../include/support_functions.h"
-#include "line.h"
+#include "pre-processor header files/pre_processor.h"
+
 /* API style documentation of every function is in the "supportFunction.h" file */
 
 /* Function to add a line to the content of a macro */
@@ -108,13 +108,15 @@ struct macroList *createMacroList()
 /* Function to find a macro in the macro list by its name */
 mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
 {
+    struct macroList *current;
+
     if (macroTable == NULL || name == NULL)
     {
         /* Handle the case of null pointers gracefully */
         return NULL;
     }
 
-    struct macroList *current = macroTable;
+    current = macroTable;
 
     while (current != NULL)
     {
@@ -149,6 +151,8 @@ mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
 int is_valid_macro_name(const char *name) {
     /* Maximum allowed length for macro name */
     const int maxNameLength = 31;
+    int i = 0;
+    size_t j = 0;
 
     /* Check the length of the name */
     size_t nameLength = strnlen(name, maxNameLength + 1);
@@ -166,7 +170,7 @@ int is_valid_macro_name(const char *name) {
 
     int numReservedKeywords = sizeof(reservedKeywords) / sizeof(reservedKeywords[0]);
 
-    for (int i = 0; i < numReservedKeywords; i++) {
+    for (i = 0; i < numReservedKeywords; i++) {
         if (strcmp(name, reservedKeywords[i]) == 0) {
             return 0; /* Name is a reserved keyword */
         }
@@ -178,7 +182,7 @@ int is_valid_macro_name(const char *name) {
     }
 
     /* Check if the name contains only valid characters (letters and digits) */
-    for (size_t j = 0; j < nameLength; j++) {
+    for (j = 0; j < nameLength; j++) {
         if (!isalnum(name[j])) {
             return 0; /* Name contains an invalid character */
         }
@@ -315,18 +319,20 @@ void deploy_macros_in_line(const char line[MAXLEN], FILE *target_file, struct ma
     char copyLine[MAXLEN];
     char *tokens[80]; /* Array to store the tokens */
     int numTokens = 0;
+    int i = 0;
+    char *token = NULL;
 
     strcpy(copyLine, line);
 
     /* Break the line into tokens */
-    char *token = strtok(copyLine, " \t\n");
+    token = strtok(copyLine, " \t\n");
     while (token != NULL) {
         tokens[numTokens++] = token;
         token = strtok(NULL, " \t\n");
     }
 
     /* Iterate through the tokens and check if they match any macro name */
-    for (int i = 0; i < numTokens; i++) {
+    for (i = 0; i < numTokens; i++) {
         mcro *foundMacro = find_macro_by_name(macroTable, tokens[i]);
         if (foundMacro != NULL) {
             /* Deploy the macro's lines to the target file */

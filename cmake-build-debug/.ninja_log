@@ -1,8 +1,12 @@
 # ninja log v5
-1	35	1690094005398760407	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o	44b1dfaf1a8ee21
-1	58	1690094005418760318	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o	83c0e67e8d441c30
-0	26	1690183322197000934	build.ninja	b91006c8a75a79a5
+0	25	1690191096265729336	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o	a41cbb030532d668
+1	69	1690191511382469529	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o	54230b0b0e7c6373
+0	19	1690191558494549357	build.ninja	b91006c8a75a79a5
 58	75	1690094005438760229	SPL2023b_Project_copy	503635b5ffe3f838
-1	34	1690094005394760425	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o	5365950bd1a86c55
-1	35	1690094005398760407	CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o	caa28cbbe0124796
-0	20	1689854120863490320	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/line.c.o	84d8019490bf0696
+0	33	1690191096273729351	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o	c02cf5f3118f7066
+1	33	1690191096273729351	CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o	a4ff9ac6851bb3f2
+0	10	1690191096249729305	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/line.c.o	49cc1b82add12a58
+0	20	1690191558494549357	build.ninja	b91006c8a75a79a5
+0	20	1690191558522549404	SPL2023b_Project_copy	503635b5ffe3f838
+0	30	1690191600202619688	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o	c02cf5f3118f7066
+30	48	1690191600226619728	SPL2023b_Project_copy	503635b5ffe3f838

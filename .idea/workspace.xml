@@ -22,13 +22,21 @@
   <component name="ChangeListManager">
     <list default="true" id="1b55be25-54df-4908-bfd7-87cd61d1ee6b" name="Changes" comment="update some files">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-f24b2e7e9864b95c85e8.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/index-2023-07-24T06-28-11-0450.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.cmake/api/v1/reply/target-SPL2023b_Project_copy-Debug-aa9d99e4f0a12a55ff99.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/line.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/line.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pre-processor/TO DO LIST" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/TO DO LIST" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/input.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/create_file_func.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/create_file_func.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pre-processor/line.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pre-processor/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pre-processor/support_functions.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/support_functions.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
