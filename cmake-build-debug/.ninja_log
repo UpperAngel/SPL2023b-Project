@@ -1,7 +1,7 @@
 # ninja log v5
 1	35	1690094005398760407	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o	44b1dfaf1a8ee21
 1	58	1690094005418760318	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o	83c0e67e8d441c30
-0	26	1690180091438399439	build.ninja	b91006c8a75a79a5
+0	26	1690183322197000934	build.ninja	b91006c8a75a79a5
 58	75	1690094005438760229	SPL2023b_Project_copy	503635b5ffe3f838
 1	34	1690094005394760425	CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o	5365950bd1a86c55
 1	35	1690094005398760407	CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o	caa28cbbe0124796

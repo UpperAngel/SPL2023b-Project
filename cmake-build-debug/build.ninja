@@ -51,35 +51,35 @@ build cmake_object_order_depends_target_SPL2023b_Project_copy: phony || CMakeFil
 
 build CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/line.c.o: C_COMPILER__SPL2023b_Project_copy_Debug /home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/line.c || cmake_object_order_depends_target_SPL2023b_Project_copy
   DEP_FILE = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/line.c.o.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu11
+  FLAGS = -g -fdiagnostics-color=always -std=gnu90
   INCLUDES = -I"/home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/pre-processor header files"
   OBJECT_DIR = CMakeFiles/SPL2023b_Project_copy.dir
   OBJECT_FILE_DIR = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor
 
 build CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o: C_COMPILER__SPL2023b_Project_copy_Debug /home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/main.c || cmake_object_order_depends_target_SPL2023b_Project_copy
   DEP_FILE = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu11
+  FLAGS = -g -fdiagnostics-color=always -std=gnu90
   INCLUDES = -I"/home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/pre-processor header files"
   OBJECT_DIR = CMakeFiles/SPL2023b_Project_copy.dir
   OBJECT_FILE_DIR = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor
 
 build CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o: C_COMPILER__SPL2023b_Project_copy_Debug /home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/pre_processor.c || cmake_object_order_depends_target_SPL2023b_Project_copy
   DEP_FILE = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu11
+  FLAGS = -g -fdiagnostics-color=always -std=gnu90
   INCLUDES = -I"/home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/pre-processor header files"
   OBJECT_DIR = CMakeFiles/SPL2023b_Project_copy.dir
   OBJECT_FILE_DIR = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor
 
 build CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o: C_COMPILER__SPL2023b_Project_copy_Debug /home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/support_functions.c || cmake_object_order_depends_target_SPL2023b_Project_copy
   DEP_FILE = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu11
+  FLAGS = -g -fdiagnostics-color=always -std=gnu90
   INCLUDES = -I"/home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/pre-processor header files"
   OBJECT_DIR = CMakeFiles/SPL2023b_Project_copy.dir
   OBJECT_FILE_DIR = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor
 
 build CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o: C_COMPILER__SPL2023b_Project_copy_Debug /home/david/CLionProjects/SPL2023b-Project-copy/src/create_file_func.c || cmake_object_order_depends_target_SPL2023b_Project_copy
   DEP_FILE = CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o.d
-  FLAGS = -g -fdiagnostics-color=always -std=gnu11
+  FLAGS = -g -fdiagnostics-color=always -std=gnu90
   INCLUDES = -I"/home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/pre-processor header files"
   OBJECT_DIR = CMakeFiles/SPL2023b_Project_copy.dir
   OBJECT_FILE_DIR = CMakeFiles/SPL2023b_Project_copy.dir/src
