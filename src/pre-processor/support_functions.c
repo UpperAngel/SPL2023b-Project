@@ -153,6 +153,13 @@ int is_valid_macro_name(const char *name) {
     const int maxNameLength = 31;
     int i = 0;
     size_t j = 0;
+    int numReservedKeywords = 0;
+
+    /* Check if name is a reserved keyword */
+    const char *reservedKeywords[] = {
+            "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
+            "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"
+    };
 
     /* Check the length of the name */
     size_t nameLength = strnlen(name, maxNameLength + 1);
@@ -162,13 +169,8 @@ int is_valid_macro_name(const char *name) {
         return 0; /* Name exceeds the maximum allowed length */
     }
 
-    /* Check if name is a reserved keyword */
-    const char *reservedKeywords[] = {
-            "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
-            "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"
-    };
 
-    int numReservedKeywords = sizeof(reservedKeywords) / sizeof(reservedKeywords[0]);
+     numReservedKeywords = sizeof(reservedKeywords) / sizeof(reservedKeywords[0]);
 
     for (i = 0; i < numReservedKeywords; i++) {
         if (strcmp(name, reservedKeywords[i]) == 0) {
@@ -425,19 +427,20 @@ int valid_end_macro(const char *line) {
 /* Function to check if a given line contains a comment */
 int is_comment(const char *line) {
     char in[MAXLEN];
-    strcpy(in, line); // Copy the input line to a local buffer 'in'.
+    char *c_pos = NULL;
+    strcpy(in, line); /* Copy the input line to a local buffer 'in'. */
 
-    char *c_pos = strchr(in, ';'); // Find the position of the first semicolon in 'in'.
+    c_pos = strchr(in, ';'); /* Find the position of the first semicolon in 'in'. */
     if (c_pos != NULL && !isspace(*(c_pos + 1))) {
         /*
          * Check if a semicolon is found and if the character immediately after it
          * is not a whitespace character (newline, tab, or space).
          * This condition ensures that it's not an empty comment or a comment with only spaces after the semicolon.
          */
-        return 1; // Return 1 to indicate that the line contains a comment.
+        return 1; /* Return 1 to indicate that the line contains a comment. */
     }
 
-    return 0; // Return 0 if no comment is found in the line.
+    return 0; /* Return 0 if no comment is found in the line. */
 }
 
 
@@ -452,13 +455,13 @@ int is_empty(const char *line) {
              * The `(unsigned char)` cast is used to handle potential negative char values correctly.
              */
 
-            return 0; // Return 0 immediately if a non-whitespace character is found.
+            return 0; /* Return 0 immediately if a non-whitespace character is found. */
         }
 
-        line++; // Move to the next character in the line.
+        line++; /* Move to the next character in the line. */
     }
 
-    return 1; // Return 1 if the loop reaches the end of the line without finding a non-whitespace character.
+    return 1; /* Return 1 if the loop reaches the end of the line without finding a non-whitespace character. */
 }
 
 
