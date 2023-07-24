@@ -1,5 +1,5 @@
-mcro            m1 
+mcro m1
+endmcro
+A
 m1
-       endmcro
-     no spaces shoudl          be seen 
-    m1
+A

@@ -88,7 +88,7 @@ mcro *create_mcro(const char *name)
 
 
 /* Function to create a new macro list */
-struct macroList *createMacroList()
+struct macroList *createMacroList(void)
 {
     struct macroList *newList = malloc(sizeof(struct macroList));
     /* Here SHOULD BE ADDED ERROR IF FAILED TO ALLOCATE MEMORY */
@@ -112,7 +112,7 @@ mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
 
     if (macroTable == NULL || name == NULL)
     {
-        /* Handle the case of null pointers gracefully */
+        /* Handle the case of null pointers */
         return NULL;
     }
 
@@ -308,7 +308,7 @@ void write_line_to_file(const char *line, FILE *target_file) {
 
 
 /* Function to skip a line if it is a comment or empty */
-int skip_line(char *line)
+int comment_or_empty(char *line)
 {
     return ( is_comment(line) || is_empty(line));
 }
@@ -350,10 +350,10 @@ void deploy_macros_in_line(const char line[MAXLEN], FILE *target_file, struct ma
 
 
 /* Modify the check_line_for_macro function to return a boolean */
-int check_line_for_macro(const char line[80], struct macroList* macroTable) {
-    char copyLine[80];
+int check_line_for_macro(const char line[MAXLEN], struct macroList* macroTable) {
+    char copyLine[MAXLEN];
     /* Array to store the tokens */
-    char* tokens[80];
+    char* tokens[MAXLEN];
     int numTokens = 0;
     char* token;
 
@@ -463,6 +463,38 @@ int is_empty(const char *line) {
 
     return 1; /* Return 1 if the loop reaches the end of the line without finding a non-whitespace character. */
 }
+
+
+char* get_second_token (const char* line){
+    /* Create a copy of the input line to avoid modifying the original string */
+    char* line_copy = strdup(line);
+
+    /* Initialize variables to keep track of tokens and the second token */
+    char* token;
+    char* second_token = NULL;
+    int token_count = 0;
+
+    /* Tokenize the line using " \t" as the delimiter */
+    token = strtok(line_copy, " \t");
+
+    /* Loop through all tokens and find the second one */
+    while (token != NULL) {
+        token_count++;
+        if (token_count == 2) {
+            /* Store the second token */
+            second_token = strdup(token);
+            break;
+        }
+        token = strtok(NULL, " \t");
+    }
+
+    /* Free the memory allocated for the copy of the line */
+    free(line_copy);
+
+    /* Return the second token */
+    return second_token;
+}
+
 
 
 

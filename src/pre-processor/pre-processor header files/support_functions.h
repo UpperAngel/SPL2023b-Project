@@ -12,7 +12,7 @@ enum ValidEndMacroResult {
 };
 
 /* Enum to represent different states of parsing a file */
-enum State {
+enum MacroState {
     OUTSIDE_MACRO_DEF, /* Indicates that the parser is currently outside a macro definition. */
     INSIDE_MACRO_DEF /* Indicates that the parser is currently inside a macro definition. */
 };
@@ -84,7 +84,7 @@ void add_line_to_mcro(mcro *macro, char *contentSource);
  *          It is the caller's responsibility to ensure the validity of the input.
  */
 
-struct macroList *createMacroList();
+struct macroList *createMacroList(void);
 
 
 
@@ -347,7 +347,7 @@ void write_line_to_file(const char *line, FILE *target_file);
  *
  * @see is_comment, is_empty
  */
-int skip_line(char *line);
+int comment_or_empty(char *line);
 
 
 
@@ -400,7 +400,7 @@ void deploy_macros_in_line(const char line[MAXLEN], FILE *target_file, struct ma
  *
  * @see find_macro_by_name
  */
-int check_line_for_macro(const char line[80], struct macroList* macroTable);
+int check_line_for_macro(const char line[MAXLEN], struct macroList* macroTable);
 
 
 
@@ -451,3 +451,15 @@ int is_comment(const char *);
  * @return 1 if the line is empty (contains only whitespace characters), 0 otherwise.
  */
 int is_empty(const char *);
+
+
+
+/**
+    Extracts the second token from a given input line.
+    This function tokenizes the input line using whitespace characters (' ' and '\t') as delimiters
+    and returns a pointer to the second token found in the line. It creates a copy of the input line
+    to avoid modifying the original string.
+    @param line The input line from which the second token will be extracted.
+    @return A pointer to the second token if it exists, or NULL if there are less than two tokens in the line.
+    */
+char* get_second_token (const char *line);
