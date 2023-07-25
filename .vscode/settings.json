@@ -5,5 +5,9 @@
         "line.h": "c",
         "helper_fucntions.h": "c",
         "support_functions.h": "c"
-    }
+    },
+    "cSpell.words": [
+        "endmcro",
+        "mcro"
+    ]
 }

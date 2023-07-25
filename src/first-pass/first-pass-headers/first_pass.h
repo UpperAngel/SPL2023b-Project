@@ -7,5 +7,6 @@
 #include <string.h>
 
 typedef enum opcode Opcode;
-typedef struct cm_entry CommandMap;
+typedef struct cmEntry CommandMap;
+typedef struct encodedInstruction EncodedInstruction;
 #endif
