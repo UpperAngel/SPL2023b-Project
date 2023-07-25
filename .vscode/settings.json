@@ -5,5 +5,11 @@
         "line.h": "c",
         "helper_fucntions.h": "c",
         "support_functions.h": "c"
-    }
+    },
+    "cSpell.words": [
+        "endmcro",
+        "mcro"
+    ],
+    "cmake.configureOnOpen": true,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }
