@@ -14,4 +14,4 @@ add_executable(SPL2023b_Project_copy
         src/pre-processor/main.c
         src/pre-processor/pre_processor.c
         src/pre-processor/support_functions.c
-        src/create_file_func.c)
+        src/create_file_func.c src/pre-processor/handle_error.c src/pre-processor/handle_error.h)

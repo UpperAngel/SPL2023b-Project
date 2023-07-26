@@ -1,5 +1,4 @@
-mcro m1
-endmcro
-A
-m1
-A
+;wont see this line
+            ;wont see this line
+         you   will,see   this,,,line   but ,also you,will see     god,
+          

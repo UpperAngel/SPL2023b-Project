@@ -20,17 +20,22 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1b55be25-54df-4908-bfd7-87cd61d1ee6b" name="Changes" comment="update some files">
+    <list default="true" id="1b55be25-54df-4908-bfd7-87cd61d1ee6b" name="Changes" comment="Refactored and fixed the pre_processor.c.">
+      <change afterPath="$PROJECT_DIR$/src/pre-processor/handle_error.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pre-processor/handle_error.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/SPL2023b_Project_copy" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/SPL2023b_Project_copy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/input.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pre-processor/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pre-processor/pre-processor header files/support_functions.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/pre-processor header files/support_functions.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pre-processor/pre_processor.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/pre_processor.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pre-processor/support_functions.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/support_functions.c" afterDir="false" />
@@ -97,11 +102,6 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -113,6 +113,7 @@
       <updated>1689853294746</updated>
       <workItem from="1689853297083" duration="8689000" />
       <workItem from="1690179996884" duration="214000" />
+      <workItem from="1690354741082" duration="1855000" />
     </task>
     <task id="LOCAL-00001" summary="update some files">
       <option name="closed" value="true" />
@@ -146,7 +147,15 @@
       <option name="project" value="LOCAL" />
       <updated>1690191829551</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Refactored and fixed the pre_processor.c.">
+      <option name="closed" value="true" />
+      <created>1690198567818</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1690198567818</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -199,6 +208,7 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="update some files" />
-    <option name="LAST_COMMIT_MESSAGE" value="update some files" />
+    <MESSAGE value="Refactored and fixed the pre_processor.c." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored and fixed the pre_processor.c." />
   </component>
 </project>

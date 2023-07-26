@@ -1,11 +1,13 @@
 /* Maximum length for a line of content */
-#define MAXLEN 81
+#define MAXLEN 200
+#define MACRO_NAME_LENGTH 32
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
-/* Enum to represent the return values of valid_end_macro */
+/* Enum to represent the return values of valid_end_macro_def */
 enum ValidEndMacroResult {
     END_MACRO_WITH_OTHER_CHARACTERS, /* Indicates that the end of a macro is found with other characters after it. */
     END_MACRO_FOUND /* Indicates that the end of a macro is found without any other characters after it. */
@@ -232,7 +234,7 @@ int is_valid_macro_name(const char *name);
  *
  * @see is_valid_macro_name
  */
-int is_valid_macro_def(const char *line);
+int valid_start_macro_def(const char *line);
 
 
 
@@ -430,7 +432,7 @@ void remove_newline(char *str);
  *         1 if "endmcro" is the only content in the line (with or without whitespace characters),
  *         0 if "endmcro" is found in the line with other characters before or after it.
  */
-int valid_end_macro(const char* line);
+int valid_end_macro_def(const char* line);
 
 
 
@@ -463,3 +465,15 @@ int is_empty(const char *);
     @return A pointer to the second token if it exists, or NULL if there are less than two tokens in the line.
     */
 char* get_second_token (const char *line);
+
+
+
+
+
+
+
+
+
+
+
+

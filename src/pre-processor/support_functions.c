@@ -1,6 +1,7 @@
 #include "pre-processor header files/pre_processor.h"
+#include "handle_error.h"
 
-/* API style documentation of every function is in the "supportFunction.h" file */
+/* API style documentation of every function is in the "support_function.h" file */
 
 /* Function to add a line to the content of a macro */
 void add_line_to_mcro(mcro *macro, char *contentSource)
@@ -199,7 +200,7 @@ int is_valid_macro_name(const char *name) {
 
 
 /* Function to check if the line is a valid macro definition */
-int is_valid_macro_def(const char *line) {
+int valid_start_macro_def(const char *line) {
     char *token = NULL;
     char *first_word;
 
@@ -317,9 +318,9 @@ int comment_or_empty(char *line)
 
 
 /* Function to deploy macros in a line to the target file */
-void deploy_macros_in_line(const char line[MAXLEN], FILE *target_file, struct macroList *macroTable) {
-    char copyLine[MAXLEN];
-    char *tokens[80]; /* Array to store the tokens */
+void deploy_macros_in_line(const char *line, FILE *target_file, struct macroList *macroTable) {
+    char copyLine[MAX_LINE_LENGTH];
+    char *tokens[MAX_LINE_LENGTH]; /* Array to store the tokens */
     int numTokens = 0;
     int i = 0;
     char *token = NULL;
@@ -327,10 +328,10 @@ void deploy_macros_in_line(const char line[MAXLEN], FILE *target_file, struct ma
     strcpy(copyLine, line);
 
     /* Break the line into tokens */
-    token = strtok(copyLine, " \t\n");
+    token = strtok(copyLine, " \t");
     while (token != NULL) {
         tokens[numTokens++] = token;
-        token = strtok(NULL, " \t\n");
+        token = strtok(NULL, " \t");
     }
 
     /* Iterate through the tokens and check if they match any macro name */
@@ -390,7 +391,7 @@ void remove_newline(char *str) {
 
 
 /* Function to check if the line contains "endmcro" with or without other words */
-int valid_end_macro(const char *line) {
+int valid_end_macro_def(const char *line) {
     char *first_word;
     char *second_word;
     char *target = "endmcro";
@@ -424,24 +425,16 @@ int valid_end_macro(const char *line) {
 
 
 
-/* Function to check if a given line contains a comment */
-int is_comment(const char *line) {
-    char in[MAXLEN];
-    char *c_pos = NULL;
-    strcpy(in, line); /* Copy the input line to a local buffer 'in'. */
+int is_comment(const char* line) {
+        int index = 0;
 
-    c_pos = strchr(in, ';'); /* Find the position of the first semicolon in 'in'. */
-    if (c_pos != NULL && !isspace(*(c_pos + 1))) {
-        /*
-         * Check if a semicolon is found and if the character immediately after it
-         * is not a whitespace character (newline, tab, or space).
-         * This condition ensures that it's not an empty comment or a comment with only spaces after the semicolon.
-         */
-        return 1; /* Return 1 to indicate that the line contains a comment. */
+        while (isspace(line[index])) {
+            index++; /* Skip leading whitespace characters. */
+        }
+
+        return (line[index] == ';') ? 1 : 0;
     }
 
-    return 0; /* Return 0 if no comment is found in the line. */
-}
 
 
 /* Function to check if a given line is empty (contains only whitespace characters) */
@@ -464,7 +457,7 @@ int is_empty(const char *line) {
     return 1; /* Return 1 if the loop reaches the end of the line without finding a non-whitespace character. */
 }
 
-
+/* Function that gets the second word from a given line */
 char* get_second_token (const char* line){
     /* Create a copy of the input line to avoid modifying the original string */
     char* line_copy = strdup(line);
@@ -494,6 +487,12 @@ char* get_second_token (const char* line){
     /* Return the second token */
     return second_token;
 }
+
+
+
+
+
+
 
 
 

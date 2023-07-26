@@ -77,6 +77,13 @@ build CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o: C_COMPILER_
   OBJECT_DIR = CMakeFiles/SPL2023b_Project_copy.dir
   OBJECT_FILE_DIR = CMakeFiles/SPL2023b_Project_copy.dir/src
 
+build CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/handle_error.c.o: C_COMPILER__SPL2023b_Project_copy_Debug /home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/handle_error.c || cmake_object_order_depends_target_SPL2023b_Project_copy
+  DEP_FILE = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/handle_error.c.o.d
+  FLAGS = -g -fdiagnostics-color=always -ansi -Wall -pedantic -std=gnu90
+  INCLUDES = -I"/home/david/CLionProjects/SPL2023b-Project-copy/src/pre-processor/pre-processor header files"
+  OBJECT_DIR = CMakeFiles/SPL2023b_Project_copy.dir
+  OBJECT_FILE_DIR = CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target SPL2023b_Project_copy
@@ -85,7 +92,7 @@ build CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o: C_COMPILER_
 #############################################
 # Link the executable SPL2023b_Project_copy
 
-build SPL2023b_Project_copy: C_EXECUTABLE_LINKER__SPL2023b_Project_copy_Debug CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o
+build SPL2023b_Project_copy: C_EXECUTABLE_LINKER__SPL2023b_Project_copy_Debug CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o CMakeFiles/SPL2023b_Project_copy.dir/src/create_file_func.c.o CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/handle_error.c.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/SPL2023b_Project_copy.dir
   POST_BUILD = :
