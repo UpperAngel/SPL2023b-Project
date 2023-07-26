@@ -1,5 +1,5 @@
 #include "first-pass-headers/first_pass.h"
-
+#include "first-pass-headers/instruction.h"
 #include "first-pass-headers/symbol_table.h"
 
 enum opcode {
@@ -64,12 +64,7 @@ static struct command commands[] = {
     {"stop", STOP_OP},
     {NULL, NULL_OP},
 };
-struct encodedInstruction {
-    unsigned int encoding_type : 2;
-    unsigned int target_addressing : 3;
-    unsigned int opcode : 4;
-    unsigned int source_addressing : 3;
-};
+
 
 int first_pass(FILE *am_file, FILE *tar_file) {
     int i;
@@ -82,6 +77,10 @@ int first_pass(FILE *am_file, FILE *tar_file) {
     symbol_table = init_table(10);
 
     while (fgets(line, 100, am_file)) {
+        if (line > 82) {
+            fprintf(stdout, "line is over the maximum length");
+        }
+
         if (get_label(line) != NULL) {
             curr_label = get_label(line);
             if (is_valid_label(curr_label)) {
@@ -161,17 +160,7 @@ char *get_label(const char *line) {
     return NULL;
 }
 
-char *get_content(const char *line) {
-    char *content = NULL;
 
-    char *mod_line = strdup(line); /* Use strdup to duplicate the line */
-    content = strtok(NULL, ":");   /* getting everything after `:` */
-
-    if (content == NULL) {
-        return NULL;
-    }
-    return content;
-}
 
 /* checks if a label is valid */
 int is_valid_label(const char label[31]) {
@@ -199,39 +188,7 @@ int is_valid_label(const char label[31]) {
     return 1;
 }
 
-/* function to encode a instruction into a 12bit word. */
-EncodedInstruction *encode_instruction(const char *instruction_line, const SymbolTable *table) {
-    char *mod_line;
-    EncodedInstruction *ret;
 
-    char *token;
-    int token_num = 0;
-
-    mod_line = strdup(instruction_line);
-    ret = malloc(sizeof(EncodedInstruction));
-
-    token = strtok(mod_line, " ");
-    token_num += 1;
-
-    while ((token = strtok(NULL, " ")) != NULL) {
-        switch (token_num) {
-            case 1:
-                ret->opcode = get_opcode(token);
-                break;
-            case 2:
-                ret->source_addressing = get_addressing(token, table);
-                break;
-            case 3:
-                ret->target_addressing = get_addressing(token, table);
-                break;
-            default:
-                break;
-        }
-
-        token_num++;
-    }
-    return ret;
-}
 
 /* Function to check each line in the source file for length and newline character */
 int valid_file_lines(FILE *source_file) {

@@ -8,5 +8,5 @@
 
 typedef enum opcode Opcode;
 typedef struct cmEntry CommandMap;
-typedef struct encodedInstruction EncodedInstruction;
+
 #endif
