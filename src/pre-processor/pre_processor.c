@@ -2,7 +2,9 @@
 #include "handle_error.h"
 
 
-/* Function to process the source file and generate the target file */
+/* Function to process the source file and generate the target file
+ In the case that a given line exceeds 80 chars the function will output to the target file up to 100 chars of
+ that line and the error will be handled in the first pass  */
 int process_file(FILE* source_file, FILE* target_file) {
 
     int line_number = 0; /* Variable to keep track of the line number being processed in the source file */

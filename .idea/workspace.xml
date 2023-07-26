@@ -20,23 +20,8 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1b55be25-54df-4908-bfd7-87cd61d1ee6b" name="Changes" comment="Refactored and fixed the pre_processor.c.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/pre_processor.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/SPL2023b_Project_copy" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/SPL2023b_Project_copy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/input.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/output.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pre-processor/handle_error.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/handle_error.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pre-processor/handle_error.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/handle_error.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pre-processor/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pre-processor/pre-processor header files/support_functions.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/pre-processor header files/support_functions.h" afterDir="false" />
+    <list default="true" id="1b55be25-54df-4908-bfd7-87cd61d1ee6b" name="Changes" comment="Added error handling and changed line length handling">
       <change beforePath="$PROJECT_DIR$/src/pre-processor/pre_processor.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/pre_processor.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pre-processor/support_functions.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/support_functions.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +138,15 @@
       <option name="project" value="LOCAL" />
       <updated>1690198567818</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Added error handling and changed line length handling">
+      <option name="closed" value="true" />
+      <created>1690382753027</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1690382753027</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -207,6 +200,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="update some files" />
     <MESSAGE value="Refactored and fixed the pre_processor.c." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactored and fixed the pre_processor.c." />
+    <MESSAGE value="Added error handling and changed line length handling" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added error handling and changed line length handling" />
   </component>
 </project>
