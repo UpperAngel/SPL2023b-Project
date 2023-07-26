@@ -1,7 +1,7 @@
 #include "first-pass-headers/symbol_table.h"
 
 struct symbol {
-    char *sym;
+    char *name;
     char *val;
 };
 
@@ -26,14 +26,14 @@ SymbolTable *init_table(const int init_size) {
     return new_table;
 }
 
-int add_symbol(SymbolTable *table, const char *sym, const char *val) {
+int add_symbol(SymbolTable *table, const char *name, const char *val) {
     int i;
     int new_len;
     int index = -1;
     SymbolTable *updated_table;
 
     /* if the table or symbol or value is null, we return 0 as a failure */
-    if (table == NULL || sym == NULL || val == NULL) {
+    if (table == NULL || name == NULL || val == NULL) {
         return 0; /* failure */
     }
 
@@ -65,21 +65,35 @@ int add_symbol(SymbolTable *table, const char *sym, const char *val) {
     }
 
     table->symbols[index] = (Symbol *)malloc(sizeof(Symbol));
-    table->symbols[index]->sym = (char *)malloc(strlen(sym) + 1);  // Corrected: Use strlen(sym) + 1
+    table->symbols[index]->name = (char *)malloc(strlen(name) + 1);  // Corrected: Use strlen(sym) + 1
     table->symbols[index]->val = (char *)malloc(strlen(val) + 1);  // Corrected: Use strlen(val) + 1
 
     table->length += 1;  // Corrected: Increment the length
 
-    strcpy(table->symbols[index]->sym, sym);
+    strcpy(table->symbols[index]->name, name);
     strcpy(table->symbols[index]->val, val);
-
+    
     return 1;
+}
+
+Symbol *get_symbol_by_name(SymbolTable *table, const char *name) {
+    int i;
+    for (i = 0; i < table->length; i++)
+    {
+        if (strcmp(name, table->symbols[i]->name) == 0)
+        {
+            return table->symbols[i];
+        }
+        
+    }
+    return NULL;
+    
 }
 
 void free_symbol_table(SymbolTable *table) {
     int i;
     for (i = 0; i < table->length; i++) {
-        free(table->symbols[i]->sym);
+        free(table->symbols[i]->name);
         free(table->symbols[i]->val);
         free(table->symbols[i]);
     }

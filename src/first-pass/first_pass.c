@@ -1,5 +1,7 @@
 #include "first-pass-headers/first_pass.h"
 
+#include "first-pass-headers/symbol_table.h"
+
 enum opcode {
     /* First Group */
     MOV_OP = 0,
@@ -13,13 +15,13 @@ enum opcode {
 
     /* Second Group */
     CLR_OP = 5,
-    NOT_OP = 5,
-    INC_OP = 5,
-    DEC_OP = 5,
+    NOT_OP = 6,
+    INC_OP = 7,
+    DEC_OP = 8,
 
     JMP_OP = 9,
-    BNE_OP = 9,
-    JSR_OP = 9,
+    BNE_OP = 10,
+    JSR_OP = 11,
 
     RED_OP = 12,
     PRN_OP = 13,
@@ -43,7 +45,6 @@ struct command {
     const char *name;
     Opcode opcode;
 };
-
 static struct command commands[] = {
     {"mov", MOV_OP},
     {"cmp", CMP_OP},
@@ -63,7 +64,6 @@ static struct command commands[] = {
     {"stop", STOP_OP},
     {NULL, NULL_OP},
 };
-
 struct encodedInstruction {
     unsigned int encoding_type : 2;
     unsigned int target_addressing : 3;
@@ -71,7 +71,34 @@ struct encodedInstruction {
     unsigned int source_addressing : 3;
 };
 
-enum addressingType get_addressing(const char *operand) {
+int first_pass(FILE *am_file, FILE *tar_file) {
+    int i;
+
+    char *line;
+    EncodedInstruction *encoded_instruction;
+    SymbolTable *symbol_table;
+    char *curr_label;
+
+    symbol_table = init_table(10);
+
+    while (fgets(line, 100, am_file)) {
+        if (get_label(line) != NULL) {
+            curr_label = get_label(line);
+            if (is_valid_label(curr_label)) {
+                add_symbol(symbol_table, curr_label, get_content(line));
+                continue;
+            }
+
+            /* invalid label name error */
+        }
+
+        encoded_instruction = encode_instruction(line, symbol_table);
+
+        fprintf(tar_file, "%s", line);
+    }
+}
+
+enum addressingType get_addressing(const char *operand, SymbolTable *table) {
     int i;
     int digit_count = 0;
     if (operand == NULL) {
@@ -94,9 +121,13 @@ enum addressingType get_addressing(const char *operand) {
     }
 
     if (digit_count == strlen(operand)) {
-        atof(operand);
+        return IMMEDIATE;
+    }
+    if (get_symbol_by_name(table, operand) != NULL) {
+        return DIRECT;
     }
 }
+/* function to get a opcode from a command name */
 
 Opcode get_opcode(char *command) {
     int i;
@@ -113,22 +144,36 @@ Opcode get_opcode(char *command) {
 
     return NULL_OP;
 }
+/* function to get the label out of a line */
 
 char *get_label(const char *line) {
     char *label = NULL;
 
-    char *mod_line = strdup(line);  // Use strdup to duplicate the line
+    char *mod_line = strdup(line); /* strdup to duplicate the line */
 
     label = strtok(mod_line, ":");
-    if (label != NULL) {
-        // Don't concatenate ":" to label, just return label
+    if (label != NULL) { /* found label. returns it*/
         return label;
     }
-    // Clean up and return NULL if no label found
+
+    /* Clean up and return NULL if no label found */
     free(mod_line);
     return NULL;
 }
 
+char *get_content(const char *line) {
+    char *content = NULL;
+
+    char *mod_line = strdup(line); /* Use strdup to duplicate the line */
+    content = strtok(NULL, ":");   /* getting everything after `:` */
+
+    if (content == NULL) {
+        return NULL;
+    }
+    return content;
+}
+
+/* checks if a label is valid */
 int is_valid_label(const char label[31]) {
     char c;
     int i = 0;
@@ -154,16 +199,18 @@ int is_valid_label(const char label[31]) {
     return 1;
 }
 
-int get_encoding(Opcode opcode) {
-}
-
-EncodedInstruction *encode_instruction(char *instruction_line) {
+/* function to encode a instruction into a 12bit word. */
+EncodedInstruction *encode_instruction(const char *instruction_line, const SymbolTable *table) {
+    char *mod_line;
     EncodedInstruction *ret;
+
     char *token;
     int token_num = 0;
 
+    mod_line = strdup(instruction_line);
     ret = malloc(sizeof(EncodedInstruction));
-    token = strtok(instruction_line, " ");
+
+    token = strtok(mod_line, " ");
     token_num += 1;
 
     while ((token = strtok(NULL, " ")) != NULL) {
@@ -172,10 +219,10 @@ EncodedInstruction *encode_instruction(char *instruction_line) {
                 ret->opcode = get_opcode(token);
                 break;
             case 2:
-                ret->source_addressing = 0;
+                ret->source_addressing = get_addressing(token, table);
                 break;
             case 3:
-                ret->target_addressing = 0;
+                ret->target_addressing = get_addressing(token, table);
                 break;
             default:
                 break;
@@ -196,7 +243,7 @@ int valid_file_lines(FILE *source_file) {
 
         /* Check if the line length exceeds 80 characters */
         if (line_length > 80) {
-           /*  handle_error(LineLengthExceeded, line_number); */
+            /*  handle_error(LineLengthExceeded, line_number); */
             return 0;
         }
 
@@ -222,7 +269,7 @@ int valid_file_lines(FILE *source_file) {
 
         /* Check if the line length exceeds 80 characters */
         if (line_length > 80) {
-          /*   handle_error(LineLengthExceeded, line_number); */
+            /*   handle_error(LineLengthExceeded, line_number); */
             return 0;
         }
 
