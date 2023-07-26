@@ -1,4 +1,11 @@
-;wont see this line
-            ;wont see this line
-         you   will,see   this,,,line   but ,also you,will see     god,
-          
+mcro m1
+inside m1
+endmcro
+mcro m2
+inside m2
+
+
+
+endmcro
+m1
+m2

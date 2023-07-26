@@ -1,17 +1,11 @@
 /* Maximum length for a line of content */
-#define MAXLEN 200
-#define MACRO_NAME_LENGTH 32
+#define MAXLEN 100 /* We have chosen an arbitrary length for defining lines to catch line-length errors during the initial pass */
+#define MACRO_NAME_LENGTH 31
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-/* Enum to represent the return values of valid_end_macro_def */
-enum ValidEndMacroResult {
-    END_MACRO_WITH_OTHER_CHARACTERS, /* Indicates that the end of a macro is found with other characters after it. */
-    END_MACRO_FOUND /* Indicates that the end of a macro is found without any other characters after it. */
-};
 
 /* Enum to represent different states of parsing a file */
 enum MacroState {
@@ -59,7 +53,7 @@ struct macroList {
  * @warning The function assumes that the given macro is a valid pointer to a `mcro` struct, and
  *          that `contentSource` is a valid null-terminated C string.
  */
-void add_line_to_mcro(mcro *macro, char *contentSource);
+void add_line_to_mcro(mcro *macro, char *contentSource,int line_number);
 
 
 
@@ -86,7 +80,7 @@ void add_line_to_mcro(mcro *macro, char *contentSource);
  *          It is the caller's responsibility to ensure the validity of the input.
  */
 
-struct macroList *createMacroList(void);
+struct macroList *createMacroList(int line_number);
 
 
 
@@ -113,7 +107,7 @@ struct macroList *createMacroList(void);
  *          It is the caller's responsibility to ensure the validity of the input.
  */
 
-mcro *create_mcro(const char *name);
+mcro *create_mcro(const char *name, int line_number);
 
 
 
@@ -144,7 +138,7 @@ mcro *create_mcro(const char *name);
  *
  * @warning The macroTablePtr itself should not be NULL, and it should point to a valid macro list (even if it's empty).
  */
-void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr);
+void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr, int line_number);
 
 
 
@@ -206,7 +200,7 @@ mcro *find_macro_by_name(struct macroList *macroTable, const char *name);
  *
  * @see `reservedKeywords`
  */
-int is_valid_macro_name(const char *name);
+int is_valid_macro_name(const char *name, int line_number);
 
 
 
@@ -234,7 +228,7 @@ int is_valid_macro_name(const char *name);
  *
  * @see is_valid_macro_name
  */
-int valid_start_macro_def(const char *line);
+int valid_start_macro_def(const char *line, int line_number);
 
 
 
@@ -432,7 +426,7 @@ void remove_newline(char *str);
  *         1 if "endmcro" is the only content in the line (with or without whitespace characters),
  *         0 if "endmcro" is found in the line with other characters before or after it.
  */
-int valid_end_macro_def(const char* line);
+int valid_end_macro_def(const char* line, int line_number);
 
 
 
@@ -465,6 +459,139 @@ int is_empty(const char *);
     @return A pointer to the second token if it exists, or NULL if there are less than two tokens in the line.
     */
 char* get_second_token (const char *line);
+
+
+
+/**
+ * Custom function to read a line with a maximum length of MAXLEN from the specified file stream.
+ *
+ * This function reads characters from the given 'source_file' until 'max_len-1' characters are read,
+ * or a newline character is encountered, or the end-of-file (EOF) is reached. The characters are stored
+ * in the 'buffer' provided by the caller. The buffer should have enough space to hold at least 'max_len'
+ * characters, including the null-terminator.
+ *
+ * Parameters:
+ * - buffer: A pointer to a character array where the read characters will be stored.
+ * - max_len: The maximum length of the line to read, including the null-terminator.
+ * - source_file: A pointer to the FILE stream from which to read the line.
+ *
+ * Returns:
+ * - On success: The function returns 'buffer', which contains the read line.
+ * - On reaching the end-of-file before reading any characters: The function returns NULL.
+ *
+ * Description:
+ * This custom implementation of 'fgets' reads characters from 'source_file' and stores them in 'buffer'
+ * until one of the following conditions is met:
+ *   - 'max_len-1' characters are read (to accommodate space for the null-terminator).
+ *   - A newline character ('\n') is encountered, indicating the end of the line.
+ *   - The end-of-file (EOF) is reached.
+ * After reading the line, the function adds a null-terminator ('\0') at the end of 'buffer' to mark
+ * the end of the string.
+ *
+ * If the line is longer than 'max_len-1' characters, the function will read the remaining characters
+ * from the stream until a newline character or the end of the line is encountered. It discards the
+ * exceeding characters to avoid buffer overflow.
+ *
+ * If the end-of-file is reached without reading any characters, and the 'buffer' is empty (char_count == 0),
+ * the function returns NULL to indicate that there is no more data to read.
+ *
+ * Note:
+ * - The 'buffer' should have enough space to hold at least 'max_len' characters (including the null-terminator)
+ *   to avoid potential buffer overflows.
+ * - The function may return a line shorter than 'max_len-1' characters if a newline character is encountered
+ *   before reaching the limit.
+ * - The caller should ensure that 'buffer' is a valid pointer and that 'max_len' is a positive integer.
+ * - After using the returned line, the caller is responsible for managing the memory of the 'buffer'.
+ */
+char* custom_fgets(char* buffer, int max_len, FILE* source_file);
+
+
+
+
+/**
+ * Check if a given word appears as a complete word in a given line.
+ *
+ * Parameters:
+ * - line: A pointer to a constant C-style string representing the line to be tokenized.
+ * - target: A pointer to a constant C-style string representing the word to search for in the tokens.
+ *
+ * Returns:
+ * - 1 if the 'target' word is found as a complete word among the tokens in the 'line'.
+ * - 0 otherwise.
+ *
+ * Description:
+ * This function tokenizes the input 'line' using space (' ') and tab ('\t') as delimiters and searches
+ * for the 'target' word among the resulting tokens. It checks if the 'target' appears as a complete word,
+ * meaning it is a standalone token and not part of a larger word.
+ *
+ * For example, if the 'target' is "mcro", this function will return 1 for "mcro" but not for "macro" or "micro".
+ *
+ * Note:
+ * - The function works with a copy of the 'line' since 'strtok' modifies the input string.
+ *   The caller should provide an appropriate buffer size for 'MAXLEN' when calling this function.
+ * - The 'line' should be a valid C-style string (null-terminated).
+ * - The 'target' should be a valid C-style string (null-terminated).
+ * - The line should not exceed the maximum token length that can be handled by the function.
+ */
+int find_word_in_tokens(const char* line, const char* target);
+
+
+
+
+/**
+ * Check if the given line contains the beginning of a macro definition.
+ *
+ * Parameters:
+ * - line: A pointer to a constant C-style string representing the line to be checked.
+ *
+ * Returns:
+ * - 1 if the word "mcro" is found among the tokens in the line.
+ * - 0 otherwise.
+ *
+ * Description:
+ * This function checks if the given 'line' contains the word "mcro" as one of its tokens.
+ * It does this by tokenizing the line using space (' ') and tab ('\t') as delimiters and
+ * then searching for the word "mcro" among the resulting tokens.
+ *
+ * Note:
+ * - The function does not consider the context of the word "mcro" and only checks if it exists
+ *   as a separate token within the line.
+ * - The line should be a valid C-style string (null-terminated).
+ * - The line should not exceed the maximum token length that can be handled by 'find_word_in_tokens'.
+ */
+int is_start_macro_def(const char* line);
+
+
+/**
+ * Check if the given line contains the ending of a macro definition.
+ *
+ * Parameters:
+ * - line: A pointer to a constant C-style string representing the line to be checked.
+ *
+ * Returns:
+ * - 1 if the word "endmcro" is found among the tokens in the line.
+ * - 0 otherwise.
+ *
+ * Description:
+ * This function checks if the given 'line' contains the word "endmcro" as one of its tokens.
+ * It does this by tokenizing the line using space (' ') and tab ('\t') as delimiters and
+ * then searching for the word "endmcro" among the resulting tokens.
+ *
+ * Note:
+ * - The function does not consider the context of the word "endmcro" and only checks if it exists
+ *   as a separate token within the line.
+ * - The line should be a valid C-style string (null-terminated).
+ * - The line should not exceed the maximum token length that can be handled by 'find_word_in_tokens'.
+ */
+int is_end_macro_def(const char* line);
+
+
+
+
+
+
+
+
 
 
 

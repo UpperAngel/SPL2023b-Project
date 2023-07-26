@@ -21,10 +21,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b55be25-54df-4908-bfd7-87cd61d1ee6b" name="Changes" comment="Refactored and fixed the pre_processor.c.">
-      <change afterPath="$PROJECT_DIR$/src/pre-processor/handle_error.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/pre-processor/handle_error.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_deps" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/.ninja_log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/main.c.o" afterDir="false" />
@@ -32,9 +29,10 @@
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir/src/pre-processor/support_functions.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/SPL2023b_Project_copy" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/SPL2023b_Project_copy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/build.ninja" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/build.ninja" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/input.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/input.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pre-processor/handle_error.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/handle_error.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pre-processor/handle_error.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/handle_error.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pre-processor/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pre-processor/pre-processor header files/support_functions.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/pre-processor header files/support_functions.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pre-processor/pre_processor.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/pre-processor/pre_processor.c" afterDir="false" />
