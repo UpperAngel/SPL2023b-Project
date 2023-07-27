@@ -4,7 +4,9 @@
         "string.h": "c",
         "line.h": "c",
         "helper_fucntions.h": "c",
-        "support_functions.h": "c"
+        "support_functions.h": "c",
+        "instruction.h": "c",
+        "symbol_table.h": "c"
     },
     "cSpell.words": [
         "endmcro",

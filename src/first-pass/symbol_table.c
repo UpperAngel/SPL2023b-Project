@@ -1,8 +1,12 @@
 #include "first-pass-headers/symbol_table.h"
 
+
+
 struct symbol {
     char *name;
     char *val;
+    SymbolType type;
+
 };
 
 struct symbolTable {
@@ -11,12 +15,13 @@ struct symbolTable {
     Symbol *symbols[];
 };
 
+
 SymbolTable *init_table(const int init_size) {
     int i;
     SymbolTable *new_table = NULL;
 
     new_table = (SymbolTable *)malloc(sizeof(SymbolTable) + sizeof(Symbol *) * init_size);
-    new_table->length = 0;  // Corrected: Initialize length to 0
+    new_table->length = 0;  
     new_table->size = init_size;
 
     for (i = 0; i < init_size; i++) {
@@ -26,7 +31,7 @@ SymbolTable *init_table(const int init_size) {
     return new_table;
 }
 
-int add_symbol(SymbolTable *table, const char *name, const char *val) {
+int add_symbol(SymbolTable *table, const char *name, const char *val, SymbolType type) {
     int i;
     int new_len;
     int index = -1;
@@ -68,11 +73,12 @@ int add_symbol(SymbolTable *table, const char *name, const char *val) {
     table->symbols[index]->name = (char *)malloc(strlen(name) + 1);  // Corrected: Use strlen(sym) + 1
     table->symbols[index]->val = (char *)malloc(strlen(val) + 1);  // Corrected: Use strlen(val) + 1
 
-    table->length += 1;  // Corrected: Increment the length
+    table->length += 1;  /* Increment the length */
 
     strcpy(table->symbols[index]->name, name);
     strcpy(table->symbols[index]->val, val);
-    
+    table->symbols[index]->type = type;
+
     return 1;
 }
 
@@ -89,6 +95,9 @@ Symbol *get_symbol_by_name(SymbolTable *table, const char *name) {
     return NULL;
     
 }
+
+
+
 
 void free_symbol_table(SymbolTable *table) {
     int i;

@@ -1,4 +1,5 @@
 #include "first-pass-headers/first_pass.h"
+
 #include "first-pass-headers/instruction.h"
 #include "first-pass-headers/symbol_table.h"
 
@@ -35,12 +36,7 @@ enum opcode {
     /* Failed/Error */
     NULL_OP = -1
 };
-enum addressingType {
-    ERROR = 0,
-    DIRECT = 3,
-    IMMEDIATE = 5,
-    REGISTER = 1,
-};
+
 struct command {
     const char *name;
     Opcode opcode;
@@ -65,7 +61,6 @@ static struct command commands[] = {
     {NULL, NULL_OP},
 };
 
-
 int first_pass(FILE *am_file, FILE *tar_file) {
     int i;
 
@@ -73,7 +68,8 @@ int first_pass(FILE *am_file, FILE *tar_file) {
     EncodedInstruction *encoded_instruction;
     SymbolTable *symbol_table;
     char *curr_label;
-
+    char *curr_content;
+    SymbolType curr_type = NONE;
     symbol_table = init_table(10);
 
     while (fgets(line, 100, am_file)) {
@@ -83,10 +79,19 @@ int first_pass(FILE *am_file, FILE *tar_file) {
 
         if (get_label(line) != NULL) {
             curr_label = get_label(line);
+            
             if (is_valid_label(curr_label)) {
-                add_symbol(symbol_table, curr_label, get_content(line));
-                continue;
+                curr_content = get_content(line);
+                
+                if (is_directive(curr_content)) {
+                    curr_type == DATA;
+                } else {
+                    curr_type == CODE;
+                }
+                
+                add_symbol(symbol_table, curr_label, curr_content, curr_type);
             }
+            continue;
 
             /* invalid label name error */
         }
@@ -97,35 +102,6 @@ int first_pass(FILE *am_file, FILE *tar_file) {
     }
 }
 
-enum addressingType get_addressing(const char *operand, SymbolTable *table) {
-    int i;
-    int digit_count = 0;
-    if (operand == NULL) {
-        return ERROR;
-    }
-    /* ADD CHECK FOR LABELS */
-
-    /* @r1 */
-    if (operand[0] == '@' && operand[1] == 'r' && isdigit(operand[2])) {
-        if (atoi(operand[2]) < 7) {
-            return REGISTER;
-        }
-        return ERROR;
-    }
-
-    for (i = 0; i < strlen(operand); i++) {
-        if (isdigit(operand[i])) {
-            digit_count++;
-        }
-    }
-
-    if (digit_count == strlen(operand)) {
-        return IMMEDIATE;
-    }
-    if (get_symbol_by_name(table, operand) != NULL) {
-        return DIRECT;
-    }
-}
 /* function to get a opcode from a command name */
 
 Opcode get_opcode(char *command) {
@@ -160,8 +136,6 @@ char *get_label(const char *line) {
     return NULL;
 }
 
-
-
 /* checks if a label is valid */
 int is_valid_label(const char label[31]) {
     char c;
@@ -187,8 +161,6 @@ int is_valid_label(const char label[31]) {
 
     return 1;
 }
-
-
 
 /* Function to check each line in the source file for length and newline character */
 int valid_file_lines(FILE *source_file) {
