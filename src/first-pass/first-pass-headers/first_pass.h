@@ -11,7 +11,7 @@ enum opcode {
     CMP_OP = 1,
 
     ADD_OP = 2,
-    SUB_OP = 2,
+    SUB_OP = 3,
 
     LEA_OP = 4,
     /* END First Group */
