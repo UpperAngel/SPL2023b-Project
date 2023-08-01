@@ -2,3 +2,4 @@
 -need to run the pre-processor on the virtual machine to verify that it works correctly.
 -need to separate the data struct of macro from the getters and setters.
 -need to update function documentation
+-need to change pre-processor so that it will output error for two macros with the same name
