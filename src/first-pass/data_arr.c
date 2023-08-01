@@ -7,7 +7,7 @@ struct dataArr
 {
     int element_num;
     int size;
-    char *chr_arr; /* need to be cast into char *[] */
+    char *chr_arr; 
     int *int_arr;
 };
 

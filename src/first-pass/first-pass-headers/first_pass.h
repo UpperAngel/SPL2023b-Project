@@ -41,7 +41,7 @@ enum opcode {
 
 typedef enum opcode Opcode;
 typedef struct cmEntry CommandMap;
-char *get_label(const char *);
+int is_label(const char *);
 int is_valid_label(const char[31]);
 Opcode get_opcode( char *);
 
