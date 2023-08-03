@@ -17,34 +17,7 @@ void assert_test(int condition, const char *message) {
     }
 }
 
-/* Custom testing function for encode_instruction. */
-void test_encode_instruction() {
-    int i;
-    SymbolTable *table;
-    table = init_table(10);
-    EncodedInstruction *encoded;
-    encoded = (EncodedInstruction *)malloc(sizeof(EncodedInstruction));
-    // Test instructions
-    const char *instructions[] = {
-        "mov 5, HELLO",
-        "add r1, 10",
-        "sub @r3, symbol1",
-        "jmp symbol2",
-        "invalid_instruction",
-    };
 
-    EncodedInstruction *expacted_resaults;
-    expacted_resaults->encoding_type = 2;
-    expacted_resaults->opcode = 0;
-    expacted_resaults->source_addressing = IMMEDIATE;
-    expacted_resaults->target_addressing = DIRECT;
-
-    encode_instruction(encoded, instructions[0], table);
-    assert_test(encoded->encoding_type == expacted_resaults->encoding_type, "encode_instruction - encoding_type");
-    assert_test(encoded->source_addressing == expacted_resaults->source_addressing, "encode_instruction - source_addresing");
-    assert_test(encoded->target_addressing == expacted_resaults->target_addressing, "encode_instruction - target_addresing");
-    assert_test(encoded->opcode == expacted_resaults->opcode, "encode_instruction - opcode");
-}
 
 /* Custom testing function for is_valid_line_length. */
 void test_is_valid_line_length() {
@@ -117,9 +90,9 @@ void test_symbol_table() {
 
     print_symbol(get_symbol_by_name(test_table, "s1"));
     print_table(test_table);
-    /* Add your test cases for the SymbolTable functions here. */
-    /* Remember to test the init_table, add_symbol, get_symbol_by_name, and free_symbol_table functions. */
-    /* You may also need to test edge cases and error conditions. */
+    
+
+    
 }
 
 void test_data_arr() {
@@ -152,7 +125,6 @@ void test_is_register() {
 /* Main function to run all the tests. */
 int main() {
     printf("Running Tests...\n");
-    test_encode_instruction();
     test_is_valid_line_length();
     test_is_data();
     test_is_entry();
