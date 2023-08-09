@@ -1,0 +1,3 @@
+/home/david/CLionProjects/SPL2023b-Project-copy/cmake-build-debug/CMakeFiles/SPL2023b_Project_copy.dir
+/home/david/CLionProjects/SPL2023b-Project-copy/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/david/CLionProjects/SPL2023b-Project-copy/cmake-build-debug/CMakeFiles/rebuild_cache.dir
