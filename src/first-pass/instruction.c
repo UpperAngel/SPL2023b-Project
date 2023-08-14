@@ -68,7 +68,7 @@ int is_valid_instruction(char *words_array[], SymbolTable *table, int *error_ptr
     int cmd_opcode;
 
     if (is_valid_label(words_array[0])) {
-        if (get_symbol_by_name(table, words_array[0])) {
+        if (get_symbol_by_name(table, words_array[0]) == 0) {
             fprintf(stderr, "ERROR. %s already defiened\n", words_array[0]);
             *error_ptr = 1;
             return 0;
@@ -296,7 +296,7 @@ int is_entry(const char *directive) {
     return 0;
 }
 
-is_valid_entry(const char *words_array[], int *error_ptr, SymbolTable *table) {
+int is_valid_entry(const char *words_array[], int *error_ptr, SymbolTable *table) {
     char *directive = words_array[0];
     char *label = words_array[2];
 
