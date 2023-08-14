@@ -6,6 +6,20 @@
 #include <stdlib.h>
 #include <string.h>
 
+
+struct symbol {
+    char *name;
+    int val;
+    SymbolType type;
+};
+
+struct symbolTable {
+    int length;
+    int size;
+    Symbol **symbols;
+};
+
+
 typedef struct symbol Symbol;
 typedef struct symbolTable SymbolTable;
 

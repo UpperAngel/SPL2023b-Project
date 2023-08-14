@@ -1,16 +1,6 @@
 #include "first-pass-headers/symbol_table.h"
 
-struct symbol {
-    char *name;
-    int val;
-    SymbolType type;
-};
 
-struct symbolTable {
-    int length;
-    int size;
-    Symbol **symbols;
-};
 
 SymbolTable *init_table(const int init_size) {
     int i;
