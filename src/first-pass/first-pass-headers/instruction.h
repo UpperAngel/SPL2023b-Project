@@ -28,5 +28,7 @@ int is_extern(const char *directive);
 int is_entry(const char *directive);
 int is_data(const char *directive);
 int is_valid_line_length(const char *line);
+int is_string(const char *line);
+int is_valid_string(const char *line);
 
 #endif

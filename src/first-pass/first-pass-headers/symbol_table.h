@@ -13,6 +13,7 @@ typedef enum symbolType {
     CODE,
     DATA,
     EXTERN,
+    ENTRY,
     NONE = -1,
 } SymbolType;
 

@@ -9,7 +9,7 @@ struct symbol {
 struct symbolTable {
     int length;
     int size;
-    Symbol *symbols[];
+    Symbol **symbols;
 };
 
 SymbolTable *init_table(const int init_size) {
