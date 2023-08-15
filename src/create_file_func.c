@@ -7,7 +7,7 @@ FILE *create_file(const char *file_name, const char *extension) {
   char *dot = NULL;
 
   /* dynamiclly allocate memory for the file name and the extension */
-  new_file_name = (char *)malloc(strlen(file_name) + 1);
+  new_file_name = (char *)malloc(strlen(file_name) +strlen(extension) + 1);
   if (new_file_name == NULL)
   {
     printf("faild allocation for the file name \n");
@@ -30,12 +30,11 @@ FILE *create_file(const char *file_name, const char *extension) {
   /* checks if file was created succesfully */
   if (created_file == NULL)
   {
-    printf("failed to create file %s \n", new_file_name);
-    free(new_file_name);
+    printf("failed to create the file: \"%s\" \n", new_file_name);
     return NULL;
   }
+  free(new_file_name);
 
-  /* closes the file and returns it*/
-  fclose(created_file);
+  /*  returns the file after being created*/
   return created_file;
 }
