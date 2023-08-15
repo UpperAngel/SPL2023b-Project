@@ -3,7 +3,7 @@
 SymbolTable *init_table(int init_size) {
     SymbolTable *new_table = (SymbolTable *)malloc(sizeof(SymbolTable));
     int i;
-    
+
     if (new_table == NULL) {
         return NULL; /* Memory allocation failure */
     }
@@ -23,12 +23,14 @@ SymbolTable *init_table(int init_size) {
     return new_table;
 }
 
-int add_symbol(SymbolTable *table, const char *name, int val, SymbolType type) {
+void add_symbol(SymbolTable **tablePtr, const char *name, int val, SymbolType type) {
     int i;
-    
-    if (table == NULL || name == NULL) {
-        return 0; /* Failure */
+
+    if (tablePtr == NULL || *tablePtr == NULL || name == NULL) {
+        return; /* Failure */
     }
+
+    SymbolTable *table = *tablePtr;
 
     int index = -1;
     for (i = 0; i < table->size; i++) {
@@ -39,32 +41,35 @@ int add_symbol(SymbolTable *table, const char *name, int val, SymbolType type) {
     }
 
     if (index == -1) {
-        int new_size = table->size * 2;
-        SymbolTable *updated_table = (SymbolTable *)realloc(table, sizeof(SymbolTable) + sizeof(Symbol *) * new_size);
-        if (updated_table == NULL) {
-            return 0; /* Memory allocation failure */
-        }
+        if (table->length == table->size) {
+            int new_size = table->size * 2;
+            SymbolTable *updated_table = (SymbolTable *)realloc(table, sizeof(SymbolTable) + sizeof(Symbol *) * new_size);
+            if (updated_table == NULL) {
+                return; /* Memory allocation failure */
+            }
 
-        for (i = table->size; i < new_size; i++) {
-            updated_table->symbols[i] = NULL;
-        }
+            for (i = table->size; i < new_size; i++) {
+                updated_table->symbols[i] = NULL;
+            }
 
-        table = updated_table;
-        table->size = new_size;
+            table = updated_table;
+            table->size = new_size;
+            *tablePtr = table;
+        }
+        index = table->length;
     }
 
     table->symbols[index] = (Symbol *)malloc(sizeof(Symbol));
     if (table->symbols[index] == NULL) {
-        return 0; /* Memory allocation failure */
+        return; /* Memory allocation failure */
     }
 
     table->symbols[index]->name = strdup(name);
     table->symbols[index]->val = val;
     table->symbols[index]->type = type;
     table->length++;
-
-    return 1; /* Success */
 }
+
 
 Symbol *get_symbol_by_name(const SymbolTable *table, const char *name) {
     int i;

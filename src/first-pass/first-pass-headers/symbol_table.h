@@ -30,7 +30,7 @@ Symbol *get_symbol_by_name(const SymbolTable *table, const char *name);
 
 void free_symbol_table(SymbolTable *table);
 
-int add_symbol(SymbolTable *table, const char *name, int val, SymbolType type);
+void add_symbol(SymbolTable **table, const char *name, int val, SymbolType type);
 
 SymbolTable *init_table(int init_size);
 
