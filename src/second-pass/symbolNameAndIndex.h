@@ -9,9 +9,9 @@ struct SymbolNameAndIndex {
 
 // Function to create a new node */
 struct SymbolNameAndIndex* createNode(const char *name, int IC_index, int line_number) {
-    struct SymbolNameAndIndex* newNode = (SymbolNameAndIndex *)malloc(sizeof(struct SymbolNameAndIndex));
+    struct SymbolNameAndIndex* newNode = (struct SymbolNameAndIndex *)malloc(sizeof(struct SymbolNameAndIndex));
     if (newNode == NULL) {
-        handle_error(FailedToAllocateMemory, line_number);
+       /*  handle_error(FailedToAllocateMemory, line_number); */
         return NULL;
     }
 

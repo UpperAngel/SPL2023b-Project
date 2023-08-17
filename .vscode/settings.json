@@ -9,7 +9,8 @@
         "symbol_table.h": "c",
         "stdlib.h": "c",
         "first_pass.h": "c",
-        "instruction_helper.h": "c"
+        "instruction_helper.h": "c",
+        "symbolnameandindex.h": "c"
     },
     "cSpell.words": [
         "endmcro",

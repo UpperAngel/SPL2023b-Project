@@ -1,0 +1,6 @@
+symbol_9: 450
+symbol_7: 350
+symbol_5: 250
+symbol_3: 150
+symbol_1: 50
+entry_symbol: 100

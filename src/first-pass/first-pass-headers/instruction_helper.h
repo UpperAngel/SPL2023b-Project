@@ -5,9 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include <symbol_table.h>
-#include <instruction.h>
+#include "../../second-pass/symbol_list.h"
 #include <first_pass.h>
 
 #define LEN 82
