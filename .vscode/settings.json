@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "pre_processor.h": "c",
+        "string.h": "c",
+        "line.h": "c",
+        "helper_fucntions.h": "c",
+        "support_functions.h": "c",
+        "instruction.h": "c",
+        "symbol_table.h": "c",
+        "stdlib.h": "c",
+        "first_pass.h": "c",
+        "instruction_helper.h": "c",
+        "symbolnameandindex.h": "c"
+    },
+    "cSpell.words": [
+        "endmcro",
+        "mcro"
+    ]
+}
