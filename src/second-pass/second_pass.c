@@ -25,6 +25,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     int ic = 0, dc = 0;
     int i, j;
 
+    // 2DO - create arr_size func (or get it from first pass)
     for (inst_array_index = 0; inst_array_index < 1024; inst_array_index++) {
         if (instruction_array[inst_array_index] != 0) {
             ic++;
@@ -37,10 +38,15 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
         }
     }
 
+    // move up 
     if (*error_ptr == 1) {
         return;
     }
+
+    // move up
     struct SymbolNameAndIndex *curr_missing = symbol_name_and_index;
+    
+    
     while (curr_missing != NULL) {
         Symbol *symbol = get_symbol_by_name(symbol_table, curr_missing->name);
         if (symbol != NULL) {
@@ -58,6 +64,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     }
 
     // File handling
+    // 2DO - move to another func
     while (symbol_table != NULL) {
         if (symbol_table->type = ENTRY) {
             entry_flag = 1;
@@ -115,6 +122,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     // Free resources in the main function
 }
 void write_encoding_type(struct InstructionStructure *encoded_inst, unsigned int encoding_type) {
+    // 2DO - add const for magic masking 
     encoded_inst->encoding_type = encoding_type & 0x3;
 }
 void encode_bits_2_to_11(int number, struct InstructionStructure *encoded_inst) {
@@ -128,6 +136,7 @@ void encode_bits_2_to_11(int number, struct InstructionStructure *encoded_inst) 
 }
 
 void binaryToBase64(uint64_t binary, char *base64) {
+    // 2DO - the order need to reflect the value of the char 
     const char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     int base64_length = 0;
 
