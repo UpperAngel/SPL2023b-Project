@@ -1,60 +1,60 @@
 #include "pre-processor header files/pre_processor.h"
+#include "handle_error.h"
 
-/* Function to process the source file and extract macros */
-int process_file(FILE *source_file, FILE *target_file) {
-    enum State state = OUTSIDE_MACRO_DEF;
-    char line[MAXLEN];
-    char curr_mcro_name[MAXLEN]; /* Initialize to an array with MAXLEN size */
-    mcro *created_macro = NULL;
-    struct macroList *macro_list = createMacroList();
 
-    /* Loop through each line in the source file */
-    while ( fgets(line, MAXLEN, source_file) != NULL ) {
-        /* Remove newline character at the end of the line */
+/* Function to process the source file and generate the target file
+ In the case that a given line exceeds 80 chars the function will output to the target file up to 100 chars of
+ that line and the error will be handled in the first pass  */
+int process_file(FILE* source_file, FILE* target_file) {
+
+    int line_number = 0; /* Variable to keep track of the line number being processed in the source file */
+    enum MacroState state = OUTSIDE_MACRO_DEF; /* Initialize the state of the macro processing to be outside a macro definition */
+    char line[MAXLEN]; /* Buffer to store each line read from the source file */
+    char curr_macro_name[MACRO_NAME_LENGTH + 1]; /* Buffer to store the name of the current macro being processed */
+    mcro* created_macro = NULL; /* Pointer to the macro structure representing the macro being created */
+    struct macroList* macro_list = createMacroList(line_number); /* Pointer to the macro list containing all defined macros */
+
+
+    while (custom_fgets(line, MAXLEN, source_file) != NULL) {
+        line_number++; /* Increment the number of the line */
+
+        /* Remove newline character at the end of a string */
         remove_newline(line);
 
-        /* Check if the line is a comment or an empty line, then skip it */
-        if (skip_line(line))
+       /* Check if the current line is a comment or an empty line if so skip it */
+        if(comment_or_empty(line))
             continue;
 
-        /* Check if the line marks the end of a macro definition */
-        if (valid_end_macro(line) == END_MACRO_FOUND) {
+        if ( is_start_macro_def(line)){
+            if ( !valid_start_macro_def(line, line_number) )
+                return 0; /* Error found */
+            state = INSIDE_MACRO_DEF;
+            strcpy(curr_macro_name, get_second_token(line));
+            created_macro = create_mcro(curr_macro_name, line_number);
+            add_to_macro_table(created_macro, &macro_list, line_number);
+            continue;
+        }else if (is_end_macro_def(line)){
+            if (!valid_end_macro_def(line, line_number))
+                return 0; /* Error found */
             state = OUTSIDE_MACRO_DEF;
             continue;
         }
-        else if (valid_end_macro(line) == END_MACRO_WITH_OTHER_CHARACTERS)
-            return 0; /* Invalid end of macro definition means error so don't make target file (return 0) */
 
-
-        /* Check if the line is the start of a valid macro definition */
-        if (state == OUTSIDE_MACRO_DEF && is_valid_macro_def(line) == 1 ) {
-            /* If the line is a valid macro definition, process it and continue to the next line. */
-            state = INSIDE_MACRO_DEF;
-            created_macro = create_mcro(curr_mcro_name);
-            add_to_macro_table(created_macro, &(macro_list));
-            continue;
-        }
-        if (is_valid_macro_def(line) == 0) {
-            return 0; /* Invalid macro definition means error, so don't make target file (return 0) */
-        }
-
-        /* If inside a macro definition, add the line to the current macro */
         if (state == INSIDE_MACRO_DEF) {
-            add_line_to_mcro(created_macro, line);
+            add_line_to_mcro(created_macro, line, line_number);
             continue;
         }
 
         /* Check if the line contains macro names and deploy the macros to the target file */
         if (check_line_for_macro(line, macro_list)) {
             deploy_macros_in_line(line, target_file, macro_list);
-            continue;
+        } else {
+            write_line_to_file(line, target_file);
         }
-
-        /* Write the line to the target file if it should not be deleted */
-        write_line_to_file(line, target_file);
     }
 
-    /* Free the dynamically allocated memory before exiting the function */
+    /* Free dynamically allocated memory */
     free_macro_list(macro_list);
-    return 1; /* indicate that the target file was built successfully */
+
+    return 1;
 }
