@@ -1,5 +1,6 @@
-#include "pre-processor header files/pre_processor.h"
-#include "handle_error.h"
+#include "pre-processor-headers/pre_processor.h"
+#include "pre-processor-headers/support_functions.h"
+#include "../error-handling/errors.h"
 
 /* API style documentation of every function is in the "support_function.h" file */
 

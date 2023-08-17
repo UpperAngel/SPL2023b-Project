@@ -1,23 +1,24 @@
-#include "pre-processor/pre-processor header files/pre_processor.h"
-#include "first-pass/first-pass-headers/first_pass.h"
-#include "second-pass/symbol_list.h"
-#include "pre-processor/pre-processor header files/helper_fucntions.h"
-int main(int argc, char const *argv[])
-{
-    FILE *am_file = NULL;
+#include "error.h"
+#include "first-pass-headers/first_pass_headers.h"
+#include "pre-processor/pre-processor-headers/pre_processor.h"
+#include "second-pass/second_pass.h"
+
+int main(int argc, char const *argv[]) {
+    int error_found = 0;
     int arg_index;
     char *curr_filename;
-    Symbol *symbol = create_symbol_table(10);
-    if (argc < 2) {
-        fprintf(stderr, "missing ");
-    }
-    
-    for (arg_index = 1; arg_index < argc; arg_index++)
-    {
-        curr_filename = argv[arg_index];
-        process_file(fopen(curr_filename, "r"), am_file = create_file(curr_filename, ".am"));
-    }
-    
-    return 0;
-}
+    Symbol *curr_symbol;
+    struct InstructionStructure *instruction_arry[1024];
+    struct DataStructure *data_array[1024];
+    struct SymbolNameAndIndex *symbol_name_and_index;
 
+    if (arg_index < 2) {
+        exit;
+    }
+    for (arg_index = 1; arg_index < argc; arg_index++) {
+        curr_filename = argv[arg_index];
+
+        // call first_pass;
+        second_pass(curr_filename, curr_symbol,&instruction_arry,&data_array,symbol_name_and_index, &error_found);
+    }
+}

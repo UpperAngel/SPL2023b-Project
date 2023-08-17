@@ -1,6 +1,13 @@
-#include "/home/david/CLionProjects/Project main branch/src/FIRST ---PASS/header files/first_pass_headers.h"
+#include "../first-pass-headers/first_pass_headers.h"
+
 int is_whitespace(char c) {
     return c == ' ' || c == '\t';
+}
+/* valid line has 80 char + '\n' char */
+int line_too_long(char *line){
+    if (strlen(line) <= 81)
+        return 1;
+    return 0;
 }
 void format_line(char source[LEN], char formatted_line[LEN]) {
     /* Get the length of the input line */
@@ -18,21 +25,21 @@ void format_line(char source[LEN], char formatted_line[LEN]) {
 
         /* Handle spaces and tabs */
         if (is_space) {
-            if (!last_was_space && formatted_index > 0 && formatted_line[formatted_index - 1] != ',') {
+            if (!last_was_space && formatted_index > 0 && formatted_line[formatted_index - 1] != ',' && formatted_line[formatted_index - 1] != ':') {
                 formatted_line[formatted_index++] = ' '; /* Replace multiple spaces with a single space */
             }
             last_was_space = 1;
         }
-            /* Handle commas */
-        else if (current_char == ',') {
+            /* Handle commas and colons */
+        else if (current_char == ',' || current_char == ':') {
             if (!last_was_space) {
-                if (formatted_index > 0 && formatted_line[formatted_index - 1] != ',') {
-                    formatted_line[formatted_index++] = ' '; /* Add a space before comma if there wasn't one */
+                if (formatted_index > 0 && formatted_line[formatted_index - 1] != ',' && formatted_line[formatted_index - 1] != ':') {
+                    formatted_line[formatted_index++] = ' '; /* Add a space before comma/colon if there wasn't one */
                 }
             }
 
             formatted_line[formatted_index++] = current_char;
-            formatted_line[formatted_index++] = ' '; /* Add a space after comma */
+            formatted_line[formatted_index++] = ' '; /* Add a space after comma/colon */
             last_was_space = 1;
         }
             /* Handle regular characters */
@@ -113,4 +120,5 @@ int is_empty(const char *line) {
 int comment_or_empty(char *line)
 {
     return ( is_comment(line) || is_empty(line));
+
 }

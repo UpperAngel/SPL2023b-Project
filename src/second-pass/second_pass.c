@@ -1,19 +1,13 @@
-#include <stdint.h>
-
-#include "../pre-processor/pre-processor header files/helper_fucntions.h"
-#include "data-and-instructions.h"
-#include "symbolNameAndIndex.h"
-#include "symbol_list.h"
+#include "../first-pass/first-pass-headers/first_pass_headers.h"
+#include "../error-handling/errors.h"
 /*
 gets name of label, index.
 lookup name -> go to index -> encode
 */
 
-void write_encoding_type(struct InstructionStructure *encoded_inst, unsigned int encoding_type);
-void encode_bits_2_to_11(int number, struct InstructionStructure *encoded_inst);
 void binaryToBase64(uint64_t binary, char *base64);
 
-void second_pass(const char *file_name, Symbol *symbol_table, struct InstructionStructure **instruction_array, struct DataStructure *data_array, struct SymbolNameAndIndex *symbol_name_and_index, int *error_ptr) {
+void second_pass(const char *file_name, Symbol *symbol_table, struct InstructionStructure **instruction_array, struct DataStructure *data_array, struct SymbolNameAndIndex *symbol_name_and_index, int *error_found) {
     struct SymbolNameAndIndex *temp = symbol_name_and_index;
     struct InstructiomStructure **printed_inst_arry = instruction_array;
     struct DataStructure *printed_data_arry = data_array;
@@ -40,7 +34,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     }
 
     // move up 
-    if (*error_ptr == 1) {
+    if (*error_found == 1) {
         return;
     }
 
@@ -54,7 +48,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
             write_encoding_type(instruction_array[curr_missing->IC_index], (symbol->type == EXTERN) ? 0x3 : 0x1);
             encode_bits_2_to_11(symbol->val, instruction_array[curr_missing->IC_index]);
         } else {
-            *error_ptr = 1;  /* Found an error */
+            *error_found = 1;  /* Found an error */
             return;
         }
         curr_missing = curr_missing->next;
@@ -66,7 +60,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     {
         if (find_symbol(temp_symbol, getNextName(temp, temp->name) == NULL))
         {
-            *error_ptr = 1;
+            *error_found = 1;
         }
         
 
@@ -74,14 +68,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
         temp_symbol = temp_symbol->next;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    if (*error_ptr == 1) {
+    if (*error_found == 1) {
         return;
     }
 
@@ -143,22 +130,8 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     fclose(ent_file);
     // Free resources in the main function
 }
-void write_encoding_type(struct InstructionStructure *encoded_inst, unsigned int encoding_type) {
-    // 2DO - add const for magic masking 
-    encoded_inst->encoding_type = encoding_type & 0x3;
-}
-void encode_bits_2_to_11(int number, struct InstructionStructure *encoded_inst) {
-    /* Get the binary representation of the number as a 32-bit unsigned integer */
-    unsigned int binary_rep = (unsigned int)number;
-
-    /* Extract the target_addressing, opcode, and source_addressing bits using bitwise operations */
-    encoded_inst->target_addressing = (binary_rep & 0x7);        /* Last 3 bits */
-    encoded_inst->opcode = ((binary_rep >> 3) & 0xF);            /* Next 4 bits */
-    encoded_inst->source_addressing = ((binary_rep >> 7) & 0x7); /* First 3 bits */
-}
 
 void binaryToBase64(uint64_t binary, char *base64) {
-    // 2DO - the order need to reflect the value of the char 
     const char base64_chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     int base64_length = 0;
 

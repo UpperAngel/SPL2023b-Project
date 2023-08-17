@@ -1,161 +1,221 @@
-#include "/home/david/CLionProjects/My-project/Project main branch/src/Error handling/handle_error.h"
+#include "/home/david/CLionProjects/My-project/Project main branch/src/FIRST ---PASS/header files/first_pass_headers.h"
+#include "/home/david/CLionProjects/My-project/Project main branch/src/Error handling/errors.h"
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#define LEN 200
-#define ARRAY_SIZE 1024
+/* TESTING HERE */
 
-/* in c90 standard minimum width of int is 16 bits so we can use the first 12 bits of it*/
-struct DataStructure {
-    int value : 12;
-};
-struct DataStructure* create_data_array(int size) {
-    // Allocate memory for the array of DataStructure
-    struct DataStructure* dataArray = (struct DataStructure*)malloc(size * sizeof(struct DataStructure));
-
-    // Check if memory allocation is successful
-    if (dataArray == NULL) {
-        // Handle memory allocation failure if needed
-        return NULL;
-    }
-
-    // Initialize the array elements (optional)
-    for (int i = 0; i < size; i++) {
-        dataArray[i].value = 0;
-    }
-
-    return dataArray;
-}
-void write_integer(struct DataStructure* data, int number) {
-    // Ensure that the integer value fits within the 12-bit range
-    if (number >= -2048 && number <= 2047) {
-        data->value = number & 0xFFF; // Mask the value to keep only the 12 least significant bits (LSBs)
-    } else {
-        // Handle the case when the number is out of range for a 12-bit signed integer.
-        // You can choose to set an error code or handle it differently as per your requirement.
-    }
-}
-void write_character_to_dataStructure(struct DataStructure* data, char c) {
-    // Convert the char to int and store it in the struct
-    data->value = (int)c;
-}
-
-int is_string_directive(char *word) {
-    if (strcmp(word,".string") == 0)
-        return 1;
-    return 0;
-}
-
-int is_data_directive(char *word){
-    if (strcmp(word,".data") == 0)
-        return 1;
-    return 0;
-}
-
-
-
-
-
-/* By the project definition vlaid characters are visible ASCI chars which are chars between 32 and 126 including */
-int is_valid_char(char c) {
-    return (c >= 32 && c <= 126);
-}
-
-int is_valid_string(char *string, int length) {
-    int i;
-    for (i = 0; i < length; i++) {
-        char current_char = string[i];
-        if (current_char == '\\') {
-            // Found backslash, skip the next character (it's valid)
-            i++;
-        } else if (current_char == '"') {
-            // Found single quote without a preceding backslash, it's an error
-            return 0;
-        } else if (!is_valid_char(current_char)) {
-            return 0;
+int is_reserved_keyword(const char *word) {
+    for (size_t i = 0; i < sizeof(reservedKeywords) / sizeof(reservedKeywords[0]); i++) {
+        if (strcmp(word, reservedKeywords[i]) == 0) {
+            return 1; /* Found a match, it's a reserved keyword */
         }
     }
-    return 1;
+    return 0; /* No match, it's not a reserved keyword */
 }
+int is_symbol(const char *symbol) {
+    size_t i = 1;
 
-int valid_string_directive(char words_array[LEN][LEN], int line_number, int *error_found, int symbol_definition) {
-    char *string;
-    int string_length = 0;
+    if (is_reserved_keyword(symbol))
+        return 0;
+
+    if (symbol == NULL || strlen(symbol) > 31 || strlen(symbol) == 0) {
+        return 0; /* Invalid if NULL, longer than 31 chars, or empty */
+    }
+
+    if (!isalpha(symbol[0])) {
+        return 0; /* Symbol must start with a letter */
+    }
+
+    for ( i; symbol[i] != '\0'; i++) {
+        if ( !isalnum(symbol[i]) ){
+            return 0; /* Invalid character in the symbol */
+        }
+    }
+
+    return 1; /* The string satisfies the criteria for a valid symbol */
+}
+int valid_commas_in_directive(char words_array[LEN][LEN], int starting_index, int line_number) {
+    int i = starting_index;
+
+    /* Check if the first word is a comma */
+    if (words_array[i][0] == ',') {
+        handle_error(CommaAtStart,line_number);  /* Comma at start */
+        return 0;  /* Invalid */
+    }
+
+    i++;  /* Move to the next word */
+
+    /* Iterate through the words */
+    while (words_array[i][0] != '\0') {
+        /* Check if the current word is a comma */
+        if (words_array[i][0] == ',') {
+            /* Check for consecutive commas */
+            if (words_array[i - 1][0] == ',') {
+                handle_error(ConsecutiveCommas,line_number);  /* 2 consecutive commas */
+                return 0;  /* Invalid */
+            }
+        } else {
+            /* Check if the previous word is not a comma */
+            if (words_array[i - 1][0] != ',') {
+                handle_error(MissingComma,line_number);  /* Comma expected after a word */
+                return 0;  /* Invalid */
+            }
+        }
+
+        i++;  /* Move to the next word */
+    }
+
+    /* Check if the last word is a comma */
+    if (words_array[i - 1][0] == ',') {
+        handle_error(EndsWithComma,line_number);  /* Ends with comma error */
+        return 0;  /* Invalid */
+    }
+
+    return 1;  /* Valid */
+}
+int valid_entry_and_extern_directive(char words_array[LEN][LEN], int *error_found, int line_number, int symbol_definition){
     int index = 1;
 
-    if (symbol_definition)
-        index++;
+    /* if there is symbol definition skip the name of the symbol and ':' char */
+    if(symbol_definition)
+        index = index + 2;
 
-    string = words_array[index];
-    string_length = strlen(string);
-
-    /* Check if the word is an empty string */
-    if (string_length == 0) {
+    if( !valid_commas_in_directive(words_array,index,line_number) ){
         *error_found = 1;
-         handle_error(EmptyStringDirective, line_number);
         return 0;
     }
 
-    /* Check if there are any additional words after the string directive */
-    if (strcmp(words_array[index + 1], "") != 0) {
+    if (words_array[index][0] == '\0'){
         *error_found = 1;
-        handle_error(ExcessCharactersInDataLine, line_number);
+        handle_error(InvalidNumberOfOperands,line_number);
         return 0;
     }
 
-        /* Check if the word has at least three characters (starting '"', content, ending '"') */
-    else if (string[0] != '"' || (string_length == 1 && string[0] == '"')) {
-        *error_found = 1;
-        handle_error(InvalidStartCharInString, line_number);
-        return 0;
-    } else if (string_length > 1 && string[string_length - 1] != '"') {
-        *error_found = 1;
-        handle_error(InvalidEndCharInString, line_number);
-        return 0;
-    }
-
-        // Check the characters between the '"' characters (excluding the starting and ending '"')
-    else {
-        if (!is_valid_string(&string[1], string_length - 2)) {
+    while ( words_array[index][0] != '\0'){
+        if( !is_symbol(words_array[index]) ){
             *error_found = 1;
-            handle_error(InvalidCharInString, line_number);
+            handle_error(OnlySymbolsAllowed,line_number);
             return 0;
         }
+        /* check the next parameter, skipping the: ',' char */
+        index = index + 2;
     }
-
     /* passed all checks */
     return 1;
 }
 
 
 
-void test_valid_string_directive() {
-    int error_found;
-    char words_array[LEN][LEN];
 
-    printf("Test 1: Empty string directive\n");
-    strcpy(words_array[0], "STRING");
-    strcpy(words_array[1], "");
-    error_found = 0;
-    int result = valid_string_directive(words_array, 1, &error_found, 0);
-    printf("Expected: Error in line 1: Empty string directive\n");
-    printf("Actual: %s\n\n", result ? "Pass" : "Fail");
+void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, struct DataStructure *data_array,  Symbol *symbol_head, struct SymbolNameAndIndex **second_pass_list ) {
+    char line[LEN];
+    char words_array [LEN][LEN] = {0}; /* Initialize array */
+    int index = 0;
+    int symbol_definition = 0;
+    int error_found = 0;
+    int IC = 0;
+    int DC = 0;
+    int line_number = 0;
+    char *word = NULL;
+    char *current_symbol_name = NULL;
 
-    printf("Test 2: Excessive characters in data line\n");
-    strcpy(words_array[0], "STRING");
-    strcpy(words_array[1], "This is a string directive");
-    strcpy(words_array[2], "with extra characters");
-    error_found = 0;
-    result = valid_string_directive(words_array, 1, &error_found, 0);
-    printf("Expected: Error in line 1: Excess characters at the end of macro definition\n");
-    printf("Actual: %s\n\n", result ? "Pass" : "Fail");
 
-    // Add more test cases here...
+    while ( fgets(line,LEN ,am_file) ) {
+        update_variables(&current_symbol_name, &symbol_definition,&line_number,&index);
+
+        /* Check if the current line is a comment or an empty line if so skip it */
+        if(comment_or_empty(line))
+            continue;
+
+        if (line_too_long(line)) {
+            handle_error(LineLimitExceeded, line_number);
+            error_found = 1;
+            continue;
+        }
+        /* breaks the lines to separate words and stores them into words_array */
+        format_and_store_words(line,words_array);
+        word = words_array[index];
+
+        /* Step 3 and 4 */
+        if ( words_array[index + 1 ][0] == ':' ) {
+            if ( is_valid_symbol(line, line_number,&error_found, words_array) ) {/* In this function we should output errors if found  */
+                symbol_definition = 1;
+                current_symbol_name = word; /* STR */
+                index = index + 2; /* skip the name of the symbol and the char ':' */
+                word = words_array[index];
+            } else {
+                continue;
+            }
+        }
+
+        /* step 5 */    /*example: STR: .data 6,7,3,5,6,7,4  */
+        if (is_directive(word,".string") || is_directive(word,".data")) {
+            /* step 6 */
+            if (symbol_definition)
+                handle_symbol(&symbol_head, current_symbol_name, line_number, &error_found, DATA , NONE_CATEGORY, DC);
+            /* if there was an error in with the symbol handling continue to next line */
+            if(error_found)
+                continue;
+
+            /* step 7 */    /*example:  STR: .string     "abc , de fg"  */
+            if ( is_directive(word,".string") ) {
+                if ( valid_string_directive(line, line_number, &error_found,symbol_definition ) )
+                    DC = DC + handle_string_directive(data_array, DC,line, line_number);
+            } else { /* data directive */
+                if ( valid_data_directive(words_array, line_number, &error_found,symbol_definition) )
+                    DC = DC + handle_data_directive(data_array, DC, words_array, symbol_definition );
+            }
+            continue;
+        }
+
+        /* step 8 + 9*/   /*   M1: .extern STR,M2,M3  */
+        if (is_directive(word,".extern") || is_directive(word,".entry")) {
+            if ( !valid_entry_and_extern_directive(words_array, &error_found, line_number, symbol_definition) )
+                continue;
+
+            if (is_directive(word,".extern") )
+                handle_extern_and_entry_directives(words_array,&symbol_head,symbol_definition,line_number, &error_found,NONE_TYPE,EXTERN);
+            else
+                handle_extern_and_entry_directives(words_array,&symbol_head,symbol_definition,line_number, &error_found, NONE_TYPE,ENTRY);
+        }
+
+
+        /* step 11 */
+        if (symbol_definition)
+            handle_symbol(&symbol_head, current_symbol_name,line_number,&error_found, CODE, NONE_CATEGORY, IC);
+
+        /* step 12 + 13 + 14 */  /* example: STR: mov 5,M2 */
+        if (valid_instruction(words_array, line_number, symbol_definition) )
+            IC = IC + handle_valid_instruction(words_array, instructions_array,IC, symbol_definition, line_number, second_pass_list );
+        else {/* the second word is not an instruction nor data/string directive than output error */
+            /* here should be a function that can find more specific errors */
+            error_found = 1;
+            //handle_error(SomeErrorHere,line_number);
+            continue;
+        }
+    }
+    //handle_separation(symbol_head,IC,line_number,&error_found);
 }
 
+
+
 int main() {
-    test_valid_string_directive();
+    // Create a mock FILE pointer for testing purposes
+    FILE *mock_file = fopen("test_input.txt", "r");
+
+    // Define your instruction and data arrays, symbol head, and second pass list
+    struct InstructionStructure instructions_array[100];
+    struct DataStructure data_array[100];
+    Symbol *symbol_head = NULL;
+    struct SymbolNameAndIndex *second_pass_list = NULL;
+
+    // Call the first_pass function with the mock FILE pointer and other required arguments
+    first_pass(mock_file, instructions_array, data_array, symbol_head, &second_pass_list);
+
+    // Close the mock FILE pointer after use
+    fclose(mock_file);
+
+    // Print the results or perform further tests/assertions
+
     return 0;
 }
 
