@@ -17,6 +17,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     struct SymbolNameAndIndex *temp = symbol_name_and_index;
     struct InstructiomStructure **printed_inst_arry = instruction_array;
     struct DataStructure *printed_data_arry = data_array;
+    Symbol *temp_symbol;
     FILE *ent_file = NULL;
     FILE *ext_file = NULL;
     FILE *ob_file;
@@ -47,12 +48,33 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
             write_encoding_type(instruction_array[curr_missing->IC_index], (symbol->type == EXTERN) ? 0x3 : 0x1);
             encode_bits_2_to_11(symbol->val, instruction_array[curr_missing->IC_index]);
         } else {
-            *error_ptr = 1;  // Found an error
+            *error_ptr = 1;  /* Found an error */
             return;
         }
         curr_missing = curr_missing->next;
     }
 
+    temp_symbol = symbol_table;
+    temp = symbol_name_and_index;
+    while (temp_symbol != NULL && temp != NULL)
+    {
+        if (find_symbol(temp_symbol, getNextName(temp, temp->name) == NULL))
+        {
+            *error_ptr = 1;
+        }
+        
+
+        temp = temp->next;
+        temp_symbol = temp_symbol->next;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     if (*error_ptr == 1) {
         return;
     }
@@ -132,9 +154,9 @@ void binaryToBase64(uint64_t binary, char *base64) {
     int base64_length = 0;
 
     while (binary > 0) {
-        int remainder = binary & 0x3F;  // Get the lowest 6 bits
+        int remainder = binary & 0x3F;  /* Get the lowest 6 bits */
         base64[base64_length++] = base64_chars[remainder];
-        binary >>= 6;  // Shift right by 6 bits
+        binary >>= 6;  /* Shift right by 6 bits */
     }
 
     if (base64_length == 0) {
@@ -142,11 +164,4 @@ void binaryToBase64(uint64_t binary, char *base64) {
     }
 
     base64[base64_length] = '\0';
-
-    // Reverse the base64 string
-    for (int i = 0; i < base64_length / 2; i++) {
-        char temp = base64[i];
-        base64[i] = base64[base64_length - 1 - i];
-        base64[base64_length - 1 - i] = temp;
-    }
 }
