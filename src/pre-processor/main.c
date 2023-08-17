@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "pre-processor header files/pre_processor.h"
+#include "../pre-processor header files/pre_processor.h"
 
 void print_file_contents(FILE* file) {
     int ch;
