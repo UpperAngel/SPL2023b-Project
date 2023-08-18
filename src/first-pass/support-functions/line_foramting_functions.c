@@ -11,7 +11,7 @@ int line_too_long(char *line){
 }
 void format_line(char source[LEN], char formatted_line[LEN]) {
     /* Get the length of the input line */
-    int i = 0;
+    int i;
     int len = (int)strlen(source);
 
     /* Variables to keep track of the formatted line */
@@ -19,7 +19,7 @@ void format_line(char source[LEN], char formatted_line[LEN]) {
     int last_was_space = 1;
 
     /* Iterate through each character of the input line */
-    for (i; i < len; i++) {
+    for (i = 0; i < len; i++) {
         char current_char = source[i];
         int is_space = is_whitespace(current_char);
 

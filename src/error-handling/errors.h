@@ -92,4 +92,4 @@ void handle_error(enum Error error, int line_number) {
         fprintf(stderr, "Error in line %d: %s\n", line_number, errorMessages[error]);
     }
 }
-#endif //SPL2023B_PROJECT_COPY_ERRORS_H
+#endif

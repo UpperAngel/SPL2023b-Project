@@ -27,6 +27,7 @@ int valid_string_directive(char *line, int line_number, int *error_found, int wo
     char quote = '\"';
     char *start = line;
     char *last_non_whitespace = NULL;
+    char *ptr;
     char *opening_quote = strchr(start, '"');
     char *closing_quote = NULL;
     int i = 0;
@@ -76,7 +77,7 @@ int valid_string_directive(char *line, int line_number, int *error_found, int wo
         return 0;
     }
 
-    for (char *ptr = opening_quote + 1; ptr < closing_quote; ptr++) {
+    for (ptr = opening_quote + 1; ptr < closing_quote; ptr++) {
         if (!is_valid_char(*ptr)) {
             *error_found = 1;
             handle_error(InvalidCharInString, line_number);

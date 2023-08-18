@@ -90,7 +90,7 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
             continue;
         }
     }
-    handle_separation(symbol_head, IC, line_number, &error_found);
+    /* handle_separation(symbol_head, IC, line_number, &error_found); */
 }
 
 

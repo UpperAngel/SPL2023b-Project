@@ -1,8 +1,8 @@
+#include <string.h>
 #include "error.h"
 #include "first-pass/first-pass-headers/first_pass.h"
 #include "pre-processor/pre-processor-headers/pre_processor.h"
 #include "second-pass/second_pass.h"
-#include "string.h";
 #include "pre-processor/pre-processor-headers/helper_fucntions.h"
 int main(int argc, char const *argv[]) {
     int error_found = 0;
@@ -32,4 +32,5 @@ int main(int argc, char const *argv[]) {
         
         second_pass(curr_filename, curr_symbol,&instruction_array,&data_array,symbol_name_and_index, &error_found);
     }
+    return 0;
 }
