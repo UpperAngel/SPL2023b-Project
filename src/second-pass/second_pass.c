@@ -119,12 +119,12 @@ void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameA
     fprintf(ob_file, "%d %d", IC, DC);
     for (i = 0; i < IC; i++) {
         char base64out[2];
-        binaryToBase64((int)&instruction_array[i], base64out);
+        binaryToBase64((uint16_t)&instruction_array[i], base64out);
         fprintf(ob_file, "%s", base64out);
     }
     for (j = 0; j < DC; j++) {
         char base64out[2];
-        binaryToBase64(data_array[j].value, base64out);
+        binaryToBase64((uint16_t)data_array[j].value, base64out);
         fprintf(ob_file, "%s", base64out);
     }
     fclose(ext_file);
