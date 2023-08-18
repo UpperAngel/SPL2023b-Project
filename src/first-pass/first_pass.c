@@ -1,4 +1,4 @@
-#include "first-pass-headers/first_pass_headers.h"
+#include "first-pass-headers/first_pass.h"
 #include "../error-handling/errors.h"
 
 /* TODO make sure that every number is macro based */
@@ -90,7 +90,7 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
             continue;
         }
     }
-    /* handle_separation(symbol_head, IC, line_number, &error_found); */
+    handle_separation(symbol_head, IC, line_number, &error_found);
 }
 
 
