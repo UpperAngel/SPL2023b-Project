@@ -2,8 +2,6 @@
 #include "pre-processor-headers/support_functions.h"
 #include "../error-handling/errors.h"
 
-/* API style documentation of every function is in the "support_function.h" file */
-
 /* Function to add a line to the content of a macro */
 void add_line_to_mcro(mcro *macro, char *contentSource, int line_number)
 {
@@ -12,12 +10,10 @@ void add_line_to_mcro(mcro *macro, char *contentSource, int line_number)
 
     /* Create a new node */
     struct content *macroNode = (struct content *)malloc(sizeof(struct content));
-
-    if(macroNode == NULL){
+    if (macroNode == NULL) {
         handle_error(FailedToAllocateMemory, line_number);
         exit(0);
     }
-
 
     /* Copy the content into the new node */
     strcpy(macroNode->line, contentSource);
@@ -28,7 +24,7 @@ void add_line_to_mcro(mcro *macro, char *contentSource, int line_number)
     {
         *ptr = macroNode;
     }
-        /* If the data member is not NULL, find the last node and append the new node */
+    /* If the data member is not NULL, find the last node and append the new node */
     else
     {
         while ((*ptr)->next != NULL)
@@ -39,19 +35,16 @@ void add_line_to_mcro(mcro *macro, char *contentSource, int line_number)
     }
 }
 
-
-
-
 /* Function to add a macro to the macro list */
 void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr, int line_number)
 {
     /* Create a new node */
-    struct macroList *newNode = malloc(sizeof(struct macroList));
-    if (newNode == NULL) {
+    struct macroList *newNode = (struct macroList *)malloc(sizeof(struct macroList));
+    if (newNode == NULL)
+    {
         handle_error(FailedToAllocateMemory, line_number);
         exit(0);
     }
-
 
     newNode->macro = macroToAdd;
     newNode->nextMacro = NULL;
@@ -76,35 +69,39 @@ void add_to_macro_table(mcro *macroToAdd, struct macroList **macroTablePtr, int 
     }
 }
 
-
-
-
 /* Function to create a new macro with the given name */
-mcro *create_mcro(const char *name, int line_number)
-{
-    mcro *newMcro = malloc(sizeof(mcro));
+/* Function to create a new macro with the given name */
+mcro *create_mcro(const char *name, int line_number) {
+    mcro *newMcro = (mcro *)malloc(sizeof(mcro));
     if (newMcro == NULL) {
         handle_error(FailedToAllocateMemory, line_number);
         exit(0);
     }
 
-    if (newMcro != NULL)
-    {
-        newMcro->name = strdup(name); /* Allocate memory and copy the name */
-        newMcro->data = NULL;         /* Initialize data member to NULL */
+    if (newMcro != NULL) {
+        size_t nameLength = strlen(name);
+        newMcro->name = (char *)malloc(nameLength + 1); /* Allocate memory for the name */
+        if (newMcro->name != NULL) {
+            strcpy(newMcro->name, name); /* Copy the name */
+        } else {
+            handle_error(FailedToAllocateMemory, line_number);
+            free(newMcro); /* Free the macro structure if memory allocation for the name failed */
+            exit(0);
+        }
+
+        newMcro->data = NULL; /* Initialize data member to NULL */
     }
 
     return newMcro;
 }
 
 
-
-
 /* Function to create a new macro list */
 struct macroList *createMacroList(int line_number)
 {
-    struct macroList *newList = malloc(sizeof(struct macroList));
-    if (newList == NULL) {
+    struct macroList *newList = (struct macroList *)malloc(sizeof(struct macroList));
+    if (newList == NULL)
+    {
         handle_error(FailedToAllocateMemory, line_number);
         exit(0);
     }
@@ -117,9 +114,6 @@ struct macroList *createMacroList(int line_number)
 
     return newList;
 }
-
-
-
 
 /* Function to find a macro in the macro list by its name */
 mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
@@ -156,14 +150,6 @@ mcro *find_macro_by_name(struct macroList *macroTable, const char *name)
     return NULL; /* Macro not found, return NULL */
 }
 
-
-
-
-
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
-
 int is_valid_macro_name(const char *name, int line_number) {
     /* Maximum allowed length for macro name */
     const int maxNameLength = MACRO_NAME_LENGTH;
@@ -178,7 +164,7 @@ int is_valid_macro_name(const char *name, int line_number) {
     };
 
     /* Check the length of the name */
-    size_t nameLength = strnlen(name, maxNameLength + 1);
+    size_t nameLength = strlen(name);
 
     /* Check if the length exceeds the maximum allowed length */
     if (nameLength > maxNameLength) {
@@ -431,20 +417,12 @@ int check_line_for_macro(const char line[MAXLEN], struct macroList* macroTable) 
     return 0;
 }
 
-
-
-
 /* Function to remove newline character at the end of a string */
 void remove_newline(char *str) {
     size_t len = strlen(str);
     if (len > 0 && str[len - 1] == '\n')
         str[len - 1] = '\0';
 }
-
-
-
-
-
 
 int is_comment(const char* line) {
         int index = 0;
@@ -479,48 +457,41 @@ int is_empty(const char *line) {
 }
 
 /* Function that gets the second word from a given line */
-char* get_second_token (const char* line){
-    /* Create a copy of the input line to avoid modifying the original string */
-    char* line_copy = strdup(line);
-
-    /* Initialize variables to keep track of tokens and the second token */
-    char* token;
+/* Function that gets the second word from a given line */
+/* Function that gets the second word from a given line */
+char* get_second_token(const char* line) {
     char* second_token = NULL;
     int token_count = 0;
 
     /* Tokenize the line using " \t" as the delimiter */
-    token = strtok(line_copy, " \t");
+    const char* delimiters = " \t";
+    char* token = strtok((char*)malloc(strlen(line) + 1), delimiters);
 
     /* Loop through all tokens and find the second one */
     while (token != NULL) {
         token_count++;
         if (token_count == 2) {
-            /* Store the second token */
-            second_token = strdup(token);
+            /* Allocate memory for the second token and copy it */
+            second_token = (char*)malloc(strlen(token) + 1);
+            if (second_token != NULL) {
+                strcpy(second_token, token);
+            }
             break;
         }
-        token = strtok(NULL, " \t");
+        token = strtok(NULL, delimiters);
     }
 
-    /* Free the memory allocated for the copy of the line */
-    free(line_copy);
-
-    /* Return the second token */
     return second_token;
 }
 
-
-
-
 /* Custom function to read a line with a maximum length of max_len */
-char* custom_fgets(char* buffer, int max_len, FILE* source_file) {
+char *custom_fgets(char *buffer, int max_len, FILE *source_file) {
     int current_char;
     int char_count = 0;
 
     /* Read characters until max_len-1 or newline or EOF is encountered */
     while (char_count < max_len - 1 && (current_char = fgetc(source_file)) != EOF && current_char != '\n') {
         buffer[char_count++] = (char)current_char;
-
     }
 
     buffer[char_count] = '\0'; /* Add the null-terminator to mark the end of the string */
@@ -533,55 +504,34 @@ char* custom_fgets(char* buffer, int max_len, FILE* source_file) {
     return (current_char == EOF && char_count == 0) ? NULL : buffer;
 }
 
-
 /* Function to check if a given word appears as a complete word in a given line. */
-int find_word_in_tokens(const char* line, const char* target) {
-    const char* delimiters = " \t";
+int find_word_in_tokens(const char *line, const char *target) {
+    const char *delimiters = " \t";
     char line_copy[MAXLEN]; /* A copy of the line to work with, as strtok modifies the input */
-    char* token;
+    char token[MAXLEN];     /* Temporary storage for tokens */
 
     /* Create a copy of the line as strtok modifies the input string */
     strncpy(line_copy, line, MAXLEN);
 
     /* Use strtok to tokenize the line */
-    token = strtok(line_copy, delimiters);
+    const char *token_ptr = strtok(line_copy, delimiters);
 
-    while (token != NULL) {
+    while (token_ptr != NULL) {
+        strncpy(token, token_ptr, MAXLEN);
         if (strcmp(token, target) == 0) {
             return 1; /* Found the target word in the tokens */
         }
 
-        token = strtok(NULL, delimiters);
+        token_ptr = strtok(NULL, delimiters);
     }
 
     return 0; /* Target word not found in the tokens */
 }
 
-
-
-int is_start_macro_def(const char* line) {
+int is_start_macro_def(const char *line) {
     return find_word_in_tokens(line, "mcro");
 }
 
-int is_end_macro_def(const char* line) {
+int is_end_macro_def(const char *line) {
     return find_word_in_tokens(line, "endmcro");
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,6 +1,6 @@
 #include "globals.h"
 #include "../error-handling/errors.h"
-
+#include "../first-pass/first-pass-headers/first_pass_headers.h"
 
 struct SymbolNameAndIndex* createNode(const char *name, int IC_index, int line_number) {
     struct SymbolNameAndIndex* newNode = malloc(sizeof(struct SymbolNameAndIndex));
@@ -15,6 +15,18 @@ struct SymbolNameAndIndex* createNode(const char *name, int IC_index, int line_n
     newNode->next = NULL;
     return newNode;
 }
+
+
+struct SymbolNameAndIndex *get_node_by_name(struct SymbolNameAndIndex *head, const char *target_name) {
+    while (head != NULL) {
+        if (strcmp(head->name, target_name) == 0) {
+            return head;
+        }
+        head = head->next;
+    }
+    return NULL; // Node not found
+}
+
 /* Function to insert a node at the end of the list */
 void insertNode(struct SymbolNameAndIndex** head, struct SymbolNameAndIndex* newNode) {
     if (*head == NULL) {

@@ -1,72 +1,29 @@
-# Compiler and compiler flags
+# Makefile for the C program
+
+# Compiler settings
 CC = gcc
-CFLAGS = -Wall -ansi 
+CFLAGS = -Wall -ansi
 
 # Directories
-BUILD_DIR = build
+SRC_DIR = src
+OBJ_DIR = obj
 BIN_DIR = bin
 
-# Source directories
-SRC_DIR = src
-FIRST_PASS_DIR = $(SRC_DIR)/first-pass
-PRE_PROCESSOR_DIR = $(SRC_DIR)/pre-processor
-SECOND_PASS_DIR = $(SRC_DIR)/second-pass
-SUPPORT_FUNCTIONS_DIR = $(FIRST_PASS_DIR)/support-functions
+EXEC = assembler
 
-# Source files
-ASSEMBLER_SRC = $(SRC_DIR)/assembler.c
-CREATE_FILE_FUNC_SRC = $(SRC_DIR)/create_file_func.c
-FIRST_PASS_SRC = $(FIRST_PASS_DIR)/first_pass.c $(SUPPORT_FUNCTIONS_DIR)/functions.c $(SUPPORT_FUNCTIONS_DIR)/handle_data_directive.c $(SUPPORT_FUNCTIONS_DIR)/line_foramting_functions.c
-ERROR_HANDLING_SRC = $(SRC_DIR)/error-handling/errors.h
-PRE_PROCESSOR_SRC = $(PRE_PROCESSOR_DIR)/pre_processor.c $(PRE_PROCESSOR_DIR)/support_functions.c
-SECOND_PASS_SRC = $(SECOND_PASS_DIR)/second_pass.c
-
-# Object files
-ASSEMBLER_OBJ = $(BUILD_DIR)/assembler.o
-CREATE_FILE_FUNC_OBJ = $(BUILD_DIR)/create_file_func.o
-FIRST_PASS_OBJ = $(BUILD_DIR)/first_pass.o $(BUILD_DIR)/functions.o $(BUILD_DIR)/handle_data_directive.o $(BUILD_DIR)/line_foramting_functions.o
-ERROR_HANDLING_OBJ = $(BUILD_DIR)/errors.o
-PRE_PROCESSOR_OBJ =  $(BUILD_DIR)/pre_processor.o $(BUILD_DIR)/functions.o
-SECOND_PASS_OBJ = $(BUILD_DIR)/second_pass.o
-
-# Executable name
-EXEC = $(BIN_DIR)/assembler
-
-# Build the executable
 all: $(EXEC)
 
-# Link the object files to create the executable
-$(EXEC): $(ASSEMBLER_OBJ) $(CREATE_FILE_FUNC_OBJ) $(FIRST_PASS_OBJ) $(ERROR_HANDLING_OBJ) $(PRE_PROCESSOR_OBJ) $(SECOND_PASS_OBJ) | $(BIN_DIR)
-	$(CC) $(CFLAGS) -o $@ $^
+$(OBJ_DIR)/pre_processor.o: $(SRC_DIR)/pre-processor/pre_processor.c $(SRC_DIR)/pre-processor/support_functions.c $(SRC_DIR)/error-handling/errors.c
+	$(CC) $(CFLAGS) $^ -o $@
 
-# Compile the source files into object files
-$(ASSEMBLER_OBJ): $(ASSEMBLER_SRC) | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $<
+$(OBJ_DIR)/first_pass.o: $(SRC_DIR)/first-pass/first_pass.c $(SRC_DIR)/first-pass/support-functions/encode.c $(SRC_DIR)/first-pass/support-functions/instruction.c $(SRC_DIR)/first-pass/support-functions/handle_data_directive.c $(SRC_DIR)/first-pass/support-functions/functions.c $(SRC_DIR)/first-pass/support-functions/line_formmating_functions.c
+	$(CC) $(CFLAGS) -c $^ -o $@
 
-$(CREATE_FILE_FUNC_OBJ): $(CREATE_FILE_FUNC_SRC) | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $<
-
-$(FIRST_PASS_OBJ): $(FIRST_PASS_SRC) | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $(filter %.c, $^)
-
-$(ERROR_HANDLING_OBJ): $(ERROR_HANDLING_SRC) | $(BUILD_DIR)
-	touch $@
-
-$(PRE_PROCESSOR_OBJ): $(PRE_PROCESSOR_SRC) | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $<
-
-$(SECOND_PASS_OBJ): $(SECOND_PASS_SRC) | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -c $<
-
-# Create necessary directories
-$(BUILD_DIR):
-	mkdir -p $@
-
-$(BIN_DIR):
-	mkdir -p $@
-
-# Clean up generated files
+# $(OBJ_DIR)/pre_processor.o: $(SRC_DIR)/pre-processor/pre_processor.c $(SRC_DIR)/pre-processor/support_functions.c
+# 	$(CC) $(CFLAGS) $^ -o $@
+# Clean target: remove object files and the binary directory
 clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-.PHONY: all clean
+# Declare 'clean' as a phony target (not associated with a file)
+.PHONY: clean

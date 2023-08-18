@@ -1,7 +1,7 @@
 #include "../first-pass-headers/instruction.h"
 
 #include "../../error-handling/errors.h"
-#include "../../globals.h"
+#include "../../globals/globals.h"
 
 void assign_operands(char words_array[LEN][LEN], char **operand1, char **operand2, int symbol_definition, int number_of_operands) {
     int index = 1; /* Initialize the IC_index variable to 1 */

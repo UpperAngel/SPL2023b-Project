@@ -11,7 +11,10 @@
         "first_pass.h": "c",
         "instruction_helper.h": "c",
         "symbolnameandindex.h": "c",
-        "cstdlib": "c"
+        "cstdlib": "c",
+        "globals.h": "c",
+        "errors.h": "c",
+        "first_pass_headers.h": "c"
     },
     "cSpell.words": [
         "endmcro",

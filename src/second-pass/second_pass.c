@@ -1,14 +1,16 @@
 #include "../error-handling/errors.h"
 #include "../first-pass/first-pass-headers/first_pass_headers.h"
+#include "../globals/globals.h"
+#include "../first-pass/first-pass-headers/encode.h"
 /*
 gets name of label, index.
 lookup name -> go to index -> encode
 */
 
 void binaryToBase64(uint64_t binary, char *base64);
-void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameAndIndex *symbol_name_and_index, struct InstructionStructure *instruction_array[], struct DataStructure *data_array, int IC, int DC);
+void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameAndIndex *symbol_name_and_index, struct InstructionStructure instruction_array[], struct DataStructure data_array[], int IC, int DC);
 
-void second_pass(const char *file_name, Symbol *symbol_table, struct InstructionStructure **instruction_array, struct DataStructure *data_array, struct SymbolNameAndIndex *symbol_name_and_index, int *error_found) {
+void second_pass(const char *file_name, Symbol *symbol_table, struct InstructionStructure instruction_array[], struct DataStructure data_array[], struct SymbolNameAndIndex *symbol_name_and_index, int *error_found) {
     struct SymbolNameAndIndex *temp = symbol_name_and_index;
     struct SymbolNameAndIndex *curr_missing = symbol_name_and_index;
     Symbol *temp_symbol;
@@ -21,7 +23,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     }
 
     for (inst_array_index = 0; inst_array_index < 1024; inst_array_index++) {
-        if (instruction_array[inst_array_index] != 0) {
+        if ((int)&instruction_array[inst_array_index] != 0) {
             ic++;
         }
     }
@@ -33,10 +35,10 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     }
 
     while (curr_missing != NULL) {
-        Symbol *symbol = get_symbol_by_name(symbol_table, curr_missing->name);
+        Symbol *symbol = find_symbol(symbol_table, curr_missing->name);
         if (symbol != NULL) {
-            write_encoding_type(instruction_array[curr_missing->IC_index], (symbol->type == EXTERN) ? 0x3 : 0x1);
-            encode_bits_2_to_11(symbol->val, instruction_array[curr_missing->IC_index]);
+            encoding_A_R_E(instruction_array, (symbol->category == EXTERN)? BIT2MASK : 0x1);
+            encode_bits_2_to_11(symbol->val, instruction_array);
         } else {
             *error_found = 1; /* Found an error */
             return;
@@ -47,7 +49,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     temp_symbol = symbol_table;
     temp = symbol_name_and_index;
     while (temp_symbol != NULL && temp != NULL) {
-        if (find_symbol(temp_symbol, getNextName(temp, temp->name) == NULL)) {
+        if (find_symbol(temp_symbol, temp->name) == NULL) {
             *error_found = 1;
         }
 
@@ -63,7 +65,7 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
 
 }
 
-void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameAndIndex *symbol_name_and_index, struct InstructionStructure *instruction_array[], struct DataStructure *data_array, int IC, int DC) {
+void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameAndIndex *symbol_name_and_index, struct InstructionStructure instruction_array[], struct DataStructure data_array[], int IC, int DC) {
     int entry_flag = 0, extern_flag = 0;
     int i, j;
 
@@ -75,7 +77,7 @@ void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameA
 
 
     while (curr_symbol != NULL) {
-        if (curr_symbol->category = ENTRY) {
+        if (curr_symbol->category == ENTRY) {
             entry_flag = 1;
             break;
         }
@@ -83,7 +85,7 @@ void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameA
     }
 
     while (curr_symbol != NULL) {
-        if (curr_symbol->category = EXTERN) {
+        if (curr_symbol->category == EXTERN) {
             extern_flag = 1;
             break;
         }
@@ -106,7 +108,7 @@ void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameA
         temp = symbol_name_and_index;
         while (temp != NULL) {
             if (curr_symbol->category == EXTERN) {
-                fprintf(ext_file, "%s: %d\n", curr_symbol->name, getNodeByName(temp, curr_symbol->name) != NULL ? temp->IC_index : -1);
+                fprintf(ext_file, "%s: %d\n", curr_symbol->name, get_node_by_name(temp, curr_symbol->name) != NULL ? temp->IC_index : -1);
             }
             temp = temp->next;
         }

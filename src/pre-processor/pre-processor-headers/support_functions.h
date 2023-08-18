@@ -1,3 +1,7 @@
+#ifndef __SUPPORT_FUNCTIONS_H
+
+#define __SUPPORT_FUNCTIONS_H
+
 /* Maximum length for a line of content */
 #define MAXLEN 100 /* We have chosen an arbitrary length for defining lines to catch line-length errors during the initial pass */
 #define MACRO_NAME_LENGTH 31
@@ -586,7 +590,7 @@ int is_start_macro_def(const char* line);
 int is_end_macro_def(const char* line);
 
 
-
+#endif
 
 
 

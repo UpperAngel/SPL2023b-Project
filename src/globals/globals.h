@@ -60,7 +60,6 @@ struct InstructionStructure {
     char source_addressing : 3; /* 3-bit field */
 };
 
-
 enum OperandType{
     NUMBER = 0,
     SYMBOL = 3,
@@ -106,31 +105,13 @@ enum opcode {
 
 typedef enum opcode Opcode;
 
-struct command {
-    const char* instruction_name;
-    enum opcode opcode_value;
-};
-
-static struct command commands[] = {
-        {"mov", MOV_OP},
-        {"cmp", CMP_OP},
-        {"add", ADD_OP},
-        {"sub", SUB_OP},
-        {"lea", LEA_OP},
-        {"clr", CLR_OP},
-        {"not", NOT_OP},
-        {"inc", INC_OP},
-        {"dec", DEC_OP},
-        {"jmp", JMP_OP},
-        {"bne", BNE_OP},
-        {"jsr", JSR_OP},
-        {"red", RED_OP},
-        {"prn", PRN_OP},
-        {"rts", RTS_OP},
-        {"stop", STOP_OP},
-        {NULL, NULL_OP}
-};
 /* functions */
+
+FILE *create_file(const char *file_name, const char *extension);
+
+
+/* structure functions*/
+struct SymbolNameAndIndex *get_node_by_name(struct SymbolNameAndIndex *head, const char *target_name);
 struct SymbolNameAndIndex* createNode(const char *name, int IC_index, int line_number);
 void insertNode(struct SymbolNameAndIndex** head, struct SymbolNameAndIndex* newNode);
 void freeList(struct SymbolNameAndIndex* head);

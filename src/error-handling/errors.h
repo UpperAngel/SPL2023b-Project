@@ -84,12 +84,7 @@ const char* errorMessages[] = {
         "Empty symbol definition.",
         "Redefinition of symbol type.",
         "Redefinition of extern symbol, cannot define symbol with the same name as an external symbol."
-
 };
 
-void handle_error(enum Error error, int line_number) {
-    if (error != NoError) {
-        fprintf(stderr, "Error in line %d: %s\n", line_number, errorMessages[error]);
-    }
-}
+void handle_error(enum Error error, int line_number);
 #endif

@@ -1,7 +1,33 @@
 #include "../../error-handling/errors.h"
 #include "../../globals/globals.h"
+#include "../first-pass-headers/encode.h"
 #include "../first-pass-headers/first_pass_headers.h"
 #include "../first-pass-headers/instruction.h"
+
+struct command {
+    const char* instruction_name;
+    enum opcode opcode_value;
+};
+
+static struct command commands[] = {
+        {"mov", MOV_OP},
+        {"cmp", CMP_OP},
+        {"add", ADD_OP},
+        {"sub", SUB_OP},
+        {"lea", LEA_OP},
+        {"clr", CLR_OP},
+        {"not", NOT_OP},
+        {"inc", INC_OP},
+        {"dec", DEC_OP},
+        {"jmp", JMP_OP},
+        {"bne", BNE_OP},
+        {"jsr", JSR_OP},
+        {"red", RED_OP},
+        {"prn", PRN_OP},
+        {"rts", RTS_OP},
+        {"stop", STOP_OP},
+        {NULL, NULL_OP}
+};
 
 Symbol *find_symbol(Symbol *head, const char *name);
 char *my_strdup(const char *str);
@@ -16,8 +42,6 @@ enum opcode get_opcode(const char *instruction_name_str) {
     }
     return NULL_OP; /* If not found, return NULL_OP */
 }
-
-/* ENCODE FUNCTIONS */
 
 /* IS A functions */
 int is_register(const char *operand) {

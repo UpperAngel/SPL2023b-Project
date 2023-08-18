@@ -1,6 +1,7 @@
 #include "first-pass-headers/first_pass.h"
 #include "../error-handling/errors.h"
 #include "../globals/globals.h"
+#include "first-pass-headers/first_pass_headers.h"
 /* TODO make sure that every number is macro based */
 
 
