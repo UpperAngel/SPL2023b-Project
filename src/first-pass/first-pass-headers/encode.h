@@ -1,7 +1,7 @@
 #ifndef __ENCODE_H
 #define __ENCODE_H
 
-#include "../../globals.h"
+#include "../../globals/globals.h"
 #include "../../error-handling/errors.h"
 #define BIT4MASK 0xF
 #define BIT3MASK 0x7

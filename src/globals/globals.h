@@ -130,6 +130,22 @@ static struct command commands[] = {
         {"stop", STOP_OP},
         {NULL, NULL_OP}
 };
+/* functions */
+struct SymbolNameAndIndex* createNode(const char *name, int IC_index, int line_number);
+void insertNode(struct SymbolNameAndIndex** head, struct SymbolNameAndIndex* newNode);
+void freeList(struct SymbolNameAndIndex* head);
+char* get_name_at(const struct SymbolNameAndIndex* head, int targetIndex);
+int get_index_at(const struct SymbolNameAndIndex* head, int targetIndex);
+int get_line_number_at(const struct SymbolNameAndIndex* head, int targetIndex);
+
+/* symbol list */
+void free_symbol_list(Symbol *head);
+int is_valid_symbol(const char *line, int line_number, int *error_found, char words_array[LEN][LEN]);
+int is_in_symbol_list(Symbol *head, const char *name);
+
+Symbol *find_symbol(Symbol *head, const char *name);
+Symbol *create_symbol(const char *name, int val, SymbolType type, SymbolCategory category);
+
 
 
 #endif

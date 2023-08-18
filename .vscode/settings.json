@@ -10,7 +10,8 @@
         "stdlib.h": "c",
         "first_pass.h": "c",
         "instruction_helper.h": "c",
-        "symbolnameandindex.h": "c"
+        "symbolnameandindex.h": "c",
+        "cstdlib": "c"
     },
     "cSpell.words": [
         "endmcro",

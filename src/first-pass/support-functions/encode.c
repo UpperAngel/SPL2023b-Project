@@ -1,43 +1,44 @@
-#include "../../globals.h"
+#include "../../globals/globals.h"
 #include "../../error-handling/errors.h"
+#include "../first-pass-headers/encode.h"
 
 void write_opcode(struct InstructionStructure* encoded_inst, enum opcode op) {
-    encoded_inst->opcode = op & 0xF; /* Mask the opcode to keep only the 4 least significant bits (LSBs) */
+    encoded_inst->opcode = op & BIT4MASK; /* Mask the opcode to keep only the 4 least significant bits (LSBs) */
 }
 void write_source_addressing(struct InstructionStructure* encoded_inst, unsigned int source_addressing) {
-    encoded_inst->source_addressing = source_addressing & 0x7; /* Mask the source_addressing to keep only the 3 least significant bits (LSBs) */
+    encoded_inst->source_addressing = source_addressing & BIT3MASK; /* Mask the source_addressing to keep only the 3 least significant bits (LSBs) */
 }
 void write_target_addressing(struct InstructionStructure* encoded_inst, unsigned int target_addressing) {
-    encoded_inst->target_addressing = target_addressing & 0x7;
+    encoded_inst->target_addressing = target_addressing & BIT3MASK;
 }
 void encoding_A_R_E(struct InstructionStructure* encoded_inst, unsigned int encoding_type) {
-    encoded_inst->encoding_type = encoding_type & 0x3;
+    encoded_inst->encoding_type = encoding_type & BIT2MASK;
 }
 void encode_bits_2_to_11(int number, struct InstructionStructure* encoded_inst) {
     /* Get the binary representation of the number as a 32-bit unsigned integer */
     unsigned int binary_rep = (unsigned int)number;
 
     /* Extract the target_addressing, opcode, and source_addressing bits using bitwise operations */
-    encoded_inst->target_addressing = (binary_rep & 0x7); /* Last 3 bits */
-    encoded_inst->opcode = ((binary_rep >> 3) & 0xF); /* Next 4 bits */
-    encoded_inst->source_addressing = ((binary_rep >> 7) & 0x7); /* First 3 bits */
+    encoded_inst->target_addressing = (binary_rep & BIT3MASK); /* Last 3 bits */
+    encoded_inst->opcode = ((binary_rep >> BIT2MASK) & BIT4MASK); /* Next 4 bits */
+    encoded_inst->source_addressing = ((binary_rep >> BIT3MASK) & BIT3MASK); /* First 3 bits */
 }
 void encode_bits_2_to_6(int number, struct InstructionStructure* encoded_inst) {
     /* Get the binary representation of the number as a 32-bit unsigned integer */
     unsigned int binary_rep = (unsigned int)number;
 
     /* Extract bits 0, 1, and 2 and store them in bits 0, 1, and 2 of the target_addressing field */
-    encoded_inst->target_addressing |= (binary_rep & 0x7); /* Bits 0, 1, and 2 stored in bits 0, 1, and 2 of target_addressing */
+    encoded_inst->target_addressing |= (binary_rep & BIT3MASK); /* Bits 0, 1, and 2 stored in bits 0, 1, and 2 of target_addressing */
 
     /* Extract bits 3 and 4 and store them in bits 1 and 2 of the opcode field */
-    encoded_inst->opcode |= ((binary_rep >> 3) & 0x3) << 1; /* Bits 3 and 4 stored in bits 1 and 2 of opcode */
+    encoded_inst->opcode |= ((binary_rep >> 3) & BIT2MASK) << 1; /* Bits 3 and 4 stored in bits 1 and 2 of opcode */
 }
 void encode_bits_7_to_11(int number, struct InstructionStructure* encoded_inst) {
     /* Get the binary representation of the number as a 32-bit unsigned integer */
     unsigned int binary_rep = (unsigned int)number;
 
     /* Extract bits 0 and 1 and store them in bits 2 and 3 of the opcode field */
-    encoded_inst->opcode |= ((binary_rep & 0x3) << 2); /* Bits 0 and 1 stored in bits 2 and 3 */
+    encoded_inst->opcode |= ((binary_rep & BIT2MASK) << 2); /* Bits 0 and 1 stored in bits 2 and 3 */
 
     /* Extract bits 2, 3, and 4 and store them in bits 9, 10, and 11 of the source_addressing field */
     encoded_inst->source_addressing |= ((binary_rep & 0x1C) << 6); /* Bits 2, 3, and 4 stored in bits 9, 10, and 11 */
