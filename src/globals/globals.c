@@ -71,6 +71,11 @@ int get_line_number_at(const struct SymbolNameAndIndex* head, int targetIndex) {
     return -1;   /* Index not found */
 }
 
+void write_character(struct DataStructure *data, char c) {
+    /* Convert the char to int and store it in the struct */
+    data->value = (int)c;
+}
+
 
 
 int is_valid_symbol(const char *line, int line_number, int *error_found, char words_array[LEN][LEN]) {

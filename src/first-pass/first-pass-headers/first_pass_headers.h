@@ -50,20 +50,14 @@ void handle_extern_and_entry_directives(char words_array[LEN][LEN], Symbol **sym
 
 
 /* SYMBOL DEF */
-int is_valid_symbol(const char *line, int line_number, int *error_found, char words_array[LEN][LEN]);
+
 int is_reserved_keyword(const char *word);
 void handle_symbol(Symbol **head, const char *name, int line_number, int *error_found, SymbolType parameter_type, SymbolCategory parameter_entry_or_extern, int parameter_value);
 
 /* INSTRUCTION HANDLING FUNCTIONS */
-struct SymbolNameAndIndex* createNode(const char *name, int IC_index, int line_number);
-void insertNode(struct SymbolNameAndIndex** head, struct SymbolNameAndIndex* newNode);
-void freeList(struct SymbolNameAndIndex* head);
-char* get_name_at(const struct SymbolNameAndIndex* head, int targetIndex);
-int get_index_at(const struct SymbolNameAndIndex* head, int targetIndex);
-int get_line_number_at(const struct SymbolNameAndIndex* head, int targetIndex);
 
 
 /* STRUCT OF SYMBOL HANDLING */
-Symbol *create_symbol(const char *name, int val, SymbolType type, SymbolCategory category);
+
 
 #endif
