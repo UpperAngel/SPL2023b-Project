@@ -1,5 +1,5 @@
 #include <string.h>
-#include "error.h"
+#include "error-handling/errors.h"
 #include "globals/globals.h"
 #include "first-pass/first-pass-headers/first_pass.h"
 #include "pre-processor/pre-processor-headers/pre_processor.h"
@@ -32,7 +32,7 @@ int main(int argc, char const *argv[]) {
         
         process_file(curr_as_file, curr_am_file);
 
-        first_pass(curr_am_file, instruction_array, data_array, &curr_symbol, &symbol_name_and_index);
+        first_pass(curr_am_file, instruction_array, data_array, &curr_symbol, &symbol_name_and_index, &error_found);
         
         second_pass(curr_filename, curr_symbol, instruction_array, data_array,symbol_name_and_index, &error_found);
         

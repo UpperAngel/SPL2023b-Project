@@ -13,7 +13,6 @@
 #include "../error-handling/errors.h"
 
 
-
 typedef enum {
     CODE,
     DATA,

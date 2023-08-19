@@ -448,39 +448,9 @@ void update_variables(char **current_symbol_name, int *symbol_definition, int *l
     *index = 0;
 }
 
-int is_comment(const char *line) {
-    int index = 0;
 
-    while (isspace(line[index])) {
-        index++; /* Skip leading whitespace characters. */
-    }
 
-    return (line[index] == ';') ? 1 : 0;
-}
 
-/* Function to check if a given line is empty (contains only whitespace characters) */
-int is_empty(const char *line) {
-    while (*line != '\0') {
-        /* Loop through each character in the line until the end of the string is reached. */
-
-        if (!isspace((unsigned char)*line)) {
-            /*
-             * Check if the current character is not a whitespace character.
-             * The `(unsigned char)` cast is used to handle potential negative char values correctly.
-             */
-
-            return 0; /* Return 0 immediately if a non-whitespace character is found. */
-        }
-
-        line++; /* Move to the next character in the line. */
-    }
-
-    return 1; /* Return 1 if the loop reaches the end of the line without finding a non-whitespace character. */
-}
-/* Function to skip a line if it is a comment or empty */
-int comment_or_empty(char *line) {
-    return (is_comment(line) || is_empty(line));
-}
 
 /* SYMBOL STRUCT FUNTIONS */
 void handle_symbol(Symbol **head, const char *name, int line_number, int *error_found, SymbolType parameter_type, SymbolCategory parameter_entry_or_extern, int parameter_value) {

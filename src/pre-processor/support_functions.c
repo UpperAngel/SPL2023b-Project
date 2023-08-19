@@ -1,6 +1,4 @@
-
 #include "pre-processor-headers/support_functions.h"
-#include "../error-handling/errors.h"
 
 /* Function to add a line to the content of a macro */
 void add_line_to_mcro(mcro *macro, char *contentSource, int line_number)
@@ -158,10 +156,6 @@ int is_valid_macro_name(const char *name, int line_number) {
     int numReservedKeywords = 0;
 
     /* Check if name is a reserved keyword */
-    const char *reservedKeywords[] = {
-            "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
-            "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"
-    };
 
     /* Check the length of the name */
     size_t nameLength = strlen(name);

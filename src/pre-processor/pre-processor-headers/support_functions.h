@@ -11,6 +11,9 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "../../error-handling/errors.h"
+#include "../../globals/globals.h"
+
 /* Enum to represent different states of parsing a file */
 enum MacroState {
     OUTSIDE_MACRO_DEF, /* Indicates that the parser is currently outside a macro definition. */

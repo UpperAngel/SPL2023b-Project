@@ -5,10 +5,11 @@
 #include "encode.h"
 #include "../../error-handling/errors.h"
 #include "instruction.h"
+#include "../../pre-processor/pre-processor-headers/support_functions.h"
+
 
 /* FUNCTION DECLARATION */
 
-/* IS A functions */
 
 
 
@@ -23,9 +24,6 @@ void format_line(char source[LEN], char formatted_line[LEN]) ;
 void store_words(char line[], char resultArray[LEN][LEN]) ;
 void format_and_store_words(char line[LEN],char words_array[LEN][LEN]);
 void update_variables(char **current_symbol_name, int *symbol_definition, int *line_number, int *index);
-int comment_or_empty(char *line);
-int is_empty(const char *line);
-int is_comment(const char* line);
 
 
 

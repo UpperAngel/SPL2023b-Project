@@ -86,15 +86,7 @@ void update_variables(char **current_symbol_name, int *symbol_definition, int *l
     *line_number = *line_number + 1;
     *index = 0;
 }
-int is_comment(const char* line) {
-    int index = 0;
 
-    while (isspace(line[index])) {
-        index++; /* Skip leading whitespace characters. */
-    }
-
-    return (line[index] == ';') ? 1 : 0;
-}
 
 /* Function to check if a given line is empty (contains only whitespace characters) */
 int is_empty(const char *line) {
