@@ -1,5 +1,10 @@
 #include "globals.h"
 
+const char *reservedKeywords[RESERVED_KEYWORDS_LENGTH] = {
+        "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
+        "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"
+};
+
 FILE *create_file(const char *file_name, const char *extension) {
   FILE *created_file = NULL;
   

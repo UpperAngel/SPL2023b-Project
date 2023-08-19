@@ -167,7 +167,7 @@ int is_valid_macro_name(const char *name, int line_number) {
     }
 
 
-     numReservedKeywords = sizeof(reservedKeywords) / sizeof(reservedKeywords[0]);
+     numReservedKeywords =  RESERVED_KEYWORDS_LENGTH/ sizeof(reservedKeywords[0]);
 
     for (i = 0; i < numReservedKeywords; i++) {
         if (strcmp(name, reservedKeywords[i]) == 0) {

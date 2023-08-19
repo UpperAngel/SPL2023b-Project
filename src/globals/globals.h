@@ -2,8 +2,8 @@
 #define __GLOBALS_H
 
 #define LEN 200
-#define INITIAL_VAL 100
-
+#define INITIAL_VAL 10
+#define RESERVED_KEYWORDS_LENGTH 16
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include "../error-handling/errors.h"
 
+extern const char *reservedKeywords[RESERVED_KEYWORDS_LENGTH];
 
 typedef enum {
     CODE,
@@ -35,10 +36,7 @@ typedef struct Symbol {
 
 
 
-const char *reservedKeywords[] = {
-        "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
-        "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"
-};
+
 
 /* in c90 standard minimum width of int is 16 bits, so we can use the first 12 bits of it*/
 struct DataStructure {
