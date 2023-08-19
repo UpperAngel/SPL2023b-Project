@@ -2,14 +2,14 @@
 #define first_pass_headers_H
 
 #include "../../globals/globals.h"
-
+#include "encode.h"
+#include "../../error-handling/errors.h"
+#include "instruction.h"
 
 /* FUNCTION DECLARATION */
 
 /* IS A functions */
-int is_register(const char *operand) ;
-int is_number(const char *str) ;
-int is_symbol(const char *symbol);
+
 
 
 /* get functions */
@@ -51,7 +51,7 @@ void handle_extern_and_entry_directives(char words_array[LEN][LEN], Symbol **sym
 
 /* SYMBOL DEF */
 
-int is_reserved_keyword(const char *word);
+
 void handle_symbol(Symbol **head, const char *name, int line_number, int *error_found, SymbolType parameter_type, SymbolCategory parameter_entry_or_extern, int parameter_value);
 
 /* INSTRUCTION HANDLING FUNCTIONS */

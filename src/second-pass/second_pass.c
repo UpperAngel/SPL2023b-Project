@@ -1,14 +1,9 @@
-#include "../error-handling/errors.h"
-#include "../first-pass/first-pass-headers/first_pass_headers.h"
-#include "../globals/globals.h"
-#include "../first-pass/first-pass-headers/encode.h"
-/*
-gets name of label, index.
-lookup name -> go to index -> encode
-*/
 
-void binaryToBase64(uint64_t binary, char *base64);
-void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameAndIndex *symbol_name_and_index, struct InstructionStructure instruction_array[], struct DataStructure data_array[], int IC, int DC);
+#include "second_pass.h"
+
+
+
+
 
 void second_pass(const char *file_name, Symbol *symbol_table, struct InstructionStructure instruction_array[], struct DataStructure data_array[], struct SymbolNameAndIndex *symbol_name_and_index, int *error_found) {
     struct SymbolNameAndIndex *temp = symbol_name_and_index;
@@ -62,7 +57,8 @@ void second_pass(const char *file_name, Symbol *symbol_table, struct Instruction
     }
 
     create_files(file_name, symbol_table, symbol_name_and_index, instruction_array, data_array, ic, dc);
-
+    free(temp_symbol);
+    free(temp);
 }
 
 void create_files(const char *file_name, Symbol *curr_symbol, struct SymbolNameAndIndex *symbol_name_and_index, struct InstructionStructure instruction_array[], struct DataStructure data_array[], int IC, int DC) {

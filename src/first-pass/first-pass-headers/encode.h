@@ -3,6 +3,7 @@
 
 #include "../../globals/globals.h"
 #include "../../error-handling/errors.h"
+
 #define BIT4MASK 0xF
 #define BIT3MASK 0x7
 #define BIT2MASK 0x3

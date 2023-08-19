@@ -1,8 +1,67 @@
 #include "globals.h"
-#include "../error-handling/errors.h"
-#include "../first-pass/first-pass-headers/first_pass_headers.h"
 
-struct SymbolNameAndIndex* createNode(const char *name, int IC_index, int line_number) {
+FILE *create_file(const char *file_name, const char *extension) {
+  FILE *created_file = NULL;
+  
+  char *new_file_name;
+  char *dot = NULL;
+
+  /* dynamiclly allocate memory for the file name and the extension */
+  new_file_name = (char *)malloc(strlen(file_name) +strlen(extension) + 1);
+  if (new_file_name == NULL)
+  {
+    printf("faild allocation for the file name \n");
+    return NULL;
+  }
+  
+  /* copy the input to file_name */
+  strcpy(new_file_name, file_name);
+  
+  /* deletes the file extension. everything after the dot and the dot itself */
+  dot = strchr(new_file_name, '.');
+  if (dot != NULL)
+  {
+    *dot = '\0';
+  }
+  /* adds the extension and creates the file*/
+  new_file_name = strcat(new_file_name, extension);
+  created_file = fopen(new_file_name, "w+");
+
+  /* checks if file was created succesfully */
+  if (created_file == NULL)
+  {
+    printf("failed to create the file: \"%s\" \n", new_file_name);
+    return NULL;
+  }
+  free(new_file_name);
+
+  /*  returns the file after being created*/
+  return created_file;
+}
+
+char *my_strdup(const char *str) {
+    size_t length = strlen(str) + 1; /* Include space for the null terminator */
+    char *duplicate = (char *)malloc(length);
+
+    if (duplicate != NULL) {
+        strcpy(duplicate, str);
+    }
+
+    return duplicate;
+}
+
+
+int is_reserved_keyword(const char *word) {
+    int i = 0;
+    for (i = 0; i < sizeof(reservedKeywords) / sizeof(reservedKeywords[0]); i++) {
+        if (strcmp(word, reservedKeywords[i]) == 0) {
+            return 1; /* Found a match, it's a reserved keyword */
+        }
+    }
+    return 0; /* No match, it's not a reserved keyword */
+}
+
+struct SymbolNameAndIndex* create_node(const char *name, int IC_index, int line_number) {
     struct SymbolNameAndIndex* newNode = malloc(sizeof(struct SymbolNameAndIndex));
     if (newNode == NULL) {
         handle_error(FailedToAllocateMemory, line_number);
@@ -24,7 +83,7 @@ struct SymbolNameAndIndex *get_node_by_name(struct SymbolNameAndIndex *head, con
         }
         head = head->next;
     }
-    return NULL; // Node not found
+    return NULL; /* Node not found */
 }
 
 /* Function to insert a node at the end of the list */

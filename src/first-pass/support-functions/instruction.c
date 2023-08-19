@@ -1,7 +1,65 @@
 #include "../first-pass-headers/instruction.h"
 
-#include "../../error-handling/errors.h"
-#include "../../globals/globals.h"
+
+int is_register(const char *operand) {
+    if (operand == NULL) {
+        return 0; /* Return 0 if the operand pointer is NULL */
+    }
+
+    if (operand[0] == '\0') {
+        return 0; /* Return 0 if the operand string is empty */
+    }
+
+    if (operand[0] == '@' && operand[1] == 'r' && isdigit(operand[2])) {
+        if ((operand[2] - '0') <= 7) {
+            return 1; /* Return 1 if the operand represents a valid register */
+        }
+    }
+    return 0; /* Return 0 if the operand does not match the register format */
+}
+int is_number(const char *str) {
+    if (str == NULL || *str == '\0') {
+        return 0; /* Return 0 if the input pointer is NULL or if the string is empty */
+    }
+
+    /* Check for a plus (+) or minus (-) sign at the beginning of the string */
+    if (*str == '+' || *str == '-') {
+        str++; /* Move to the next character */
+    }
+
+    while (*str) {
+        if (!isdigit(*str)) {
+            return 0; /* Return 0 if a non-digit character is encountered */
+        }
+        str++; /* Move to the next character */
+    }
+
+    return 1; /* Return 1 if all characters are digits */
+}
+int is_symbol(const char *symbol) {
+    size_t i = 1;
+
+    if (is_reserved_keyword(symbol))
+        return 0;
+
+    if (symbol == NULL || strlen(symbol) > 31 || strlen(symbol) == 0) {
+        return 0; /* Invalid if NULL, longer than 31 chars, or empty */
+    }
+
+    if (!isalpha(symbol[0])) {
+        return 0; /* Symbol must start with a letter */
+    }
+
+    for (i; symbol[i] != '\0'; i++) {
+        if (!isalnum(symbol[i])) {
+            return 0; /* Invalid character in the symbol */
+        }
+    }
+
+    return 1; /* The string satisfies the criteria for a valid symbol */
+}
+
+
 
 void assign_operands(char words_array[LEN][LEN], char **operand1, char **operand2, int symbol_definition, int number_of_operands) {
     int index = 1; /* Initialize the IC_index variable to 1 */
@@ -248,7 +306,7 @@ int handle_valid_instruction(char words_array[LEN][LEN], struct InstructionStruc
             }
             break;
         case SYMBOL: /* encoding of extra symbol words happens in the second pass */
-            insertNode(pass2_list_head, createNode(operand1, IC + 1, line_number));
+            insertNode(pass2_list_head, create_node(operand1, IC + 1, line_number));
             if (number_of_operands == 1) {
                 write_target_addressing(&instructions_array[IC], 3);
                 return 2;
@@ -272,7 +330,7 @@ int handle_valid_instruction(char words_array[LEN][LEN], struct InstructionStruc
             return 3;
         case SYMBOL:
             write_target_addressing(&instructions_array[IC], 3);
-            insertNode(pass2_list_head, createNode(operand2, IC + 2, line_number));
+            insertNode(pass2_list_head, create_node(operand2, IC + 2, line_number));
             return 3;
     }
     return 0; /* random value change laterrrrrrrrrrrrrrrr */

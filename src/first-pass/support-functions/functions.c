@@ -1,8 +1,5 @@
-#include "../../error-handling/errors.h"
-#include "../../globals/globals.h"
-#include "../first-pass-headers/encode.h"
 #include "../first-pass-headers/first_pass_headers.h"
-#include "../first-pass-headers/instruction.h"
+
 
 struct command {
     const char* instruction_name;
@@ -30,7 +27,6 @@ static struct command commands[] = {
 };
 
 Symbol *find_symbol(Symbol *head, const char *name);
-char *my_strdup(const char *str);
 
 enum opcode get_opcode(const char *instruction_name_str) {
     int i = 0;
@@ -44,72 +40,8 @@ enum opcode get_opcode(const char *instruction_name_str) {
 }
 
 /* IS A functions */
-int is_register(const char *operand) {
-    if (operand == NULL) {
-        return 0; /* Return 0 if the operand pointer is NULL */
-    }
 
-    if (operand[0] == '\0') {
-        return 0; /* Return 0 if the operand string is empty */
-    }
 
-    if (operand[0] == '@' && operand[1] == 'r' && isdigit(operand[2])) {
-        if ((operand[2] - '0') <= 7) {
-            return 1; /* Return 1 if the operand represents a valid register */
-        }
-    }
-    return 0; /* Return 0 if the operand does not match the register format */
-}
-int is_number(const char *str) {
-    if (str == NULL || *str == '\0') {
-        return 0; /* Return 0 if the input pointer is NULL or if the string is empty */
-    }
-
-    /* Check for a plus (+) or minus (-) sign at the beginning of the string */
-    if (*str == '+' || *str == '-') {
-        str++; /* Move to the next character */
-    }
-
-    while (*str) {
-        if (!isdigit(*str)) {
-            return 0; /* Return 0 if a non-digit character is encountered */
-        }
-        str++; /* Move to the next character */
-    }
-
-    return 1; /* Return 1 if all characters are digits */
-}
-int is_symbol(const char *symbol) {
-    size_t i = 1;
-
-    if (is_reserved_keyword(symbol))
-        return 0;
-
-    if (symbol == NULL || strlen(symbol) > 31 || strlen(symbol) == 0) {
-        return 0; /* Invalid if NULL, longer than 31 chars, or empty */
-    }
-
-    if (!isalpha(symbol[0])) {
-        return 0; /* Symbol must start with a letter */
-    }
-
-    for (i; symbol[i] != '\0'; i++) {
-        if (!isalnum(symbol[i])) {
-            return 0; /* Invalid character in the symbol */
-        }
-    }
-
-    return 1; /* The string satisfies the criteria for a valid symbol */
-}
-int is_reserved_keyword(const char *word) {
-    int i = 0;
-    for (i = 0; i < sizeof(reservedKeywords) / sizeof(reservedKeywords[0]); i++) {
-        if (strcmp(word, reservedKeywords[i]) == 0) {
-            return 1; /* Found a match, it's a reserved keyword */
-        }
-    }
-    return 0; /* No match, it's not a reserved keyword */
-}
 
 /* get functions */
 int get_register_number(char *register_str) {
@@ -617,13 +549,3 @@ void handle_symbol(Symbol **head, const char *name, int line_number, int *error_
     *head = new_symbol;       /* Set head to the new symbol */
 }
 
-char *my_strdup(const char *str) {
-    size_t length = strlen(str) + 1; /* Include space for the null terminator */
-    char *duplicate = (char *)malloc(length);
-
-    if (duplicate != NULL) {
-        strcpy(duplicate, str);
-    }
-
-    return duplicate;
-}

@@ -10,6 +10,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdint.h>
+#include "../error-handling/errors.h"
 
 
 
@@ -108,11 +109,11 @@ typedef enum opcode Opcode;
 /* functions */
 
 FILE *create_file(const char *file_name, const char *extension);
-
+int is_reserved_keyword(const char *word);
 
 /* structure functions*/
 struct SymbolNameAndIndex *get_node_by_name(struct SymbolNameAndIndex *head, const char *target_name);
-struct SymbolNameAndIndex* createNode(const char *name, int IC_index, int line_number);
+struct SymbolNameAndIndex* create_node(const char *name, int IC_index, int line_number);
 void insertNode(struct SymbolNameAndIndex** head, struct SymbolNameAndIndex* newNode);
 void freeList(struct SymbolNameAndIndex* head);
 char* get_name_at(const struct SymbolNameAndIndex* head, int targetIndex);

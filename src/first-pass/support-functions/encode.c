@@ -1,7 +1,4 @@
-#include "../../globals/globals.h"
-#include "../../error-handling/errors.h"
 #include "../first-pass-headers/encode.h"
-#include "../first-pass-headers/first_pass_headers.h"
 
 void write_opcode(struct InstructionStructure* encoded_inst, enum opcode op) {
     encoded_inst->opcode = op & BIT4MASK; /* Mask the opcode to keep only the 4 least significant bits (LSBs) */
