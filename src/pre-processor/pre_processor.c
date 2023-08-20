@@ -11,7 +11,6 @@ int process_file(FILE* source_file, FILE* target_file) {
     mcro* created_macro = NULL;                                  /* Pointer to the macro structure representing the macro being created */
     struct macroList* macro_list = createMacroList(line_number); /* Pointer to the macro list containing all defined macros */
 
-    printf("got to main while-loop");
     while (custom_fgets(line, MAXLEN, source_file) != NULL) {
         line_number++; /* Increment the number of the line */
 
@@ -22,7 +21,6 @@ int process_file(FILE* source_file, FILE* target_file) {
         if (comment_or_empty(line))
             continue;
         
-        printf("got to is_start_macro");
         
         if (is_start_macro_def(line)) {
             if (!valid_start_macro_def(line, line_number))
@@ -42,12 +40,11 @@ int process_file(FILE* source_file, FILE* target_file) {
             continue;
         }
         
-        printf("got to inside macro check");
         if (state == INSIDE_MACRO_DEF) {
             add_line_to_mcro(created_macro, line, line_number);
             continue;
         }
-        printf("got to macro replacement");
+
         /* Check if the line contains macro names and deploy the macros to the target file */
         if (check_line_for_macro(line, macro_list)) {
             deploy_macros_in_line(line, target_file, macro_list);

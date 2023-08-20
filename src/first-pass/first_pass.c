@@ -6,14 +6,11 @@
 
 
 
-void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, struct DataStructure *data_array, Symbol **symbol_head, struct SymbolNameAndIndex **second_pass_list, int *error_found) {
+void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, struct DataStructure *data_array, Symbol **symbol_head, struct SymbolNameAndIndex **second_pass_list, int *ic, int *dc, int *error_found) {
     char line[LEN];
     char words_array[LEN][LEN] = {0}; /* Initialize array */
     int index = 0;
     int symbol_definition = 0;
-    
-    int IC = 0;
-    int DC = 0;
     int line_number = 0;
     char *word = NULL;
     char *current_symbol_name = NULL;
@@ -50,7 +47,7 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
         if (is_directive(word, ".string") || is_directive(word, ".data")) {
             /* Step 6 */
             if (symbol_definition)
-                handle_symbol(symbol_head, current_symbol_name, line_number, error_found, DATA, NONE_CATEGORY, DC);
+                handle_symbol(symbol_head, current_symbol_name, line_number, error_found, DATA, NONE_CATEGORY, *dc);
             /* If there was an error with the symbol handling, continue to the next line */
             if (error_found)
                 continue;
@@ -58,10 +55,10 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
             /* Step 7 */    /* Example: STR: .string "abc , de fg" */
             if (is_directive(word, ".string")) {
                 if (valid_string_directive(line, line_number, error_found, symbol_definition))
-                    DC = DC + handle_string_directive(data_array, DC, line, line_number);
+                    *dc = *dc + handle_string_directive(data_array, *dc, line, line_number);
             } else { /* data directive */
                 if (valid_data_directive(words_array, line_number, error_found, symbol_definition))
-                    DC = DC + handle_data_directive(data_array, DC, words_array, symbol_definition);
+                    *dc = *dc + handle_data_directive(data_array, *dc, words_array, symbol_definition);
             }
             continue;
         }
@@ -79,11 +76,11 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
 
         /* Step 11 */
         if (symbol_definition)
-            handle_symbol(symbol_head, current_symbol_name, line_number, error_found, CODE, NONE_CATEGORY, IC);
+            handle_symbol(symbol_head, current_symbol_name, line_number, error_found, CODE, NONE_CATEGORY, *ic);
 
         /* Step 12 + 13 + 14 */  /* Example: STR: mov 5,M2 */
         if (valid_instruction(words_array, line_number, symbol_definition))
-            IC = IC + handle_valid_instruction(words_array, instructions_array, IC, symbol_definition, line_number, second_pass_list);
+            *ic = *ic + handle_valid_instruction(words_array, instructions_array, *ic, symbol_definition, line_number, second_pass_list);
         else { /* The second word is not an instruction nor data/string directive; output an error */
             /* Here should be a function that can find more specific errors */
             *error_found = 1;
@@ -91,7 +88,7 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
             continue;
         }
     }
-    /* handle_separation(symbol_head, IC, line_number, &error_found); */
+    /* handle_separation(symbol_head, *ic, line_number, &error_found); */
 }
 
 
