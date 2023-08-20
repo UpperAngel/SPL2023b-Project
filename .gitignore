@@ -1,4 +1,4 @@
-.vscode/
-.idea/
-obj/
-bin/
+.vscode/*
+.idea/*
+obj/*
+bin/*
