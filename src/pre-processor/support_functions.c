@@ -104,11 +104,9 @@ struct macroList *createMacroList(int line_number)
         exit(0);
     }
 
-    if (newList != NULL)
-    {
-        newList->macro = NULL;     /* Initialize macro member to NULL */
-        newList->nextMacro = NULL; /* Initialize nextMacro member to NULL */
-    }
+    newList->macro = NULL;     /* Initialize macro member to NULL */
+    newList->nextMacro = NULL; /* Initialize nextMacro member to NULL */
+    
 
     return newList;
 }
@@ -385,31 +383,34 @@ void deploy_macros_in_line(const char line[MAXLEN], FILE *target_file, struct ma
 
 
 /* Modify the check_line_for_macro function to return a boolean */
-int check_line_for_macro(const char line[MAXLEN], struct macroList* macroTable) {
-    char copyLine[MAXLEN];
-    /* Array to store the tokens */
-    char* tokens[MAXLEN];
-    int numTokens = 0;
-    char* token;
+int check_line_for_macro(const char *line, struct macroList *macro_list) {
+    char copy_line[MAXLEN];
+    char *tokens[MAXLEN];
+    int i;
+    int num_tokens = 0;
+    char *token;
 
-    strcpy(copyLine, line);
+    strcpy(copy_line, line);
 
     /* Break the line into tokens */
-    token = strtok(copyLine, " \t\n");
+    token = strtok(copy_line, " \t\n");
     while (token != NULL) {
-        tokens[numTokens++] = token;
+        tokens[num_tokens++] = token;
         token = strtok(NULL, " \t\n");
     }
 
-    /* Check if the first token is a macro name */
-    if (numTokens > 0) {
-        mcro* foundMacro = find_macro_by_name(macroTable, tokens[0]);
-        return (foundMacro != NULL);
+    /* Iterate through the tokens and check if they match any macro name */
+    for (i = 0; i < num_tokens; i++) {
+        mcro *found_macro = find_macro_by_name(macro_list, tokens[i]);
+        if (found_macro != NULL) {
+            return 1; /* Found a macro name in the line */
+        }
     }
 
-    /* If there is no macro with the same name, return false (0) */
+    /* No macro names found in the line */
     return 0;
 }
+
 
 /* Function to remove newline character at the end of a string */
 void remove_newline(char *str) {
@@ -451,22 +452,20 @@ int is_empty(const char *line) {
 }
 
 /* Function that gets the second word from a given line */
-/* Function that gets the second word from a given line */
-/* Function that gets the second word from a given line */
 char* get_second_token(const char* line) {
     char* second_token = NULL;
     int token_count = 0;
-
+    char *line_cpy = my_strdup(line);
     /* Tokenize the line using " \t" as the delimiter */
     const char* delimiters = " \t";
-    char* token = strtok((char*)malloc(strlen(line) + 1), delimiters);
+    char* token = strtok(line_cpy, delimiters);
 
     /* Loop through all tokens and find the second one */
     while (token != NULL) {
         token_count++;
         if (token_count == 2) {
             /* Allocate memory for the second token and copy it */
-            second_token = (char*)malloc(strlen(token) + 1);
+            second_token = (char *)malloc(strlen(line_cpy) + 1);
             if (second_token != NULL) {
                 strcpy(second_token, token);
             }

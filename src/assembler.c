@@ -5,13 +5,15 @@
 #include "pre-processor/pre-processor-headers/pre_processor.h"
 #include "second-pass/second_pass.h"
 
+#define NAMELEN 100
+
 int main(int argc, char const *argv[]) {
     int error_found = 0;
     int arg_index;
     
-    char *curr_filename;
-    FILE *curr_as_file;
-    FILE *curr_am_file;
+    char *curr_filename = NULL;
+    FILE *curr_as_file = NULL;
+    FILE *curr_am_file = NULL;
     
     
     Symbol *curr_symbol;
@@ -23,11 +25,10 @@ int main(int argc, char const *argv[]) {
         exit(1);
     }
     for (arg_index = 1; arg_index < argc; arg_index++) {
+        curr_filename = my_strdup(argv[arg_index]);
+       
         
-        curr_filename = argv[arg_index];
-        curr_filename = strcat(curr_filename, ".as");
-        
-        curr_as_file = fopen(curr_filename, "r");
+        curr_as_file = fopen(strcat(curr_filename, ".as"), "r");
         curr_am_file = create_file(curr_filename, ".am");
         
         process_file(curr_as_file, curr_am_file);
@@ -36,8 +37,9 @@ int main(int argc, char const *argv[]) {
         
         second_pass(curr_filename, curr_symbol, instruction_array, data_array,symbol_name_and_index, &error_found);
         
-        
-        free(symbol_name_and_index);
+        fclose(curr_as_file);
+        fclose(curr_am_file);
+        free(curr_filename);
         free(curr_symbol);
     }
     return 0;

@@ -36,6 +36,18 @@ int is_number(const char *str) {
 
     return 1; /* Return 1 if all characters are digits */
 }
+
+int pack_instruction(struct InstructionStructure instruction) {
+    int packed_instruction = 0;
+    
+    packed_instruction |= ((int)instruction.encoding_type) & 0x3;     /* Mask and pack 2 bits */
+    packed_instruction |= (((int)instruction.target_addressing) & 0x7) << 2; /* Mask and pack 3 bits, shift by 2 */
+    packed_instruction |= (((int)instruction.opcode) & 0xF) << 5;     /* Mask and pack 4 bits, shift by 5 */
+    packed_instruction |= (((int)instruction.source_addressing) & 0x7) << 9; /* Mask and pack 3 bits, shift by 9 */
+    
+    return packed_instruction;
+}
+
 int is_symbol(const char *symbol) {
     size_t i = 1;
 
