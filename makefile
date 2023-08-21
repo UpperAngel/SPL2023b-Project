@@ -11,6 +11,10 @@ EXEC = $(BIN_DIR)/assembler
 
 all: $(EXEC)
 
+$(OBJ_DIR)/line_formmating_functions.o: $(SRC_DIR)/first-pass/support-functions/line_formmating_functions.c
+	mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $(SRC_DIR)/first-pass/support-functions/line_formmating_functions.c -o $@
+
 $(OBJ_DIR)/errors.o: $(SRC_DIR)/error-handling/errors.c
 	mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/error-handling/errors.c -o $@
@@ -39,7 +43,7 @@ $(OBJ_DIR)/functions.o: $(SRC_DIR)/first-pass/support-functions/functions.c $(OB
 	mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/first-pass/support-functions/functions.c -o $@
 
-$(OBJ_DIR)/first_pass.o: $(SRC_DIR)/first-pass/first_pass.c $(OBJ_DIR)/functions.o $(OBJ_DIR)/encode.o $(OBJ_DIR)/globals.o
+$(OBJ_DIR)/first_pass.o: $(SRC_DIR)/first-pass/first_pass.c $(OBJ_DIR)/functions.o $(OBJ_DIR)/encode.o $(OBJ_DIR)/globals.o $(OBJ_DIR)/line_formmating_functions.o
 	mkdir -p $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $(SRC_DIR)/first-pass/first_pass.c -o $@
 
@@ -49,7 +53,7 @@ $(OBJ_DIR)/second_pass.o: $(SRC_DIR)/second-pass/second_pass.c $(OBJ_DIR)/encode
 
 $(EXEC): $(SRC_DIR)/assembler.c $(OBJ_DIR)/second_pass.o $(OBJ_DIR)/pre_processor.o $(OBJ_DIR)/first_pass.o $(OBJ_DIR)/support_functions.o $(OBJ_DIR)/errors.o $(OBJ_DIR)/encode.o $(OBJ_DIR)/instruction.o $(OBJ_DIR)/functions.o  $(OBJ_DIR)/globals.o
 	mkdir -p $(BIN_DIR)
-	$(CC) $(CFLAGS) $(SRC_DIR)/assembler.c $(OBJ_DIR)/second_pass.o $(OBJ_DIR)/pre_processor.o $(OBJ_DIR)/first_pass.o $(OBJ_DIR)/support_functions.o $(OBJ_DIR)/errors.o $(OBJ_DIR)/encode.o $(OBJ_DIR)/instruction.o $(OBJ_DIR)/functions.o  $(OBJ_DIR)/globals.o -o $(EXEC) -g
+	$(CC) $(CFLAGS) $(SRC_DIR)/assembler.c $(OBJ_DIR)/second_pass.o $(OBJ_DIR)/pre_processor.o $(OBJ_DIR)/first_pass.o $(OBJ_DIR)/support_functions.o $(OBJ_DIR)/errors.o $(OBJ_DIR)/encode.o $(OBJ_DIR)/instruction.o $(OBJ_DIR)/line_formmating_functions.o $(OBJ_DIR)/functions.o  $(OBJ_DIR)/globals.o -o $(EXEC) -g
 
 
 # Clean target: remove object files and the binary directory
