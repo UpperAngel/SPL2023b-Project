@@ -1,13 +1,13 @@
 #ifndef __ENCODE_H
 #define __ENCODE_H
 
-#include "../../globals/globals.h"
 #include "../../error-handling/errors.h"
+#include "../../globals/globals.h"
 
 #define BIT4MASK 0xF
 #define BIT3MASK 0x7
 #define BIT2MASK 0x3
-
+int get_register_number(char* register_str);
 void write_opcode(struct InstructionStructure* encoded_inst, enum opcode op);
 void write_source_addressing(struct InstructionStructure* encoded_inst, unsigned int source_addressing);
 void write_target_addressing(struct InstructionStructure* encoded_inst, unsigned int target_addressing);

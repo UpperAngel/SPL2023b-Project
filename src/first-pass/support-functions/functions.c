@@ -39,39 +39,6 @@ enum opcode get_opcode(const char *instruction_name_str) {
     return NULL_OP; /* If not found, return NULL_OP */
 }
 
-/* IS A functions */
-
-
-
-/* get functions */
-int get_register_number(char *register_str) {
-    int register_number;
-    if (register_str == NULL || strlen(register_str) != 3) {
-        /* Invalid input: register_str is NULL or not of length 3 */
-        /* You can handle this case as needed (e.g., return an error code) */
-        return -1; /* Return a default value or an error code */
-    }
-
-    if (register_str[0] != '@' || register_str[1] != 'r') {
-        /* Invalid input: register_str does not start with '@r' */
-        /* You can handle this case as needed (e.g., return an error code) */
-        return -1; /* Return a default value or an error code */
-    }
-
-    /* Extract the register number from the string and convert it to an integer */
-    register_number = register_str[2] - '0';
-
-    /* Check if the register number is valid (0 to 7) */
-    if (register_number < 0 || register_number > 7) {
-        /* Invalid input: register number is out of range */
-        /* You can handle this case as needed (e.g., return an error code) */
-        return -1; /* Return a default value or an error code */
-    }
-
-    return register_number;
-}
-
-/* INSTRUCTION FUNCTIOS */
 
 /* DIRECTIVE HANDLING FUNCTIONS */
 int is_directive(char *word, const char *directive) {
@@ -110,7 +77,7 @@ int valid_string_directive(char *line, int line_number, int *error_found, int wo
         start++;
     }
 
-    for (i; i < words_to_skip + 1; i++) {
+    for (i = 0; i < words_to_skip + 1; i++) {
         /* skip first word and second word */
         while (*start != '\0' && !is_whitespace(*start)) {
             start++;
@@ -355,98 +322,8 @@ void handle_extern_and_entry_directives(char words_array[LEN][LEN], Symbol **sym
     }
 }
 
-/* FORMAT LINE */
-int is_whitespace(char c) {
-    return c == ' ' || c == '\t';
-}
 
-/* valid line has 80 char + '\n' char */
-int line_too_long(char *line) {
-    if (strlen(line) <= 81)
-        return 1;
-    return 0;
-}
 
-void format_line(char source[LEN], char formatted_line[LEN]) {
-    /* Get the length of the input line */
-    int i = 0;
-    int len = (int)strlen(source);
-
-    /* Variables to keep track of the formatted line */
-    int formatted_index = 0;
-    int last_was_space = 1;
-
-    /* Iterate through each character of the input line */
-    for (i; i < len; i++) {
-        char current_char = source[i];
-        int is_space = is_whitespace(current_char);
-
-        /* Handle spaces and tabs */
-        if (is_space) {
-            if (!last_was_space && formatted_index > 0 && formatted_line[formatted_index - 1] != ',' && formatted_line[formatted_index - 1] != ':') {
-                formatted_line[formatted_index++] = ' '; /* Replace multiple spaces with a single space */
-            }
-            last_was_space = 1;
-        }
-        /* Handle commas and colons */
-        else if (current_char == ',' || current_char == ':') {
-            if (!last_was_space) {
-                if (formatted_index > 0 && formatted_line[formatted_index - 1] != ',' && formatted_line[formatted_index - 1] != ':') {
-                    formatted_line[formatted_index++] = ' '; /* Add a space before comma/colon if there wasn't one */
-                }
-            }
-
-            formatted_line[formatted_index++] = current_char;
-            formatted_line[formatted_index++] = ' '; /* Add a space after comma/colon */
-            last_was_space = 1;
-        }
-        /* Handle regular characters */
-        else {
-            formatted_line[formatted_index++] = current_char;
-            last_was_space = 0;
-        }
-    }
-
-    /* Remove trailing whitespace, if any */
-    if (formatted_index > 0 && is_whitespace(formatted_line[formatted_index - 1])) {
-        formatted_index--;
-    }
-
-    /* Null-terminate the formatted string */
-    formatted_line[formatted_index] = '\0';
-}
-
-void store_words(char line[], char resultArray[LEN][LEN]) {
-    char *token;
-    const char delimiter[] = " ";
-    int index = 0;
-
-    memset(resultArray, 0, sizeof(resultArray[0][0]) * LEN * LEN);
-
-    token = strtok(line, delimiter);
-
-    while (token != NULL && index < LEN - 1) {
-        if (strlen(token) < LEN) {
-            strncpy(resultArray[index], token, LEN - 1);
-            resultArray[index][LEN - 1] = '\0';
-            index++;
-        }
-        token = strtok(NULL, delimiter);
-    }
-}
-
-void format_and_store_words(char line[LEN], char words_array[LEN][LEN]) {
-    char formatted_line[LEN] = {0};
-    format_line(line, formatted_line);
-    store_words(formatted_line, words_array);
-}
-
-void update_variables(char **current_symbol_name, int *symbol_definition, int *line_number, int *index) {
-    *(current_symbol_name) = NULL;
-    *symbol_definition = 0;
-    *line_number = *line_number + 1;
-    *index = 0;
-}
 
 
 

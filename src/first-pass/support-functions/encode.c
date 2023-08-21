@@ -1,5 +1,32 @@
 #include "../first-pass-headers/encode.h"
 
+int get_register_number(char* register_str) {
+    int register_number;
+    if (register_str == NULL || strlen(register_str) != 3) {
+        /* Invalid input: register_str is NULL or not of length 3 */
+        /* You can handle this case as needed (e.g., return an error code) */
+        return -1; /* Return a default value or an error code */
+    }
+
+    if (register_str[0] != '@' || register_str[1] != 'r') {
+        /* Invalid input: register_str does not start with '@r' */
+        /* You can handle this case as needed (e.g., return an error code) */
+        return -1; /* Return a default value or an error code */
+    }
+
+    /* Extract the register number from the string and convert it to an integer */
+    register_number = register_str[2] - '0';
+
+    /* Check if the register number is valid (0 to 7) */
+    if (register_number < 0 || register_number > 7) {
+        /* Invalid input: register number is out of range */
+        /* You can handle this case as needed (e.g., return an error code) */
+        return -1; /* Return a default value or an error code */
+    }
+
+    return register_number;
+}
+
 void write_opcode(struct InstructionStructure* encoded_inst, enum opcode op) {
     encoded_inst->opcode = op & BIT4MASK; /* Mask the opcode to keep only the 4 least significant bits (LSBs) */
 }
@@ -17,8 +44,8 @@ void encode_bits_2_to_11(int number, struct InstructionStructure* encoded_inst) 
     unsigned int binary_rep = (unsigned int)number;
 
     /* Extract the target_addressing, opcode, and source_addressing bits using bitwise operations */
-    encoded_inst->target_addressing = (binary_rep & BIT3MASK); /* Last 3 bits */
-    encoded_inst->opcode = ((binary_rep >> BIT2MASK) & BIT4MASK); /* Next 4 bits */
+    encoded_inst->target_addressing = (binary_rep & BIT3MASK);               /* Last 3 bits */
+    encoded_inst->opcode = ((binary_rep >> BIT2MASK) & BIT4MASK);            /* Next 4 bits */
     encoded_inst->source_addressing = ((binary_rep >> BIT3MASK) & BIT3MASK); /* First 3 bits */
 }
 void encode_bits_2_to_6(int number, struct InstructionStructure* encoded_inst) {
@@ -45,56 +72,56 @@ void encode_opcode(struct InstructionStructure* encoded_inst, enum opcode operat
     switch (operation) {
         /* First Group */
         case MOV_OP:
-            write_opcode(encoded_inst,MOV_OP);
+            write_opcode(encoded_inst, MOV_OP);
             break;
         case CMP_OP:
-            write_opcode(encoded_inst,CMP_OP);
+            write_opcode(encoded_inst, CMP_OP);
             break;
         case ADD_OP:
-            write_opcode(encoded_inst,ADD_OP);
+            write_opcode(encoded_inst, ADD_OP);
             break;
         case SUB_OP:
-            write_opcode(encoded_inst,SUB_OP);
+            write_opcode(encoded_inst, SUB_OP);
             break;
         case LEA_OP:
-            write_opcode(encoded_inst,LEA_OP);
+            write_opcode(encoded_inst, LEA_OP);
             break;
 
             /* Second Group */
         case CLR_OP:
-            write_opcode(encoded_inst,CLR_OP);
+            write_opcode(encoded_inst, CLR_OP);
             break;
         case NOT_OP:
-            write_opcode(encoded_inst,NOT_OP);
+            write_opcode(encoded_inst, NOT_OP);
             break;
         case INC_OP:
-            write_opcode(encoded_inst,MOV_OP);
+            write_opcode(encoded_inst, MOV_OP);
             break;
         case DEC_OP:
-            write_opcode(encoded_inst,DEC_OP);
+            write_opcode(encoded_inst, DEC_OP);
             break;
         case JMP_OP:
-            write_opcode(encoded_inst,JMP_OP);
+            write_opcode(encoded_inst, JMP_OP);
             break;
         case BNE_OP:
-            write_opcode(encoded_inst,BNE_OP);
+            write_opcode(encoded_inst, BNE_OP);
             break;
         case JSR_OP:
-            write_opcode(encoded_inst,JSR_OP);
+            write_opcode(encoded_inst, JSR_OP);
             break;
         case RED_OP:
-            write_opcode(encoded_inst,MOV_OP);
+            write_opcode(encoded_inst, MOV_OP);
             break;
         case PRN_OP:
-            write_opcode(encoded_inst,PRN_OP);
+            write_opcode(encoded_inst, PRN_OP);
             break;
 
             /* Third Group */
         case RTS_OP:
-            write_opcode(encoded_inst,RTS_OP);
+            write_opcode(encoded_inst, RTS_OP);
             break;
         case STOP_OP:
-            write_opcode(encoded_inst,STOP_OP);
+            write_opcode(encoded_inst, STOP_OP);
             break;
 
             /* Failed/Error */
@@ -103,20 +130,20 @@ void encode_opcode(struct InstructionStructure* encoded_inst, enum opcode operat
             break;
     }
 }
-void encode_second_and_third_word(struct InstructionStructure *instruction, enum OperandType OPERAND_TYPE, char *operand, int is_source_operand){
+void encode_second_and_third_word(struct InstructionStructure* instruction, enum OperandType OPERAND_TYPE, char* operand, int is_source_operand) {
     int number = 0;
 
-    switch (OPERAND_TYPE){
+    switch (OPERAND_TYPE) {
         case NUMBER:
             number = atoi(operand);
-            encode_bits_2_to_11(number,instruction);
+            encode_bits_2_to_11(number, instruction);
             break;
         case REGISTER:
-            number = get_register_number (operand);
-            if (is_source_operand){
-                encode_bits_7_to_11(number,instruction);
-            }else { /* is target operand */
-                encode_bits_2_to_6(number,instruction);
+            number = get_register_number(operand);
+            if (is_source_operand) {
+                encode_bits_7_to_11(number, instruction);
+            } else { /* is target operand */
+                encode_bits_2_to_6(number, instruction);
             }
             break;
         default:

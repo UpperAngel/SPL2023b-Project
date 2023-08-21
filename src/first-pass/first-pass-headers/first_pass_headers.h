@@ -14,12 +14,15 @@
 
 
 /* get functions */
-int get_register_number(char *register_str) ;
+
 enum opcode get_opcode(const char* instruction_name_str);
 
 /* FORAMAT LINE FUNCTIONS */
 int line_too_long(char *line);
 int is_whitespace(char c) ;
+int is_empty(const char *line);
+int is_comment(const char *line);
+int is_comment_or_empty(char *line);
 void format_line(char source[LEN], char formatted_line[LEN]) ;
 void store_words(char line[], char resultArray[LEN][LEN]) ;
 void format_and_store_words(char line[LEN],char words_array[LEN][LEN]);

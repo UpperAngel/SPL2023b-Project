@@ -4,11 +4,12 @@ int is_whitespace(char c) {
     return c == ' ' || c == '\t';
 }
 /* valid line has 80 char + '\n' char */
-int line_too_long(char *line){
-    if (strlen(line) <= 81)
+int line_too_long(char *line) {
+    if (strlen(line) > 81)
         return 1;
     return 0;
 }
+
 void format_line(char source[LEN], char formatted_line[LEN]) {
     /* Get the length of the input line */
     int i;
@@ -30,7 +31,7 @@ void format_line(char source[LEN], char formatted_line[LEN]) {
             }
             last_was_space = 1;
         }
-            /* Handle commas and colons */
+        /* Handle commas and colons */
         else if (current_char == ',' || current_char == ':') {
             if (!last_was_space) {
                 if (formatted_index > 0 && formatted_line[formatted_index - 1] != ',' && formatted_line[formatted_index - 1] != ':') {
@@ -42,7 +43,7 @@ void format_line(char source[LEN], char formatted_line[LEN]) {
             formatted_line[formatted_index++] = ' '; /* Add a space after comma/colon */
             last_was_space = 1;
         }
-            /* Handle regular characters */
+        /* Handle regular characters */
         else {
             formatted_line[formatted_index++] = current_char;
             last_was_space = 0;
@@ -58,7 +59,7 @@ void format_line(char source[LEN], char formatted_line[LEN]) {
     formatted_line[formatted_index] = '\0';
 }
 void store_words(char line[], char resultArray[LEN][LEN]) {
-    char* token;
+    char *token;
     const char delimiter[] = " ";
     int index = 0;
 
@@ -75,18 +76,27 @@ void store_words(char line[], char resultArray[LEN][LEN]) {
         token = strtok(NULL, delimiter);
     }
 }
-void format_and_store_words(char line[LEN],char words_array[LEN][LEN]){
-    char formatted_line[LEN] =  {0};
-    format_line(line,formatted_line);
-    store_words(formatted_line,words_array);
+void format_and_store_words(char line[LEN], char words_array[LEN][LEN]) {
+    char formatted_line[LEN] = {0};
+    format_line(line, formatted_line);
+    store_words(formatted_line, words_array);
 }
-void update_variables(char **current_symbol_name, int *symbol_definition, int *line_number, int *index){
+void update_variables(char **current_symbol_name, int *symbol_definition, int *line_number, int *index) {
     *(current_symbol_name) = NULL;
     *symbol_definition = 0;
     *line_number = *line_number + 1;
     *index = 0;
 }
 
+int is_comment(const char *line) {
+    int index = 0;
+
+    while (isspace(line[index])) {
+        index++; /* Skip leading whitespace characters. */
+    }
+
+    return (line[index] == ';') ? 1 : 0;
+}
 
 /* Function to check if a given line is empty (contains only whitespace characters) */
 int is_empty(const char *line) {
@@ -109,8 +119,6 @@ int is_empty(const char *line) {
 }
 
 /* Function to skip a line if it is a comment or empty */
-int comment_or_empty(char *line)
-{
-    return ( is_comment(line) || is_empty(line));
-
+int is_comment_or_empty(char *line) {
+    return (is_comment(line) || is_empty(line));
 }

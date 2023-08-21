@@ -18,7 +18,7 @@ int process_file(FILE* source_file, FILE* target_file) {
         remove_newline(line);
 
         /* Check if the current line is a comment or an empty line if so skip it */
-        if (comment_or_empty(line))
+        if (is_line_comment_or_empty(line))
             continue;
         
         

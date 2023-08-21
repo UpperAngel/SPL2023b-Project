@@ -350,7 +350,7 @@ void write_line_to_file(const char *line, FILE *target_file);
  *
  * @see is_comment, is_empty
  */
-int comment_or_empty(char *line);
+int is_line_comment_or_empty(char *line);
 
 
 
@@ -444,7 +444,7 @@ int valid_end_macro_def(const char* line, int line_number);
  * @return 1 if the line contains a comment (semicolon followed by non-whitespace character after it),
  *         0 otherwise.
  */
-int is_comment(const char *);
+int is_line_comment(const char *);
 
 
 /**
@@ -453,7 +453,7 @@ int is_comment(const char *);
  * @param line The input line to check for emptiness.
  * @return 1 if the line is empty (contains only whitespace characters), 0 otherwise.
  */
-int is_empty(const char *);
+int is_line_empty(const char *);
 
 
 

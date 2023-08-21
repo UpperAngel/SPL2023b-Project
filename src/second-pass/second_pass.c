@@ -175,3 +175,4 @@ void binaryToBase64(uint64_t binary, char *base64) {
     if (base64_length == 0) {
         base64[base64_length++] = '\0';
     }
+}

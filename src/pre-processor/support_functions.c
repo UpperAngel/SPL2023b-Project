@@ -341,9 +341,9 @@ void write_line_to_file(const char *line, FILE *target_file) {
 
 
 /* Function to skip a line if it is a comment or empty */
-int comment_or_empty(char *line)
+int is_line_comment_or_empty(char *line)
 {
-    return ( is_comment(line) || is_empty(line));
+    return ( is_line_comment(line) || is_line_empty(line));
 }
 
 
@@ -419,7 +419,7 @@ void remove_newline(char *str) {
         str[len - 1] = '\0';
 }
 
-int is_comment(const char* line) {
+int is_line_comment(const char* line) {
         int index = 0;
 
         while (isspace(line[index])) {
@@ -432,7 +432,7 @@ int is_comment(const char* line) {
 
 
 /* Function to check if a given line is empty (contains only whitespace characters) */
-int is_empty(const char *line) {
+int is_line_empty(const char *line) {
     while (*line != '\0') {
         /* Loop through each character in the line until the end of the string is reached. */
 
