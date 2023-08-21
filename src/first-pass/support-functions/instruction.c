@@ -1,5 +1,41 @@
 #include "../first-pass-headers/instruction.h"
 
+struct command {
+    const char* instruction_name;
+    enum opcode opcode_value;
+};
+
+static struct command commands[] = {
+        {"mov", MOV_OP},
+        {"cmp", CMP_OP},
+        {"add", ADD_OP},
+        {"sub", SUB_OP},
+        {"lea", LEA_OP},
+        {"clr", CLR_OP},
+        {"not", NOT_OP},
+        {"inc", INC_OP},
+        {"dec", DEC_OP},
+        {"jmp", JMP_OP},
+        {"bne", BNE_OP},
+        {"jsr", JSR_OP},
+        {"red", RED_OP},
+        {"prn", PRN_OP},
+        {"rts", RTS_OP},
+        {"stop", STOP_OP},
+        {NULL, NULL_OP}
+};
+
+
+enum opcode get_opcode(const char *instruction_name_str) {
+    int i = 0;
+    while (commands[i].instruction_name != NULL) {
+        if (strcmp(commands[i].instruction_name, instruction_name_str) == 0) {
+            return commands[i].opcode_value;
+        }
+        i++;
+    }
+    return NULL_OP; /* If not found, return NULL_OP */
+}
 
 int is_register(const char *operand) {
     if (operand == NULL) {
@@ -62,7 +98,7 @@ int is_symbol(const char *symbol) {
         return 0; /* Symbol must start with a letter */
     }
 
-    for (i; symbol[i] != '\0'; i++) {
+    for (i = 0; symbol[i] != '\0'; i++) {
         if (!isalnum(symbol[i])) {
             return 0; /* Invalid character in the symbol */
         }

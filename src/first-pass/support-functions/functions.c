@@ -1,43 +1,11 @@
 #include "../first-pass-headers/first_pass_headers.h"
 
 
-struct command {
-    const char* instruction_name;
-    enum opcode opcode_value;
-};
 
-static struct command commands[] = {
-        {"mov", MOV_OP},
-        {"cmp", CMP_OP},
-        {"add", ADD_OP},
-        {"sub", SUB_OP},
-        {"lea", LEA_OP},
-        {"clr", CLR_OP},
-        {"not", NOT_OP},
-        {"inc", INC_OP},
-        {"dec", DEC_OP},
-        {"jmp", JMP_OP},
-        {"bne", BNE_OP},
-        {"jsr", JSR_OP},
-        {"red", RED_OP},
-        {"prn", PRN_OP},
-        {"rts", RTS_OP},
-        {"stop", STOP_OP},
-        {NULL, NULL_OP}
-};
 
 Symbol *find_symbol(Symbol *head, const char *name);
 
-enum opcode get_opcode(const char *instruction_name_str) {
-    int i = 0;
-    while (commands[i].instruction_name != NULL) {
-        if (strcmp(commands[i].instruction_name, instruction_name_str) == 0) {
-            return commands[i].opcode_value;
-        }
-        i++;
-    }
-    return NULL_OP; /* If not found, return NULL_OP */
-}
+
 
 
 /* DIRECTIVE HANDLING FUNCTIONS */
@@ -229,7 +197,7 @@ int valid_data_directive(char words_array[LEN][LEN], int line_number, int *error
     /* Check if commas are valid in the line */
     if (valid_commas_in_directive(words_array, index, line_number)) {
         /* Iterate through words_array in steps of 2 */
-        for (index; words_array[index][0] != '\0'; index += 2) {
+        for (index = 0; words_array[index][0] != '\0'; index += 2) {
             /* Check if the current word is not a number */
             if (!is_number(words_array[index])) {
                 handle_error(InvalidCharInDataDirective, line_number);

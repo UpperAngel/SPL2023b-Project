@@ -15,7 +15,7 @@
 
 /* get functions */
 
-enum opcode get_opcode(const char* instruction_name_str);
+
 
 /* FORAMAT LINE FUNCTIONS */
 int line_too_long(char *line);
