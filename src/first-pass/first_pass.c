@@ -1,7 +1,8 @@
 #include "first-pass-headers/first_pass.h"
-#include "first-pass-headers/first_pass_headers.h"
+
 #include "../error-handling/errors.h"
 #include "../globals/globals.h"
+#include "first-pass-headers/first_pass_headers.h"
 
 /* TODO make sure that every number is macro based */
 
@@ -15,7 +16,6 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
     char *current_symbol_name = NULL;
 
     while (fgets(line, LEN, am_file) != NULL) {
-        printf("entered fgets\n");
         update_variables(&current_symbol_name, &symbol_definition, &line_number, &index);
 
         /* Check if the current line is a comment or an empty line; if so, skip it */
@@ -83,16 +83,17 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
             printf("added code symbol\n");
         }
         /* Step 12 + 13 + 14 */ /* Example: STR: mov 5,M2 */
-        if (valid_instruction(words_array, line_number, symbol_definition))
+        if (valid_instruction(words_array, line_number, symbol_definition)) {
+            printf("yes\n");
             *ic = *ic + handle_valid_instruction(words_array, instructions_array, *ic, symbol_definition, line_number, second_pass_list);
-        else { /* The second word is not an instruction nor data/string directive; output an error */
+        } else { /* The second word is not an instruction nor data/string directive; output an error */
             /* Here should be a function that can find more specific errors */
             *error_found = 1;
             /* handle_error(SomeErrorHere, line_number); */
             continue;
         }
-        printf("current IC is %d, current DC is %d\n", *ic, *dc);
     }
+    printf("current IC is %d, current DC is %d\n", *ic, *dc);
     printf("finished first pass\n");
     /* handle_separation(symbol_head, *ic, line_number, &error_found); */
 }

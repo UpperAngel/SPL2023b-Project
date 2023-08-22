@@ -31,10 +31,8 @@ char *custom_strrchr(const char *str, int ch) {
     return (char *)last;
 }
 int valid_string_directive(char *line, int line_number, int *error_found, int words_to_skip) {
-    char *directive = ".string";
     char quote = '\"';
     char *start = line;
-    char *last_non_whitespace = NULL;
     char *ptr;
     char *opening_quote = strchr(start, '"');
     char *closing_quote = NULL;
@@ -249,7 +247,7 @@ int handle_data_directive(struct DataStructure *data_array, int DC, char words_a
 /* EXTERN AND ENTRY FUNCTIONS */
 int valid_entry_and_extern_directive(char words_array[LEN][LEN], int *error_found, int line_number, int symbol_definition) {
     int index = 1;
-
+    
     /* if there is symbol definition skip the name of the symbol and ':' char */
     if (symbol_definition)
         index = index + 2;
@@ -269,6 +267,7 @@ int valid_entry_and_extern_directive(char words_array[LEN][LEN], int *error_foun
         if (!is_symbol(words_array[index])) {
             *error_found = 1;
             handle_error(OnlySymbolsAllowed, line_number);
+            printf("the symbol - %s", words_array[index]);
             return 0;
         }
         /* check the next parameter, skipping the: ',' char */

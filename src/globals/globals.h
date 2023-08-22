@@ -59,7 +59,7 @@ struct InstructionStructure {
 };
 
 enum OperandType{
-    NUMBER = 0,
+    NUMBER = 1,
     SYMBOL = 3,
     REGISTER = 5,
     UNDEFINED

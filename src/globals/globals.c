@@ -1,47 +1,43 @@
 #include "globals.h"
 
-const char *reservedKeywords[RESERVED_KEYWORDS_LENGTH] = {
-        "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
-        "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"
-};
+const char *reservedKeywords[] = {
+    "mov", "cmp", "add", "sub", "not", "clr", "lea", "inc",
+    "de", "jmp", "bne", "red", "prn", "jsr", "rts", "stop"};
 
 FILE *create_file(const char *file_name, const char *extension) {
-  FILE *created_file = NULL;
-  
-  char *new_file_name;
-  char *dot = NULL;
+    FILE *created_file = NULL;
 
-  /* dynamiclly allocate memory for the file name and the extension */
-  new_file_name = (char *)malloc(strlen(file_name) +strlen(extension) + 1);
-  if (new_file_name == NULL)
-  {
-    printf("faild allocation for the file name \n");
-    return NULL;
-  }
-  
-  /* copy the input to file_name */
-  strcpy(new_file_name, file_name);
-  
-  /* deletes the file extension. everything after the dot and the dot itself */
-  dot = strchr(new_file_name, '.');
-  if (dot != NULL)
-  {
-    *dot = '\0';
-  }
-  /* adds the extension and creates the file*/
-  new_file_name = strcat(new_file_name, extension);
-  created_file = fopen(new_file_name, "w+");
+    char *new_file_name;
+    char *dot = NULL;
 
-  /* checks if file was created succesfully */
-  if (created_file == NULL)
-  {
-    printf("failed to create the file: \"%s\" \n", new_file_name);
-    return NULL;
-  }
-  free(new_file_name);
+    /* dynamiclly allocate memory for the file name and the extension */
+    new_file_name = (char *)malloc(strlen(file_name) + strlen(extension) + 1);
+    if (new_file_name == NULL) {
+        printf("faild allocation for the file name \n");
+        return NULL;
+    }
 
-  /*  returns the file after being created*/
-  return created_file;
+    /* copy the input to file_name */
+    strcpy(new_file_name, file_name);
+
+    /* deletes the file extension. everything after the dot and the dot itself */
+    dot = strchr(new_file_name, '.');
+    if (dot != NULL) {
+        *dot = '\0';
+    }
+    /* adds the extension and creates the file*/
+    new_file_name = strcat(new_file_name, extension);
+    created_file = fopen(new_file_name, "w+");
+
+    /* checks if file was created succesfully */
+    if (created_file == NULL) {
+        printf("failed to create the file: \"%s\" \n", new_file_name);
+        return NULL;
+    }
+    free(new_file_name);
+
+    /*  returns the file after being created*/
+    return created_file;
 }
 
 char *my_strdup(const char *str) {
@@ -55,7 +51,6 @@ char *my_strdup(const char *str) {
     return duplicate;
 }
 
-
 int is_reserved_keyword(const char *word) {
     int i = 0;
     for (i = 0; i < sizeof(reservedKeywords) / sizeof(reservedKeywords[0]); i++) {
@@ -66,20 +61,19 @@ int is_reserved_keyword(const char *word) {
     return 0; /* No match, it's not a reserved keyword */
 }
 
-struct SymbolNameAndIndex* create_node(const char *name, int IC_index, int line_number) {
-    struct SymbolNameAndIndex* newNode = malloc(sizeof(struct SymbolNameAndIndex));
+struct SymbolNameAndIndex *create_node(const char *name, int IC_index, int line_number) {
+    struct SymbolNameAndIndex *newNode = malloc(sizeof(struct SymbolNameAndIndex));
     if (newNode == NULL) {
         handle_error(FailedToAllocateMemory, line_number);
         return NULL;
     }
 
-    newNode->name = my_strdup(name);  /* Duplicate the string to avoid issues */
+    newNode->name = my_strdup(name); /* Duplicate the string to avoid issues */
     newNode->IC_index = IC_index;
-    newNode->line_number = line_number;  /* Set line number */
+    newNode->line_number = line_number; /* Set line number */
     newNode->next = NULL;
     return newNode;
 }
-
 
 struct SymbolNameAndIndex *get_node_by_name(struct SymbolNameAndIndex *head, const char *target_name) {
     while (head != NULL) {
@@ -92,67 +86,65 @@ struct SymbolNameAndIndex *get_node_by_name(struct SymbolNameAndIndex *head, con
 }
 
 /* Function to insert a node at the end of the list */
-void insertNode(struct SymbolNameAndIndex** head, struct SymbolNameAndIndex* newNode) {
+void insertNode(struct SymbolNameAndIndex **head, struct SymbolNameAndIndex *newNode) {
     if (*head == NULL) {
         *head = newNode;
         return;
     }
 
-    struct SymbolNameAndIndex* current = *head;
+    struct SymbolNameAndIndex *current = *head;
     while (current->next != NULL) {
         current = current->next;
     }
     current->next = newNode;
 }
 /* Function to free the linked list and its nodes */
-void freeList(struct SymbolNameAndIndex* head) {
-    struct SymbolNameAndIndex* current = head;
+void freeList(struct SymbolNameAndIndex *head) {
+    struct SymbolNameAndIndex *current = head;
     while (current != NULL) {
-        struct SymbolNameAndIndex* temp = current;
+        struct SymbolNameAndIndex *temp = current;
         current = current->next;
-        free(temp);  /* Deallocate the memory for the current node, including the name string */
+        free(temp); /* Deallocate the memory for the current node, including the name string */
     }
 }
 /* Function to get the name at a specified index */
-char* get_name_at(const struct SymbolNameAndIndex* head, int targetIndex) {
-    const struct SymbolNameAndIndex* current = head;
+char *get_name_at(const struct SymbolNameAndIndex *head, int targetIndex) {
+    const struct SymbolNameAndIndex *current = head;
     while (current != NULL) {
         if (current->IC_index == targetIndex) {
             return current->name;
         }
         current = current->next;
     }
-    return NULL;  /* Index not found */
+    return NULL; /* Index not found */
 }
 /* Function to get the index at a specified index */
-int get_index_at(const struct SymbolNameAndIndex* head, int targetIndex) {
-    const struct SymbolNameAndIndex* current = head;
+int get_index_at(const struct SymbolNameAndIndex *head, int targetIndex) {
+    const struct SymbolNameAndIndex *current = head;
     while (current != NULL) {
         if (current->IC_index == targetIndex) {
             return current->IC_index;
         }
         current = current->next;
     }
-    return -1;  /* Index not found */
+    return -1; /* Index not found */
 }
 /* Function to get the line number at a specified index */
-int get_line_number_at(const struct SymbolNameAndIndex* head, int targetIndex) {
-    const struct SymbolNameAndIndex* current = head;
+int get_line_number_at(const struct SymbolNameAndIndex *head, int targetIndex) {
+    const struct SymbolNameAndIndex *current = head;
     while (current != NULL) {
         if (current->IC_index == targetIndex) {
             return current->line_number;
         }
         current = current->next;
     }
-    return -1;   /* Index not found */
+    return -1; /* Index not found */
 }
 
 void write_character(struct DataStructure *data, char c) {
     /* Convert the char to int and store it in the struct */
     data->value = (int)c;
 }
-
-
 
 int is_valid_symbol(const char *line, int line_number, int *error_found, char words_array[LEN][LEN]) {
     /* Skip initial white spaces */
@@ -194,7 +186,6 @@ int is_valid_symbol(const char *line, int line_number, int *error_found, char wo
 
     return 1;
 }
-
 
 Symbol *find_symbol(Symbol *head, const char *name) {
     Symbol *current = head;

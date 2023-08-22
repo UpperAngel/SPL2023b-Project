@@ -1,30 +1,28 @@
 #include "../first-pass-headers/instruction.h"
 
 struct command {
-    const char* instruction_name;
+    const char *instruction_name;
     enum opcode opcode_value;
 };
 
 static struct command commands[] = {
-        {"mov", MOV_OP},
-        {"cmp", CMP_OP},
-        {"add", ADD_OP},
-        {"sub", SUB_OP},
-        {"lea", LEA_OP},
-        {"clr", CLR_OP},
-        {"not", NOT_OP},
-        {"inc", INC_OP},
-        {"dec", DEC_OP},
-        {"jmp", JMP_OP},
-        {"bne", BNE_OP},
-        {"jsr", JSR_OP},
-        {"red", RED_OP},
-        {"prn", PRN_OP},
-        {"rts", RTS_OP},
-        {"stop", STOP_OP},
-        {NULL, NULL_OP}
-};
-
+    {"mov", MOV_OP},
+    {"cmp", CMP_OP},
+    {"add", ADD_OP},
+    {"sub", SUB_OP},
+    {"lea", LEA_OP},
+    {"clr", CLR_OP},
+    {"not", NOT_OP},
+    {"inc", INC_OP},
+    {"dec", DEC_OP},
+    {"jmp", JMP_OP},
+    {"bne", BNE_OP},
+    {"jsr", JSR_OP},
+    {"red", RED_OP},
+    {"prn", PRN_OP},
+    {"rts", RTS_OP},
+    {"stop", STOP_OP},
+    {NULL, NULL_OP}};
 
 enum opcode get_opcode(const char *instruction_name_str) {
     int i = 0;
@@ -53,39 +51,51 @@ int is_register(const char *operand) {
     }
     return 0; /* Return 0 if the operand does not match the register format */
 }
-int is_number(const char *str) {
-    if (str == NULL || *str == '\0') {
-        return 0; /* Return 0 if the input pointer is NULL or if the string is empty */
+
+void sanitize_input(char *input) {
+    int len = strlen(input);
+    if (len > 0 && (input[len - 1] == '\n' || isspace(input[len - 1]))) {
+        input[len - 1] = '\0'; /* Remove trailing newline */
     }
 
-    /* Check for a plus (+) or minus (-) sign at the beginning of the string */
-    if (*str == '+' || *str == '-') {
-        str++; /* Move to the next character */
+    /* Remove leading whitespace */
+    while (*input != '\0' && isspace(*input)) {
+        input++;
+    }
+}
+
+int is_number(const char *operand) {
+    if (operand == NULL || *operand == '\0') {
+        return 0;
     }
 
-    while (*str) {
-        if (!isdigit(*str)) {
-            return 0; /* Return 0 if a non-digit character is encountered */
+    if (operand[0] == '+' || operand[0] == '-') {
+        operand++;
+    }
+
+    while (!isspace(*operand) && *operand != '\0') {
+        if (!isdigit(*operand)) {
+            return 0;
         }
-        str++; /* Move to the next character */
+        operand++;
     }
 
-    return 1; /* Return 1 if all characters are digits */
+    return 1;
 }
 
 int pack_instruction(struct InstructionStructure instruction) {
     int packed_instruction = 0;
-    
-    packed_instruction |= ((int)instruction.encoding_type) & 0x3;     /* Mask and pack 2 bits */
+
+    packed_instruction |= ((int)instruction.encoding_type) & 0x3;            /* Mask and pack 2 bits */
     packed_instruction |= (((int)instruction.target_addressing) & 0x7) << 2; /* Mask and pack 3 bits, shift by 2 */
-    packed_instruction |= (((int)instruction.opcode) & 0xF) << 5;     /* Mask and pack 4 bits, shift by 5 */
+    packed_instruction |= (((int)instruction.opcode) & 0xF) << 5;            /* Mask and pack 4 bits, shift by 5 */
     packed_instruction |= (((int)instruction.source_addressing) & 0x7) << 9; /* Mask and pack 3 bits, shift by 9 */
-    
+
     return packed_instruction;
 }
 
 int is_symbol(const char *symbol) {
-    size_t i = 1;
+    size_t i;
 
     if (is_reserved_keyword(symbol))
         return 0;
@@ -98,7 +108,7 @@ int is_symbol(const char *symbol) {
         return 0; /* Symbol must start with a letter */
     }
 
-    for (i = 0; symbol[i] != '\0'; i++) {
+    for (i = 1; symbol[i] != '\0'; i++) {
         if (!isalnum(symbol[i])) {
             return 0; /* Invalid character in the symbol */
         }
@@ -106,8 +116,6 @@ int is_symbol(const char *symbol) {
 
     return 1; /* The string satisfies the criteria for a valid symbol */
 }
-
-
 
 void assign_operands(char words_array[LEN][LEN], char **operand1, char **operand2, int symbol_definition, int number_of_operands) {
     int index = 1; /* Initialize the IC_index variable to 1 */
@@ -141,52 +149,59 @@ int valid_instruction(char words_array[LEN][LEN], int line_number, int symbol_de
 
     /* assign operands, between the two operands there is ',' char so we skip it */
     operand1 = words_array[instruction_index + 1];
+    sanitize_input(operand1);
     operand2 = words_array[instruction_index + 3];
-
+    sanitize_input(operand2);
     /* check the line for correct comma structure */
     if (!valid_commas_in_instruction(words_array, instruction_index + 1, line_number)) {
         return 0;
     }
-
     operation_code = get_opcode(words_array[instruction_index]);
     if (operation_code == NULL_OP) {
         handle_error(UnknownOperationName, line_number);
         return 0;
     }
-
     number_of_operands = get_number_of_operands(operation_code);
 
     switch (number_of_operands) {
         case 0:
             if (operand1 != NULL || operand2 != NULL) {
-                is_valid = 0;
+                if (strlen(operand1) > 0 || strlen(operand1) > 0) {
+                    is_valid = 0;
+                }
             }
+
             break;
         case 1:
-            if (operand1 == NULL || operand2 != NULL) {
-                is_valid = 0;
+            if (operand1 != NULL || operand2 != NULL) {
+                if (strlen(operand1) == 0 || strlen(operand2) > 0) {
+                    is_valid = 0;
+                }
             }
             break;
         case 2:
-            if (operand1 == NULL || operand2 == NULL) {
-                is_valid = 0;
+            if (operand1 != NULL || operand2 != NULL) {
+                if (strlen(operand1) == 0 || strlen(operand2) == 0) {
+                    is_valid = 0;
+                }
             }
             break;
         default:
             /* do nothing */
             break;
     }
-
-    if (!is_valid) {
+    if (is_valid == 0) {
         handle_error(InvalidNumberOfOperands, line_number);
         return 0; /* Return 0 for an invalid instruction */
     }
 
     /* Here is a check for excess char at the end of the instruction line */
     if (number_of_operands == 1 || number_of_operands == 0) {
-        if (words_array[instruction_index + number_of_operands + 1] != NULL) {
-            handle_error(ExcessCharactersInInstruction, line_number);
-            return 0;
+        if (words_array[instruction_index + number_of_operands + 1] != NULL && words_array[instruction_index + number_of_operands + 1][0] != '\0') {
+            if (strlen(words_array[instruction_index + number_of_operands + 1] > 0)) {
+                handle_error(ExcessCharactersInInstruction, line_number);
+                return 0;
+            }
         }
     } else {
         if (words_array[instruction_index + 4][0] != '\0') {
@@ -195,8 +210,13 @@ int valid_instruction(char words_array[LEN][LEN], int line_number, int symbol_de
         }
     }
 
-    operand1_type = get_operand_type(operand1);
-    operand2_type = get_operand_type(operand2);
+    if (operand1 != NULL) {
+        operand1_type = get_operand_type(operand1);
+    }
+
+    if (operand2 != NULL) {
+        operand2_type = get_operand_type(operand2);
+    }
 
     switch (number_of_operands) {
         case 0:
@@ -219,7 +239,7 @@ int valid_instruction(char words_array[LEN][LEN], int line_number, int symbol_de
             break;
     }
 
-    if (!is_valid) {
+    if (is_valid == 0) {
         handle_error(UndefinedOperandsNames, line_number);
         return 0;
     }
@@ -274,14 +294,16 @@ int valid_addressing_for_operands(enum OperandType operand1_type, enum OperandTy
             break;
 
         case (PRN_OP):
-            if (source_operand != UNDEFINED || target_operand == UNDEFINED)
+            if (source_operand != UNDEFINED || target_operand == UNDEFINED) {
                 return 0;
+            }
             break;
 
         case (RTS_OP):
         case (STOP_OP):
-            if (source_operand != UNDEFINED || target_operand != UNDEFINED)
+            if (source_operand != UNDEFINED || target_operand != UNDEFINED) {
                 return 0;
+            }
             break;
     }
 

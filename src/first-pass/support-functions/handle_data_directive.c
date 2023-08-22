@@ -237,35 +237,3 @@ int handle_data_directive(struct DataStructure *data_array, int DC, char words_a
 
 
 
-
-/* EXTERN AND ENTRY FUNCTIONS */
-int valid_extern_directive(char words_array[LEN][LEN], int *error_found, int line_number, int symbol_definition){
-    int index = 1;
-
-    /* if there is symbol definition skip the name of the symbol and ':' char */
-    if(symbol_definition)
-        index = index + 2;
-
-    if( !valid_commas_in_directive(words_array,index,line_number) ){
-        *error_found = 1;
-        return 0;
-    }
-
-    if (words_array[index][0] == '\0'){
-        *error_found = 1;
-        handle_error(InvalidNumberOfOperands,line_number);
-        return 0;
-    }
-
-    while ( words_array[index][0] != '\0'){
-        if( !is_symbol(words_array[index]) ){
-            *error_found = 1;
-            handle_error(OnlySymbolsAllowed,line_number);
-            return 0;
-        }
-        /* check the next parameter, skipping the: ',' char */
-        index = index + 2;
-    }
-    /* passed all checks */
-    return 1;
-}

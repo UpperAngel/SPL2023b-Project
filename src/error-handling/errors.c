@@ -35,7 +35,7 @@ const char* errorMessages[] = {
         "Excess characters after instruction.",
         "Undefined operands names in instruction.",
         "Invalid operands addressing for the given instruction." ,
-        "Only symbols allowed as parameters to extern directive.",
+        "Only symbols allowed as parameters to extern\\entry directive.",
         "Symbol cannot be a reserved language word.",
         "Empty symbol definition.",
         "Redefinition of symbol type.",
