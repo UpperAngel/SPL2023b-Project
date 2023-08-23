@@ -319,7 +319,6 @@ int handle_valid_instruction(char words_array[LEN][LEN], struct InstructionStruc
     enum opcode op;
     char *operand1 = NULL;
     char *operand2 = NULL;
-    printf("kuku \n");
     /* Increment the index if symbol_definition is true */
     if (symbol_definition) {
         index = index + 2;
@@ -327,16 +326,11 @@ int handle_valid_instruction(char words_array[LEN][LEN], struct InstructionStruc
 
     /* Translate instruction name to opcode */
     op = get_opcode(words_array[index]);
-    printf("kuku1 \n");
-
     /* Get the number of operands for the instruction */
     number_of_operands = get_number_of_operands(op);
-    printf("kuku2 \n");
-
     /* Assign operands if there are any */
     if (number_of_operands) {
         assign_operands(words_array, &operand1, &operand2, symbol_definition, number_of_operands);
-        printf("kuku3 \n");
         if (operand1 != NULL) {
             /* code */
             operand1_type = get_operand_type(operand1);
@@ -349,31 +343,24 @@ int handle_valid_instruction(char words_array[LEN][LEN], struct InstructionStruc
 
     /* Encode opcode of the first word*/
     encode_opcode(&instructions_array[IC], op);
-    printf("kuku4 \n");
-
     /* first word of instruction A,R,E is always 0 */
     encoding_A_R_E(&instructions_array[IC], 0);
-    printf("kuku5 \n");
-
     switch (operand1_type) {
         case UNDEFINED:
             write_source_addressing(&instructions_array[IC], 0);
             write_target_addressing(&instructions_array[IC], 0);
-            printf("kuku51 \n");
             return 1; /* one line of instructions was added */
         case NUMBER:
             if (number_of_operands == 1) {
                 write_source_addressing(&instructions_array[IC], 0);
                 write_target_addressing(&instructions_array[IC], 1);
                 encode_second_and_third_word(&instructions_array[IC + 1], NUMBER, operand1, 0);
-                printf("kuku52 \n");
                 return 2; /* two lines of instructions were added */
             } else {      /* number of operands is 2 */
                 write_source_addressing(&instructions_array[IC], 1);
                 /* A,R,E of second word is 0 */
                 encoding_A_R_E(&instructions_array[IC + 1], 0);
                 encode_second_and_third_word(&instructions_array[IC + 1], NUMBER, operand1, number_of_operands);
-                printf("kuku52 \n");
             }
             break;
         case REGISTER:
@@ -383,12 +370,10 @@ int handle_valid_instruction(char words_array[LEN][LEN], struct InstructionStruc
             if (number_of_operands == 1) {
                 write_target_addressing(&instructions_array[IC], 5);
                 encode_second_and_third_word(&instructions_array[IC + 1], REGISTER, operand1, number_of_operands);
-                printf("kuku52 \n");
                 return 2;
             } else { /* number of operands is 2 */
                 write_source_addressing(&instructions_array[IC], 5);
                 encode_second_and_third_word(&instructions_array[IC + 1], REGISTER, operand1, 1);
-                printf("kuku53 \n");
             }
             break;
         case SYMBOL: /* encoding of extra symbol words happens in the second pass */
@@ -400,12 +385,10 @@ int handle_valid_instruction(char words_array[LEN][LEN], struct InstructionStruc
             write_source_addressing(&instructions_array[IC], 3);
             break;
     }
-    printf("kuku6 \n");
-    
+
     /* handling second operand */
     switch (operand2_type) {
         case NUMBER:
-            printf("kuku61 \n");
             write_target_addressing(&instructions_array[IC], 1);
             encode_second_and_third_word(&instructions_array[IC + 2], NUMBER, operand2, number_of_operands);
             return 3;
@@ -413,23 +396,18 @@ int handle_valid_instruction(char words_array[LEN][LEN], struct InstructionStruc
             write_target_addressing(&instructions_array[IC], 5);
             if (operand1_type == REGISTER) {
                 encode_second_and_third_word(&instructions_array[IC + 1], REGISTER, operand2, 0);
-                printf("kuku62 \n");
                 return 2;
             }
             encode_second_and_third_word(&instructions_array[IC + 2], REGISTER, operand2, 0);
-            printf("kuku62 \n");
             return 3;
         case SYMBOL:
             write_target_addressing(&instructions_array[IC], 3);
-            printf("kuku63 \n");
             insertNode(pass2_list_head, create_node(operand2, IC + 2, line_number));
-            printf("kuku64 \n");
             return 3;
         case UNDEFINED:
             write_target_addressing(&instructions_array[IC], 0);
             return 1;
     }
-    printf("kuku7 \n");
     return 0;
 }
 
