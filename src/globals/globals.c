@@ -32,11 +32,20 @@ FILE *create_file(const char *file_name, const char *extension) {
         printf("Failed to create file '%s'\n", new_file_name);
         free(new_file_name);
         return NULL;
-    } else {
-        printf("File created: '%s'\n", new_file_name);
     }
 
     return created_file;
+}
+void sanitize_input(char *input) {
+    int len = strlen(input);
+    if (len > 0 && (input[len - 1] == '\n' || isspace(input[len - 1]))) {
+        input[len - 1] = '\0'; /* Remove trailing newline */
+    }
+
+    /* Remove leading whitespace */
+    while (*input != '\0' && isspace(*input)) {
+        input++;
+    }
 }
 
 char *my_strdup(const char *str) {

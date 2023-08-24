@@ -405,26 +405,6 @@ void deploy_macros_in_line(const char line[MAXLEN], FILE *target_file, struct ma
  */
 int check_line_for_macro(const char line[MAXLEN], struct macroList* macroTable);
 
-
-
-
-/**
- * @brief Removes the newline character at the end of a string, if present.
- *
- * This function takes a C string as input and removes the newline character ('\n') at the end of the string, if it exists. If the last character in the string is a newline character, it is replaced with a null terminator ('\0').
- *
- * @param[in,out] str   The input string from which the newline character will be removed.
- *                      It should be a valid null-terminated C string.
- *
- * @note The function modifies the input string in place.
- * @note If the input string is empty or does not contain a newline character at the end, the function does not perform any changes.
- *
- * @warning The function does not perform any validation on the parameter, and it is the responsibility of the caller to ensure its validity.
- */
-void remove_newline(char *str);
-
-
-
 /**
  * Checks if a line contains the string "endmcro" with specific conditions.
  *

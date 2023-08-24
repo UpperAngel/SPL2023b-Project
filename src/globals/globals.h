@@ -99,6 +99,7 @@ enum opcode {
 typedef enum opcode Opcode;
 
 /* functions */
+void sanitize_input(char *input);
 char *my_strdup(const char *str);
 FILE *create_file(const char *file_name, const char *extension);
 int is_reserved_keyword(const char *word);

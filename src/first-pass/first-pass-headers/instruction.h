@@ -7,7 +7,7 @@
 #include "../../globals/globals.h"
 #include "../first-pass-headers/encode.h"
 #include "../first-pass-headers/instruction.h"
-void sanitize_input(char *input);
+
 enum opcode get_opcode(const char *instruction_name_str);
 int is_register(const char *operand);
 int is_number(const char *str);

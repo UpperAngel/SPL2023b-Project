@@ -41,7 +41,6 @@ int main(int argc, char const *argv[]) {
         if (curr_am_file == NULL) {
             exit(1);
         }
-
         /* pre processor */
         process_file(curr_as_file, curr_am_file);
         fclose(curr_as_file);
@@ -51,7 +50,6 @@ int main(int argc, char const *argv[]) {
         fclose(curr_am_file);
 
         second_pass(curr_filename, curr_symbol, instruction_array, data_array, symbol_name_and_index, ic, dc, &error_found);
-        printf("finished assembler for file\n");
 
         free(curr_filename);
         free(curr_symbol);

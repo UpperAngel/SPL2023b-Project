@@ -14,7 +14,10 @@
         "cstdlib": "c",
         "globals.h": "c",
         "errors.h": "c",
-        "first_pass_headers.h": "c"
+        "first_pass_headers.h": "c",
+        "stdio.h": "c",
+        "typeinfo": "c",
+        "encode.h": "c"
     },
     "cSpell.words": [
         "endmcro",

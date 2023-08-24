@@ -412,12 +412,7 @@ int check_line_for_macro(const char *line, struct macroList *macro_list) {
 }
 
 
-/* Function to remove newline character at the end of a string */
-void remove_newline(char *str) {
-    size_t len = strlen(str);
-    if (len > 0 && str[len - 1] == '\n')
-        str[len - 1] = '\0';
-}
+
 
 int is_line_comment(const char* line) {
         int index = 0;
@@ -481,7 +476,12 @@ char* get_second_token(const char* line) {
 char *custom_fgets(char *buffer, int max_len, FILE *source_file) {
     int current_char;
     int char_count = 0;
-
+    if (buffer == NULL)
+    {
+        printf("buffer is null\n");
+        return NULL;
+    }
+    
     /* Read characters until max_len-1 or newline or EOF is encountered */
     while (char_count < max_len - 1 && (current_char = fgetc(source_file)) != EOF && current_char != '\n') {
         buffer[char_count++] = (char)current_char;

@@ -52,17 +52,6 @@ int is_register(const char *operand) {
     return 0; /* Return 0 if the operand does not match the register format */
 }
 
-void sanitize_input(char *input) {
-    int len = strlen(input);
-    if (len > 0 && (input[len - 1] == '\n' || isspace(input[len - 1]))) {
-        input[len - 1] = '\0'; /* Remove trailing newline */
-    }
-
-    /* Remove leading whitespace */
-    while (*input != '\0' && isspace(*input)) {
-        input++;
-    }
-}
 
 int is_number(const char *operand) {
     if (operand == NULL || *operand == '\0') {
