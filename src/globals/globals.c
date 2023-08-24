@@ -16,9 +16,8 @@ FILE *create_file(const char *file_name, const char *extension) {
         printf("faild allocation for the file name \n");
         return NULL;
     }
-
+    new_file_name = my_strdup(file_name);
     /* copy the input to file_name */
-    strcpy(new_file_name, file_name);
 
     /* deletes the file extension. everything after the dot and the dot itself */
     dot = strchr(new_file_name, '.');
@@ -27,13 +26,16 @@ FILE *create_file(const char *file_name, const char *extension) {
     }
     /* adds the extension and creates the file*/
     new_file_name = strcat(new_file_name, extension);
+    printf("kuku1\n");
     created_file = fopen(new_file_name, "w+");
+    printf("kuku2\n");
 
     /* checks if file was created succesfully */
     if (created_file == NULL) {
-        printf("failed to create the file: \"%s\" \n", new_file_name);
+        printf("failed to create file '%s' \n", new_file_name);
         return NULL;
     }
+    printf("kuku3\n");
     free(new_file_name);
 
     /*  returns the file after being created*/
@@ -201,6 +203,50 @@ int is_in_symbol_list(Symbol *head, const char *name) {
     Symbol *symbol = find_symbol(head, name);
     return (symbol != NULL);
 }
+
+Symbol *copy_symlist(Symbol *original) {
+    if (original == NULL) {
+        return NULL;
+    }
+
+    Symbol *new_list = NULL;
+    Symbol *new_tail = NULL;
+
+    while (original != NULL) {
+        Symbol *new_node = malloc(sizeof(Symbol));
+        if (new_node == NULL) {
+            handle_error(FailedToAllocateMemory, 0);
+            return NULL;
+        }
+
+        /* Copy the string using strdup */
+        new_node->name = my_strdup(original->name);
+        if (new_node->name == NULL) {
+            handle_error(FailedToAllocateMemory, 0);
+            free(new_node);
+            return NULL;
+        }
+
+        /*  Copy the rest of the fields */
+        new_node->val = original->val;
+        new_node->type = original->type;
+        new_node->category = original->category;
+        new_node->next = NULL;
+
+        if (new_list == NULL) {
+            new_list = new_node;
+            new_tail = new_node;
+        } else {
+            new_tail->next = new_node;
+            new_tail = new_node;
+        }
+
+        original = original->next;
+    }
+
+    return new_list;
+}
+
 Symbol *create_symbol(const char *name, int val, SymbolType type, SymbolCategory category) {
     Symbol *new_symbol = (Symbol *)malloc(sizeof(Symbol));
     if (new_symbol != NULL) {

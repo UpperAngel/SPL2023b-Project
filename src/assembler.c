@@ -22,7 +22,7 @@ int main(int argc, char const *argv[]) {
     struct SymbolNameAndIndex *symbol_name_and_index;
 
     if (argc < 2) {
-        printf("usage: %s <filename without \"as\" extension>\n", argv[0]);
+        printf("usage: %s <filename without '.as' extension>\n", argv[0]);
         exit(1);
     }
 
@@ -34,15 +34,18 @@ int main(int argc, char const *argv[]) {
 
         curr_as_file = fopen(strcat(curr_filename, ".as"), "r");
         curr_am_file = create_file(curr_filename, ".am");
+        
         /* pre processor */
         process_file(curr_as_file, curr_am_file);
         fclose(curr_as_file);
         rewind(curr_am_file);
 
         first_pass(curr_am_file, instruction_array, data_array, &curr_symbol, &symbol_name_and_index, &ic, &dc, &error_found);
-        second_pass(curr_filename, curr_symbol, instruction_array, data_array, symbol_name_and_index, ic, dc, &error_found);
-
         fclose(curr_am_file);
+        
+        second_pass(curr_filename, curr_symbol, instruction_array, data_array, symbol_name_and_index, ic, dc, &error_found);
+        printf("finished assembler for file\n");
+
         free(curr_filename);
         free(curr_symbol);
     }
