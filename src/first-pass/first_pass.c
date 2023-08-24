@@ -23,7 +23,6 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
             continue;
 
         if (line_too_long(line)) {
-            printf("current line len is %d\n", (int)strlen(line));
             handle_error(LineLimitExceeded, line_number);
             *error_found = 1;
             continue;
@@ -49,7 +48,6 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
             /* Step 6 */
             if (symbol_definition) {
                 handle_symbol(symbol_head, current_symbol_name, line_number, error_found, DATA, NONE_CATEGORY, *dc);
-                printf("added symbol \"%s\"\n", current_symbol_name);
             }
             /* If there was an error with the symbol handling, continue to the next line */
             if (error_found)
@@ -68,23 +66,22 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
 
         /* Step 8 + 9 */ /* M1: .extern STR,M2,M3 */
         if (is_directive(word, ".extern") || is_directive(word, ".entry")) {
-            if (!valid_entry_and_extern_directive(words_array, error_found, line_number, symbol_definition))
+            if (!valid_entry_and_extern_directive(words_array, error_found, line_number, symbol_definition)) {
                 continue;
-
-            if (is_directive(word, ".extern"))
+            }
+            if (is_directive(word, ".extern")) {
                 handle_extern_and_entry_directives(words_array, symbol_head, symbol_definition, line_number, error_found, NONE_TYPE, EXTERN);
-            else
+            } else if (is_directive(word, ".entry")) {
                 handle_extern_and_entry_directives(words_array, symbol_head, symbol_definition, line_number, error_found, NONE_TYPE, ENTRY);
+            }
         }
 
         /* Step 11 */
         if (symbol_definition) {
             handle_symbol(symbol_head, current_symbol_name, line_number, error_found, CODE, NONE_CATEGORY, *ic);
-            printf("added code symbol\n");
         }
         /* Step 12 + 13 + 14 */ /* Example: STR: mov 5,M2 */
         if (valid_instruction(words_array, line_number, symbol_definition)) {
-            printf("yes\n");
             *ic = *ic + handle_valid_instruction(words_array, instructions_array, *ic, symbol_definition, line_number, second_pass_list);
         } else { /* The second word is not an instruction nor data/string directive; output an error */
             /* Here should be a function that can find more specific errors */
@@ -93,7 +90,5 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
             continue;
         }
     }
-    printf("current IC is %d, current DC is %d\n", *ic, *dc);
-    printf("finished first pass\n");
     /* handle_separation(symbol_head, *ic, line_number, &error_found); */
 }

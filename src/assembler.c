@@ -27,14 +27,21 @@ int main(int argc, char const *argv[]) {
     }
 
     for (arg_index = 1; arg_index < argc; arg_index++) {
+        curr_filename = my_strdup(argv[arg_index]);
         ic = COUNTER_INIT;
         dc = COUNTER_INIT;
 
-        curr_filename = my_strdup(argv[arg_index]);
+        if (strstr(curr_filename, ".as") != NULL) {
+            printf("usage: %s <filename without '.as' extension>\n", argv[0]);
+            exit(1);
+        }
 
         curr_as_file = fopen(strcat(curr_filename, ".as"), "r");
         curr_am_file = create_file(curr_filename, ".am");
-        
+        if (curr_am_file == NULL) {
+            exit(1);
+        }
+
         /* pre processor */
         process_file(curr_as_file, curr_am_file);
         fclose(curr_as_file);
@@ -42,7 +49,7 @@ int main(int argc, char const *argv[]) {
 
         first_pass(curr_am_file, instruction_array, data_array, &curr_symbol, &symbol_name_and_index, &ic, &dc, &error_found);
         fclose(curr_am_file);
-        
+
         second_pass(curr_filename, curr_symbol, instruction_array, data_array, symbol_name_and_index, ic, dc, &error_found);
         printf("finished assembler for file\n");
 

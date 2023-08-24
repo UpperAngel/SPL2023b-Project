@@ -18,7 +18,6 @@ void second_pass(const char *file_name, Symbol *sym_head, struct InstructionStru
     struct SymbolNameAndIndex *curr_missing = symbol_name_and_index_head;
     Symbol *curr_symbol_copy = copy_symlist(sym_head);
 
-    printf("kuku1\n");
     if (*error_found == 1) {
         return; /* Abort if errors were previously found */
     }
@@ -26,15 +25,15 @@ void second_pass(const char *file_name, Symbol *sym_head, struct InstructionStru
     /* Resolve missing symbols */
     while (curr_missing != NULL) {
         Symbol *symbol = find_symbol(curr_symbol_copy, curr_missing->name);
-        printf("kuku2\n");
+
         if (symbol != NULL) {
             encoding_A_R_E(&instruction_array[symbol_name_and_index_head->IC_index], (symbol->category == EXTERN) ? BIT2MASK : -1);
-            printf("kuku3\n");
+
             if (instruction_array[symbol_name_and_index_head->IC_index].encoding_type == -1) {
                 *error_found = 1; /* Set error flag if encoding failed */
             }
             encode_bits_2_to_11(symbol->val, instruction_array);
-            printf("kuku4\n");
+
         } else {
             *error_found = 1; /* Found an error */
             return;
@@ -47,7 +46,7 @@ void second_pass(const char *file_name, Symbol *sym_head, struct InstructionStru
     temp = symbol_name_and_index_head;
     while (curr_symbol_copy != NULL && temp != NULL) {
         if (find_symbol(curr_symbol_copy, temp->name) == NULL) {
-            printf("kuku5\n");
+
             *error_found = 1; /* Set error flag if unused symbol found */
         }
         temp = temp->next;
@@ -59,9 +58,9 @@ void second_pass(const char *file_name, Symbol *sym_head, struct InstructionStru
     }
 
     /* Create output files */
-    printf("kuku6\n");
+
     create_files(file_name, curr_symbol_copy, symbol_name_and_index_head, instruction_array, data_array, ic, dc);
-    printf("kuku7\n");
+
     free(curr_symbol_copy);
     free(temp);
 }
@@ -80,13 +79,15 @@ void second_pass(const char *file_name, Symbol *sym_head, struct InstructionStru
 void create_files(const char *file_name, Symbol *head, struct SymbolNameAndIndex *symbol_name_and_index, struct InstructionStructure instruction_array[], struct DataStructure data_array[], int IC, int DC) {
     int entry_flag = 0, extern_flag = 0;
     int i = 0, j = 0;
+    char *inst_base64out = NULL;
+    char *data_base64out = NULL;
 
     Symbol *print_extern = head;
     Symbol *print_entry = head;
     Symbol *find_extern = head;
     Symbol *find_entry = head;
 
-    struct SymbolNameAndIndex *temp;
+    struct SymbolNameAndIndex *temp = symbol_name_and_index;;
 
     FILE *ob_file = NULL;
     FILE *ent_file = NULL;
@@ -94,7 +95,7 @@ void create_files(const char *file_name, Symbol *head, struct SymbolNameAndIndex
 
     /* Check for entry and extern flags */
     while (find_entry != NULL) {
-        printf("kuku61\n");
+
         if (find_entry->category == ENTRY) {
             entry_flag = 1;
             break;
@@ -102,7 +103,7 @@ void create_files(const char *file_name, Symbol *head, struct SymbolNameAndIndex
         find_entry = find_entry->next;
     }
     while (find_extern != NULL) {
-        printf("kuku62\n");
+
         if (find_extern->category == EXTERN) {
             extern_flag = 1;
             break;
@@ -111,35 +112,32 @@ void create_files(const char *file_name, Symbol *head, struct SymbolNameAndIndex
     }
 
     /* Create output files */
-    printf("kuku63\n");
+
     if (entry_flag) {
-        printf("kuku631\n");
+
         ent_file = create_file(file_name, ".ent");
-        printf("kuku632\n");
+
     }
     if (extern_flag) {
-        printf("kuku633\n");
+
         ext_file = create_file(file_name, ".ext");
-        printf("kuku634\n");
+
     }
     ob_file = create_file(file_name, ".ob");
-    printf("kuku635\n");
+
 
     /* Print entry and extern information */
     if (ent_file != NULL) {
         while (print_entry != NULL) {
-            printf("kuku64\n");
+
             if (print_entry->category == ENTRY) {
-                printf("kuku641\n");
+     
                 fprintf(ent_file, "%s: %d\n", print_entry->name, print_entry->val);
-                printf("kuku642\n");
+
             }
             print_entry = print_entry->next;
         }
     }
-
-    printf("kuku636\n");
-    temp = symbol_name_and_index;
     if (ext_file != NULL) {
         while (temp != NULL && print_extern != NULL) {
             if (print_extern->category == EXTERN) {
@@ -149,23 +147,22 @@ void create_files(const char *file_name, Symbol *head, struct SymbolNameAndIndex
             print_extern = print_extern->next;
         }
     }
-    printf("kuku637\n");
+
 
     /* Print instruction and data information */
     if (ob_file != NULL) {
         fprintf(ob_file, "%d %d\n", IC, DC);
         for (i = 0; i < IC; i++) {
-            char base64out[3];
-            binaryToBase64(pack_instruction(instruction_array[i]), base64out);
-            fprintf(ob_file, "%s\n", base64out);
+            inst_base64out = (char *)calloc(3, sizeof(char));
+            binaryToBase64(pack_instruction(instruction_array[i]), inst_base64out);
+            fprintf(ob_file, "%s\n", inst_base64out);
         }
         for (j = 0; j < DC; j++) {
-            char base64out[3];
-            binaryToBase64(data_array[j].value, base64out);
-            fprintf(ob_file, "%s\n", base64out);
+            data_base64out = calloc(3, sizeof(char));
+            binaryToBase64(data_array[j].value, data_base64out);
+            fprintf(ob_file, "%s\n", data_base64out);
         }
     }
-    printf("kuku638\n");
 
     /* Close files and free memory */
     if (ob_file != NULL) {

@@ -1,12 +1,6 @@
 #include "../first-pass-headers/first_pass_headers.h"
 
-
-
-
 Symbol *find_symbol(Symbol *head, const char *name);
-
-
-
 
 /* DIRECTIVE HANDLING FUNCTIONS */
 int is_directive(char *word, const char *directive) {
@@ -103,7 +97,6 @@ int valid_string_directive(char *line, int line_number, int *error_found, int wo
     }
     return 1;
 }
-
 
 int handle_string_directive(struct DataStructure *data_array, int DC, char *line, int line_number) {
     char *start = line;
@@ -247,7 +240,6 @@ int handle_data_directive(struct DataStructure *data_array, int DC, char words_a
 /* EXTERN AND ENTRY FUNCTIONS */
 int valid_entry_and_extern_directive(char words_array[LEN][LEN], int *error_found, int line_number, int symbol_definition) {
     int index = 1;
-    
     /* if there is symbol definition skip the name of the symbol and ':' char */
     if (symbol_definition)
         index = index + 2;
@@ -264,10 +256,11 @@ int valid_entry_and_extern_directive(char words_array[LEN][LEN], int *error_foun
     }
 
     while (words_array[index][0] != '\0') {
+        sanitize_input(words_array[index]);
         if (!is_symbol(words_array[index])) {
             *error_found = 1;
             handle_error(OnlySymbolsAllowed, line_number);
-            printf("the symbol - %s", words_array[index]);
+            printf("the symbol - '%s'", words_array[index]);
             return 0;
         }
         /* check the next parameter, skipping the: ',' char */
@@ -288,13 +281,6 @@ void handle_extern_and_entry_directives(char words_array[LEN][LEN], Symbol **sym
         index = index + 2;
     }
 }
-
-
-
-
-
-
-
 
 /* SYMBOL STRUCT FUNTIONS */
 void handle_symbol(Symbol **head, const char *name, int line_number, int *error_found, SymbolType parameter_type, SymbolCategory parameter_entry_or_extern, int parameter_value) {
@@ -362,4 +348,3 @@ void handle_symbol(Symbol **head, const char *name, int line_number, int *error_
     new_symbol->next = *head; /* Link the new symbol to the current head */
     *head = new_symbol;       /* Set head to the new symbol */
 }
-

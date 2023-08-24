@@ -6,39 +6,36 @@ const char *reservedKeywords[] = {
 
 FILE *create_file(const char *file_name, const char *extension) {
     FILE *created_file = NULL;
-
     char *new_file_name;
     char *dot = NULL;
 
-    /* dynamiclly allocate memory for the file name and the extension */
+    /* Dynamically allocate memory for the file name and the extension */
     new_file_name = (char *)malloc(strlen(file_name) + strlen(extension) + 1);
     if (new_file_name == NULL) {
-        printf("faild allocation for the file name \n");
+        printf("Failed allocation for the file name\n");
         return NULL;
     }
-    new_file_name = my_strdup(file_name);
-    /* copy the input to file_name */
 
-    /* deletes the file extension. everything after the dot and the dot itself */
-    dot = strchr(new_file_name, '.');
+    /* Copy the input file_name to new_file_name */
+    strcpy(new_file_name, file_name);
+
+    /* Find the last dot in the new_file_name (to remove existing extension) */
+    dot = strrchr(new_file_name, '.');
     if (dot != NULL) {
         *dot = '\0';
     }
-    /* adds the extension and creates the file*/
-    new_file_name = strcat(new_file_name, extension);
-    printf("kuku1\n");
+
+    /* Adds the extension and creates the file */
+    strcat(new_file_name, extension);
     created_file = fopen(new_file_name, "w+");
-    printf("kuku2\n");
-
-    /* checks if file was created succesfully */
     if (created_file == NULL) {
-        printf("failed to create file '%s' \n", new_file_name);
+        printf("Failed to create file '%s'\n", new_file_name);
+        free(new_file_name);
         return NULL;
+    } else {
+        printf("File created: '%s'\n", new_file_name);
     }
-    printf("kuku3\n");
-    free(new_file_name);
 
-    /*  returns the file after being created*/
     return created_file;
 }
 
