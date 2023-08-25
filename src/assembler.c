@@ -18,7 +18,7 @@ int main(int argc, char const *argv[])
     FILE *curr_as_file = NULL;
     FILE *curr_am_file = NULL;
 
-    Symbol *symbol_head = NULL;
+    Symbol *symbol_head;
     struct SymbolNameAndIndex *symbol_name_and_index;
     struct InstructionStructure instruction_array[1024];
     struct DataStructure data_array[1024];
@@ -31,12 +31,15 @@ int main(int argc, char const *argv[])
 
     for (arg_index = 1; arg_index < argc; arg_index++)
     {
+
+        symbol_head = NULL;
+        symbol_name_and_index = NULL;
+
         filename = my_strdup(argv[arg_index]);
-        full_filename = malloc(strlen(filename) + sizeof(char) * 4);
+        full_filename = malloc(strlen(filename) + sizeof(char) * 5);
+
         strcpy(full_filename, filename);
         strcat(full_filename, ".as");
-
-        
 
         ic = COUNTER_INIT;
         dc = COUNTER_INIT;
@@ -58,7 +61,6 @@ int main(int argc, char const *argv[])
             exit(1);
         }
 
-        
         /* pre processor */
         process_file(curr_as_file, curr_am_file);
         fclose(curr_as_file);
@@ -72,6 +74,7 @@ int main(int argc, char const *argv[])
         free(filename);
         free(full_filename);
         free_symbol_list(symbol_head);
+        free_list(symbol_name_and_index);
     }
 
     return 0;

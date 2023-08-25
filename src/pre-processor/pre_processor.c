@@ -5,6 +5,7 @@
  that line and the error will be handled in the first pass  */
 int process_file(FILE *source_file, FILE *target_file)
 {
+    char *second_token = NULL;
     int line_number = 0;                                         /* Variable to keep track of the line number being processed in the source file */
     enum MacroState state = OUTSIDE_MACRO_DEF;                   /* Initialize the state of the macro processing to be outside a macro definition */
     char line[MAXLEN];                                           /* Buffer to store each line read from the source file */
@@ -31,17 +32,17 @@ int process_file(FILE *source_file, FILE *target_file)
 
             state = INSIDE_MACRO_DEF;
   
-
-            strcpy(curr_macro_name, get_second_token(line));
+            second_token = get_second_token(line);
+            strcpy(curr_macro_name, second_token);
             created_macro = create_mcro(curr_macro_name, line_number);
-
+            free(second_token);
 
             add_to_macro_table(created_macro, &macro_list, line_number);
             continue;
         }
         else if (is_end_macro_def(line))
         {
-            if (!valid_end_macro_def(line, line_number))
+            if (!valid_end_macro_def(line, line_number)) 
                 return 0; /* Error found */
             state = OUTSIDE_MACRO_DEF;
 
@@ -64,13 +65,11 @@ int process_file(FILE *source_file, FILE *target_file)
         }
         else
         {
-            printf("%s\n",line);
             write_line_to_file(line, target_file);
         }
     }
 
     /* Free dynamically allocated memory */
-    free(created_macro);
     free_macro_list(macro_list);
 
     return 1;

@@ -108,7 +108,7 @@ int is_reserved_keyword(const char *word);
 struct SymbolNameAndIndex *get_node_by_name(struct SymbolNameAndIndex *head, const char *target_name);
 struct SymbolNameAndIndex *create_node(const char *name, int IC_index, int line_number);
 void insertNode(struct SymbolNameAndIndex **head, struct SymbolNameAndIndex *newNode);
-void freeList(struct SymbolNameAndIndex *head);
+void free_list(struct SymbolNameAndIndex *head);
 char *get_name_at(const struct SymbolNameAndIndex *head, int targetIndex);
 int get_index_at(const struct SymbolNameAndIndex *head, int targetIndex);
 int get_line_number_at(const struct SymbolNameAndIndex *head, int targetIndex);

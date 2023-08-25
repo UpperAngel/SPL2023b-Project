@@ -83,7 +83,7 @@ int is_reserved_keyword(const char *word)
 
 struct SymbolNameAndIndex *create_node(const char *name, int IC_index, int line_number)
 {
-    struct SymbolNameAndIndex *newNode = malloc(sizeof(struct SymbolNameAndIndex));
+    struct SymbolNameAndIndex *newNode = (struct SymbolNameAndIndex *)malloc(sizeof(struct SymbolNameAndIndex));
     if (newNode == NULL)
     {
         handle_error(FailedToAllocateMemory, line_number);
@@ -127,13 +127,15 @@ void insertNode(struct SymbolNameAndIndex **head, struct SymbolNameAndIndex *new
     current->next = newNode;
 }
 /* Function to free the linked list and its nodes */
-void freeList(struct SymbolNameAndIndex *head)
+void free_list(struct SymbolNameAndIndex *head)
 {
     struct SymbolNameAndIndex *current = head;
     while (current != NULL)
     {
         struct SymbolNameAndIndex *temp = current;
         current = current->next;
+        temp->next = NULL;
+        free(temp->name);
         free(temp); /* Deallocate the memory for the current node, including the name string */
     }
 }
@@ -311,13 +313,13 @@ Symbol *create_symbol(const char *name, int val, SymbolType type, SymbolCategory
     return new_symbol;
 }
 
-void free_symbol_list(Symbol *head)
-{
-    while (head != NULL)
-    {
+/* Free the entire linked list of symbols */
+void free_symbol_list(Symbol *head) {
+    while (head != NULL) {
         Symbol *temp = head;
         head = head->next;
+        temp->next = NULL;  /* Set the next pointer to NULL */
         free(temp->name);
-        free(temp);
+        free(temp);         /* Free the current symbol node */
     }
 }

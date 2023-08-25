@@ -103,6 +103,7 @@ mcro *create_mcro(const char *name, int line_number)
 /* Function to create a new macro list */
 struct macroList *createMacroList(int line_number)
 {
+    /* Allocate memory for the new macroList node */
     struct macroList *newList = (struct macroList *)malloc(sizeof(struct macroList));
     if (newList == NULL)
     {
@@ -278,7 +279,10 @@ int valid_end_macro_def(const char *line, int line_number)
     second_word = strtok(NULL, " \t");
 
     if (strcmp(target, first_word) == 0 && second_word == NULL)
+    {
+        free(mod_line); /* Free the dynamically allocated memory. */
         return 1; /* "endmcro" is the only word in the line. */
+    }
 
     free(mod_line); /* Free the dynamically allocated memory. */
 
@@ -316,22 +320,24 @@ void free_macro_list(struct macroList *list)
 {
     while (list != NULL)
     {
-        struct macroList *temp = list; /* Store the current node in a temporary variable */
-        list = list->nextMacro;        /* Move to the next node before deallocating the current one */
+        struct macroList *temp = list;
+        list = list->nextMacro;
 
-        /* Make sure the macro is not NULL before freeing its memory */
         if (temp->macro != NULL)
         {
-            /* Free the memory for the macro name and the linked list of content nodes */
-            free(temp->macro->name);
-            free_content_list(temp->macro->data);
+            mcro *currentMacro = temp->macro;
+
+            /* Free the linked list of content nodes */
+            free_content_list(currentMacro->data);
+
+            /* Free the memory for the macro name */
+            free(currentMacro->name);
 
             /* Free the memory for the macro itself */
-            free(temp->macro);
+            free(currentMacro);
         }
 
-        /* Free the memory for the current node in the macro list */
-        free(temp);
+        free(temp); /*  Free the current node in the macro list */
     }
 }
 
@@ -468,7 +474,7 @@ char *get_second_token(const char *line)
         if (token_count == 2)
         {
             /* Allocate memory for the second token and copy it */
-            second_token = (char *)malloc(strlen(line_cpy) + 1);
+            second_token = (char *)malloc(strlen(token) + 1);
             if (second_token != NULL)
             {
                 strcpy(second_token, token);
@@ -478,6 +484,9 @@ char *get_second_token(const char *line)
         token = strtok(NULL, delimiters);
     }
 
+    /* Free the memory allocated for line_cpy */
+    free(line_cpy);
+
     return second_token;
 }
 
@@ -486,7 +495,7 @@ char *custom_fgets(char *buffer, int max_len, FILE *source_file)
 {
     int current_char;
     int char_count = 0;
-    
+
     /* Read characters until max_len-1 or newline or EOF is encountered */
     while (char_count < max_len - 1 && (current_char = fgetc(source_file)) != EOF && current_char != '\n')
     {
@@ -506,6 +515,7 @@ char *custom_fgets(char *buffer, int max_len, FILE *source_file)
 /* Function to check if a given word appears as a complete word in a given line. */
 int find_word_in_tokens(const char *line, const char *target)
 {
+    char *token_ptr = (char *)malloc(strlen(line) +1);
     const char *delimiters = " \t";
     char line_copy[MAXLEN]; /* A copy of the line to work with, as strtok modifies the input */
     char token[MAXLEN];     /* Temporary storage for tokens */
@@ -514,7 +524,7 @@ int find_word_in_tokens(const char *line, const char *target)
     strncpy(line_copy, line, MAXLEN);
 
     /* Use strtok to tokenize the line */
-    const char *token_ptr = strtok(line_copy, delimiters);
+    token_ptr = strtok(line_copy, delimiters);
 
     while (token_ptr != NULL)
     {

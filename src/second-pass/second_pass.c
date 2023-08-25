@@ -17,17 +17,20 @@ void second_pass(const char *file_name, Symbol *sym_head, struct InstructionStru
 {
     struct SymbolNameAndIndex *temp = symbol_name_and_index_head;
     struct SymbolNameAndIndex *curr_missing = symbol_name_and_index_head;
-    Symbol *curr_symbol_copy = copy_symlist(sym_head);
-
+    Symbol *symbol_copy_head = copy_symlist(sym_head);
+    Symbol *symbol_copy = symbol_copy_head;
     if (*error_found == 1)
     {
+        if (symbol_copy_head != NULL)    {
+            free_symbol_list(symbol_copy_head);
+         }
         return; /* Abort if errors were previously found */
     }
 
     /* Resolve missing symbols */
     while (curr_missing != NULL)
     {
-        Symbol *symbol = find_symbol(curr_symbol_copy, curr_missing->name);
+        Symbol *symbol = find_symbol(symbol_copy, curr_missing->name);
 
         if (symbol != NULL)
         {
@@ -41,6 +44,9 @@ void second_pass(const char *file_name, Symbol *sym_head, struct InstructionStru
         }
         else
         {
+            if (symbol_copy_head != NULL)    {
+                free_symbol_list(symbol_copy_head);
+            }
             *error_found = 1; /* Found an error */
             return;
         }
@@ -48,30 +54,41 @@ void second_pass(const char *file_name, Symbol *sym_head, struct InstructionStru
     }
 
     /* Check for symbols not used */
-    curr_symbol_copy = sym_head;
+    symbol_copy = sym_head;
     temp = symbol_name_and_index_head;
-    while (curr_symbol_copy != NULL && temp != NULL)
+    while (symbol_copy != NULL && temp != NULL)
     {
-        if (find_symbol(curr_symbol_copy, temp->name) == NULL)
+        if (find_symbol(symbol_copy, temp->name) == NULL)
         {
 
             *error_found = 1; /* Set error flag if unused symbol found */
         }
         temp = temp->next;
-        curr_symbol_copy = curr_symbol_copy->next;
+        symbol_copy = symbol_copy->next;
     }
 
     if (*error_found == 1)
     {
+        if (symbol_copy_head != NULL)    {
+            free_symbol_list(symbol_copy_head);
+         }
         return; /* Abort if errors were found */
     }
 
     /* Create output files */
 
-    create_files(file_name, curr_symbol_copy, symbol_name_and_index_head, instruction_array, data_array, ic, dc);
-
-    free_symbol_list(curr_symbol_copy);
-    freeList(temp);
+    create_files(file_name, symbol_copy, symbol_name_and_index_head, instruction_array, data_array, ic, dc);
+    
+    if (symbol_copy_head != NULL)
+    {
+        free_symbol_list(symbol_copy_head);
+    }
+    
+    
+    if (temp != NULL)
+    {
+        free_list(temp);
+    }
 }
 
 /* This function creates output files containing assembly information.
@@ -98,7 +115,6 @@ void create_files(const char *file_name, Symbol *head, struct SymbolNameAndIndex
     Symbol *find_entry = head;
 
     struct SymbolNameAndIndex *temp = symbol_name_and_index;
-    ;
 
     FILE *ob_file = NULL;
     FILE *ent_file = NULL;
@@ -201,10 +217,10 @@ void create_files(const char *file_name, Symbol *head, struct SymbolNameAndIndex
         fclose(ext_file);
     }
 
-    free(print_entry);
-    free(print_extern);
-    free(find_entry);
-    free(find_extern);
+    free_symbol_list(print_entry);
+    free_symbol_list(find_entry);
+    free_symbol_list(print_extern);
+    free_symbol_list(find_extern);
 }
 
 /* This function converts a binary value to a Base64 string.
