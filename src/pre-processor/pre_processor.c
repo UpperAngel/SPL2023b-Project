@@ -11,17 +11,15 @@ int process_file(FILE *source_file, FILE *target_file)
     char curr_macro_name[MACRO_NAME_LENGTH + 1];                 /* Buffer to store the name of the current macro being processed */
     mcro *created_macro = NULL;                                  /* Pointer to the macro structure representing the macro being created */
     struct macroList *macro_list = createMacroList(line_number); /* Pointer to the macro list containing all defined macros */
-    printf("kuku\n");
   
     
     while (custom_fgets(line, MAXLEN, source_file) != NULL)
     {
-        printf("kuku01\n");
         line_number++; /* Increment the number of the line */
 
         /* Remove newline character at the end of a string */
         sanitize_input(line);
-
+ 
         /* Check if the current line is a comment or an empty line if so skip it */
         if (is_line_comment_or_empty(line))
             continue;
@@ -32,11 +30,11 @@ int process_file(FILE *source_file, FILE *target_file)
                 return 0; /* Error found */
 
             state = INSIDE_MACRO_DEF;
-            printf("kuku1\n");
+  
 
             strcpy(curr_macro_name, get_second_token(line));
             created_macro = create_mcro(curr_macro_name, line_number);
-            printf("kuku2\n");
+
 
             add_to_macro_table(created_macro, &macro_list, line_number);
             continue;
@@ -46,7 +44,7 @@ int process_file(FILE *source_file, FILE *target_file)
             if (!valid_end_macro_def(line, line_number))
                 return 0; /* Error found */
             state = OUTSIDE_MACRO_DEF;
-            printf("kuku3\n");
+
 
             continue;
         }
@@ -60,14 +58,13 @@ int process_file(FILE *source_file, FILE *target_file)
         /* Check if the line contains macro names and deploy the macros to the target file */
         if (check_line_for_macro(line, macro_list))
         {
-            printf("kuku4\n");
+
 
             deploy_macros_in_line(line, target_file, macro_list);
         }
         else
         {
-            printf("kuku5\n");
-
+            printf("%s\n",line);
             write_line_to_file(line, target_file);
         }
     }

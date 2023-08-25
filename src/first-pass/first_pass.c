@@ -76,6 +76,10 @@ void first_pass(FILE *am_file, struct InstructionStructure *instructions_array, 
             }
         }
 
+        if (is_directive(word, ".extern") || is_directive(word, ".entry") || is_directive(word, ".data") ||  is_directive(word, ".string")) {
+            continue;
+        } 
+
         /* Step 11 */
         if (symbol_definition) {
             handle_symbol(symbol_head, current_symbol_name, line_number, error_found, CODE, NONE_CATEGORY, *ic);

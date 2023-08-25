@@ -1,2 +1,2 @@
-prn -3
-.entry L1
+prn -5
+.entry test

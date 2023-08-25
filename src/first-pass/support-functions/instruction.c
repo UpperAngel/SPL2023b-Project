@@ -294,6 +294,9 @@ int valid_addressing_for_operands(enum OperandType operand1_type, enum OperandTy
                 return 0;
             }
             break;
+        case (NULL_OP):
+            return 0;
+            break;
     }
 
     /* correct operands addressing */
